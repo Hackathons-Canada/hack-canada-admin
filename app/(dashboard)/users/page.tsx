@@ -9,6 +9,15 @@ import DownloadOptions from "@/components/DownloadOptions";
 import { UserSearch } from "@/components/UserSearch";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/auth";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { UserStatusBadge } from "@/components/UserSearch/UserStatusBadge";
 
 interface UsersPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -23,9 +32,11 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
 
   const page = searchParams["page"] ?? "1";
   const perPage = searchParams["perPage"] ?? "50";
-  const role = searchParams["role"] ?? "all";
-  const firstName = searchParams["firstName"] ?? "";
-  const lastName = searchParams["lastName"] ?? "";
+  const role = String(searchParams["role"] ?? "all");
+  const firstName = String(searchParams["firstName"] ?? "");
+  const lastName = String(searchParams["lastName"] ?? "");
+  const email = String(searchParams["email"] ?? "");
+  const status = String(searchParams["status"] ?? "all");
 
   const start = (Number(page) - 1) * Number(perPage);
   const end = start + Number(perPage);
@@ -34,90 +45,84 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
   params.append("role", role.toString());
   params.append("firstName", firstName.toString());
   params.append("lastName", lastName.toString());
+  params.append("email", email.toString());
+  params.append("status", status.toString());
 
-  // Getting a list of RESULTS_PER_PAGE users, offset by "start"
   const totalNumOfUsers: number =
-    (await getNumUsersSearch(role, firstName, lastName)) ?? 0;
-  const users = await getUsersSearch(role, firstName, lastName, start);
+    (await getNumUsersSearch(role, firstName, lastName, email, status)) ?? 0;
+  const users = await getUsersSearch(
+    role,
+    firstName,
+    lastName,
+    email,
+    status,
+    start,
+  );
 
   return (
-    <Container className="space-y-6 md:space-y-8">
+    <Container className="space-y-8">
       <PageBanner subheading="List of all users in the database. Note that these are just accounts created with us and not necessarily people who have applied to the hackathon. To view a list of hackers, navigate to the Hackers page." />
-      <DownloadOptions entity="users" />
-      <UserSearch />
-      <div className="space-y-2">
+
+      <div className="space-y-6">
+        <DownloadOptions entity="users" />
+        <UserSearch />
+      </div>
+
+      <div className="space-y-4">
         {users.length ? (
-          <p className="max-md:text-center max-md:text-sm">
+          <p className="text-sm text-muted-foreground max-md:text-center">
             Displaying users {start + 1} - {start + users.length} from{" "}
             {totalNumOfUsers} users
           </p>
         ) : (
-          <p className="max-md:text-center max-md:text-sm">
+          <p className="text-sm text-muted-foreground max-md:text-center">
             No users match the search criteria.
           </p>
         )}
 
-        <table className="w-full">
-          <thead className="border-2 text-sm">
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id} className="flexbox align-middle">
-                <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  <Link
-                    href={`/users/${user.id}`}
-                    prefetch={false}
-                    className=""
-                  >
-                    <ExternalLinkIcon size={20} className="mx-auto" />
-                  </Link>
-                </td>
-                <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  {user.name}
-                </td>
-                <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  {user.email}
-                </td>
-                <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  {user.role}
-                </td>
-                <td
-                  className={
-                    "overflow-x-hidden border-2 border-inherit px-3 py-2"
-                  }
-                >
-                  <p
-                    className={
-                      user.applicationStatus === "pending" ||
-                      user.applicationStatus === "waitListed"
-                        ? "text-amber-500"
-                        : user.applicationStatus === "accepted"
-                          ? "text-emerald-500"
-                          : user.applicationStatus === "rejected"
-                            ? "text-red-500"
-                            : ""
-                    }
-                  >
-                    {user.applicationStatus}
-                  </p>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="rounded-lg border bg-card">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-muted/50">
+                <TableHead className="w-[50px]"></TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.id} className="hover:bg-muted/50">
+                  <TableCell className="text-center">
+                    <Link
+                      href={`/users/${user.id}`}
+                      prefetch={false}
+                      className="inline-block transition-colors hover:text-primary"
+                    >
+                      <ExternalLinkIcon size={18} />
+                    </Link>
+                  </TableCell>
+                  <TableCell className="font-medium">{user.name}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    <span className="capitalize">{user.role}</span>
+                  </TableCell>
+                  <TableCell>
+                    <UserStatusBadge status={user.applicationStatus} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
         {users.length ? (
           <PaginationControls
             totalNumOfUsers={totalNumOfUsers}
             search={params.toString()}
-            table={"users"}
-            className="max-w-lg rounded-md border bg-zinc-100 py-2.5 dark:bg-zinc-950 max-md:mx-auto md:mt-8"
+            table="users"
+            className="mx-auto mt-6 max-w-lg rounded-lg border bg-card p-2"
           />
         ) : null}
       </div>

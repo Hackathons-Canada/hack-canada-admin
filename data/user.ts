@@ -65,14 +65,36 @@ export const getNumUsers = async () => {
 };
 
 export const getUsersSearch = async (
-  role: any,
-  firstName: string | string[],
-  lastName: string | string[],
+  role: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  status: string,
   offsetAmt: number,
 ) => {
   try {
-    role = role === "all" ? "" : role;
+    const conditions = [];
+
+    if (role !== "all") {
+      conditions.push(eq(users.role, role));
+    }
+
     const searchName = `${firstName} ${lastName}`.trim();
+    if (searchName) {
+      conditions.push(like(users.name, `%${searchName}%`));
+    }
+
+    if (email) {
+      conditions.push(like(users.email, `%${email}%`));
+    }
+
+    if (status !== "all") {
+      if (status === "noApplication") {
+        conditions.push(eq(users.applicationStatus, "not_applied"));
+      } else {
+        conditions.push(eq(users.applicationStatus, status));
+      }
+    }
 
     return await db
       .select()
@@ -80,12 +102,7 @@ export const getUsersSearch = async (
       .limit(RESULTS_PER_PAGE)
       .offset(offsetAmt)
       .orderBy(desc(users.createdAt))
-      .where(
-        and(
-          role ? eq(users.role, role) : undefined,
-          searchName ? like(users.name, `${searchName}%`) : undefined,
-        ),
-      );
+      .where(and(...conditions));
   } catch (error) {
     console.log("Error searching users", error);
     return [];
@@ -93,30 +110,41 @@ export const getUsersSearch = async (
 };
 
 export const getNumUsersSearch = async (
-  role: any,
-  firstName: string | string[],
-  lastName: string | string[],
+  role: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  status: string,
 ) => {
   try {
-    const searchName = `${firstName} ${lastName}`.trim();
+    const conditions = [];
 
-    if (role === "all") {
-      const results = await db
-        .select({ count: count() })
-        .from(users)
-        .where(searchName ? like(users.name, `${searchName}%`) : undefined);
-      return results[0].count;
+    if (role !== "all") {
+      conditions.push(eq(users.role, role));
+    }
+
+    const searchName = `${firstName} ${lastName}`.trim();
+    if (searchName) {
+      conditions.push(like(users.name, `%${searchName}%`));
+    }
+
+    if (email) {
+      conditions.push(like(users.email, `%${email}%`));
+    }
+
+    if (status !== "all") {
+      if (status === "noApplication") {
+        conditions.push(eq(users.applicationStatus, "not_applied"));
+      } else {
+        conditions.push(eq(users.applicationStatus, status));
+      }
     }
 
     const results = await db
       .select({ count: count() })
       .from(users)
-      .where(
-        and(
-          eq(users.role, role),
-          searchName ? like(users.name, `${searchName}%`) : undefined,
-        ),
-      );
+      .where(and(...conditions));
+
     return results[0].count;
   } catch (error) {
     console.log("Error fetching number of users", error);
