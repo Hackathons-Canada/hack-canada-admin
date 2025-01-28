@@ -68,8 +68,8 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
 
       <main className="space-y-10">
         <section aria-label="Search and Download Controls">
-          <div className="flex items-start justify-between gap-8 max-lg:flex-col-reverse">
-            <div className="flex-1">
+          <div className="flex items-start justify-between gap-8 max-2xl:flex-col-reverse">
+            <div className="w-full flex-1">
               <UserSearch />
             </div>
             <div className="w-full shrink-0 lg:w-auto">

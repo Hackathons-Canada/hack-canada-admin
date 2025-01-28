@@ -20,16 +20,30 @@ const Sidebar = ({ isMinimized, onMinimize }: SidebarProps) => {
       )}
     >
       <div className="flex flex-1 flex-col">
-        <button
-          className={"mx-auto mb-4 ml-auto mr-4"}
-          onClick={() => onMinimize(!isMinimized)}
-        >
-          {isMinimized ? (
-            <PanelLeftOpen className="size-5" />
-          ) : (
-            <PanelLeftClose className="size-5" />
-          )}
-        </button>
+        <div className="relative ml-auto mr-4">
+          <button
+            className="flex items-center"
+            onClick={() => onMinimize(!isMinimized)}
+          >
+            <span
+              className={cn(
+                "absolute right-6 origin-right whitespace-nowrap text-sm font-medium transition-all duration-300",
+                isMinimized
+                  ? "scale-x-0 opacity-0 duration-150"
+                  : "scale-x-100 opacity-100 delay-200",
+              )}
+            >
+              Minimize
+            </span>
+            {isMinimized ? (
+              <PanelLeftOpen className="size-5" />
+            ) : (
+              <PanelLeftClose className="size-5" />
+            )}
+          </button>
+        </div>
+
+        <hr className="my-4 border-t-border/50" />
 
         <div className="px-3">
           <NavLinks isMinimized={isMinimized} />

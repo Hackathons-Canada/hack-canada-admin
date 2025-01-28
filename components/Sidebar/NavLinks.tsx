@@ -35,7 +35,7 @@ const NavLinks = ({ isMinimized }: NavLinksProps) => {
           <li
             key={link.name}
             className={cn(
-              "flex rounded-lg text-foreground/70 transition-all duration-200 hover:bg-primary/10 hover:text-foreground",
+              "flex rounded-lg border border-border/50 bg-muted/50 text-foreground/70 transition-all duration-200 hover:bg-primary/10 hover:text-foreground",
               {
                 "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground":
                   pathname === link.href,
