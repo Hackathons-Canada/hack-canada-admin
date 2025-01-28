@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
+import DashboardWrapper from "@/components/DashboardWrapper";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -17,11 +16,8 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-full min-h-svh flex-col">
-      <div className="flex-1">
-        <Navbar />
-        <Sidebar />
-        <main className="pt-20 lg:pl-72">{children}</main>
-      </div>
+      <Navbar />
+      <DashboardWrapper>{children}</DashboardWrapper>
     </div>
   );
 }

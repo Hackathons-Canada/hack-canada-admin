@@ -10,7 +10,7 @@ const Navbar = async ({}: Props) => {
   const user = await getCurrentUser();
 
   return (
-    <header className="fixed z-40 flex h-20 w-full items-center justify-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed z-40 flex h-20 w-full items-center justify-center border-b bg-background">
       <nav className="mx-auto flex h-full w-full flex-1 items-center justify-between px-4 py-2.5 sm:px-8 sm:py-4">
         <div className="flex items-center gap-3">
           <Image
@@ -20,7 +20,7 @@ const Navbar = async ({}: Props) => {
             height={40}
             className="translate-y-0.5"
           />
-          <p className="bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-xl font-semibold text-transparent transition-colors xl:text-2xl">
+          <p className="w-fit bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-xl font-semibold text-transparent transition-colors dark:from-sky-500 dark:to-blue-500 xl:text-2xl">
             Hack Canada Admin
           </p>
         </div>

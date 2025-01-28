@@ -6,9 +6,12 @@ import React, { useState } from "react";
 import NavLinks from "./NavLinks";
 import UserProfile from "./UserProfile";
 
-const Sidebar = () => {
-  const [isMinimized, setIsMinimized] = useState(false);
+interface SidebarProps {
+  isMinimized: boolean;
+  onMinimize: (value: boolean) => void;
+}
 
+const Sidebar = ({ isMinimized, onMinimize }: SidebarProps) => {
   return (
     <div
       className={cn(
@@ -19,7 +22,7 @@ const Sidebar = () => {
       <div className="flex flex-1 flex-col">
         <button
           className={"mx-auto mb-4 ml-auto mr-4"}
-          onClick={() => setIsMinimized(!isMinimized)}
+          onClick={() => onMinimize(!isMinimized)}
         >
           {isMinimized ? (
             <PanelLeftOpen className="size-5" />

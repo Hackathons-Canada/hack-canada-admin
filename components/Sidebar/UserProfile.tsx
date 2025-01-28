@@ -25,16 +25,16 @@ const UserProfile = ({ isMinimized }: UserProfileProps) => {
   return (
     <div
       className={cn(
-        "origin-left bg-accent p-3 transition-all duration-500",
+        "origin-left p-3 transition-all duration-500",
         isMinimized ? "opacity-0 duration-100" : "opacity-100 delay-300",
       )}
     >
-      <div className="flex gap-3.5 rounded-lg bg-card p-3 shadow-md shadow-black/30">
-        <div className="relative aspect-square size-9 overflow-hidden rounded-full ring-2 ring-primary/20">
+      <div className="flex gap-3.5 rounded-lg bg-muted p-3 shadow-lg shadow-black/30">
+        <div className="relative aspect-square size-9 overflow-hidden rounded-full border border-primary/20">
           <Image
             src="/default-avatar.webp"
             alt="User avatar"
-            className="object-cover"
+            className="bg-white object-cover dark:bg-gray-800"
             fill
             sizes="(max-width: 40px) 40px"
             priority
