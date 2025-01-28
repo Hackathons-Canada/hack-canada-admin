@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import ThemeToggle from "../ThemeToggle";
 import { getCurrentUser } from "@/auth";
+import Image from "next/image";
 
 type Props = {};
 
@@ -9,17 +10,31 @@ const Navbar = async ({}: Props) => {
   const user = await getCurrentUser();
 
   return (
-    <header className="fixed z-40 flex h-20 w-full items-center justify-center border bg-background">
+    <header className="fixed z-40 flex h-20 w-full items-center justify-center border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="mx-auto flex h-full w-full flex-1 items-center justify-between px-4 py-2.5 sm:px-8 sm:py-4">
-        <div className="flex items-center gap-2">
-          <p className="text-xl font-medium xl:text-2xl">Hack Canada Admin</p>
+        <div className="flex items-center gap-3">
+          <Image
+            src={"/logo.webp"}
+            alt="Hack Canada Logo"
+            width={40}
+            height={40}
+            className="translate-y-0.5"
+          />
+          <p className="bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-xl font-semibold text-transparent transition-colors xl:text-2xl">
+            Hack Canada Admin
+          </p>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <ThemeToggle />
 
           {user ? (
-            <p>Logged in as {user.name}.</p>
+            <div className="flex items-center gap-2 rounded-full bg-secondary/20 px-4 py-2">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+              <p className="text-sm font-medium text-muted-foreground">
+                {user.role === "admin" ? "Administrator" : user.role}
+              </p>
+            </div>
           ) : (
             <Button asChild>
               <Link href="/login">Sign in</Link>
