@@ -7,7 +7,16 @@ type Props = {
 };
 
 const Container = ({ children, className }: Props) => {
-  return <div className={cn("p-4 md:p-8", className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[1600px] p-4 md:p-6 lg:p-8",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default Container;

@@ -60,72 +60,88 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
   );
 
   return (
-    <Container className="space-y-8">
-      <PageBanner subheading="List of all users in the database. Note that these are just accounts created with us and not necessarily people who have applied to the hackathon. To view a list of hackers, navigate to the Hackers page." />
+    <Container className="space-y-10">
+      <PageBanner
+        subheading="List of all users in the database. Note that these are just accounts created with us and not necessarily people who have applied to the hackathon. To view a list of hackers, navigate to the Hackers page."
+        className="transition-all duration-200 hover:bg-muted/50"
+      />
 
-      <div className="space-y-6">
-        <DownloadOptions entity="users" />
-        <UserSearch />
-      </div>
+      <main className="space-y-10">
+        <section aria-label="Search and Download Controls">
+          <div className="flex items-start justify-between gap-8 max-lg:flex-col-reverse">
+            <div className="flex-1">
+              <UserSearch />
+            </div>
+            <div className="w-full shrink-0 lg:w-auto">
+              <DownloadOptions entity="users" />
+            </div>
+          </div>
+        </section>
 
-      <div className="space-y-4">
-        {users.length ? (
-          <p className="text-sm text-muted-foreground max-md:text-center">
-            Displaying users {start + 1} - {start + users.length} from{" "}
-            {totalNumOfUsers} users
-          </p>
-        ) : (
-          <p className="text-sm text-muted-foreground max-md:text-center">
-            No users match the search criteria.
-          </p>
-        )}
+        <section aria-label="Users List" className="space-y-6">
+          {users.length ? (
+            <p className="text-sm font-medium text-muted-foreground max-md:text-center">
+              Displaying users {start + 1} - {start + users.length} from{" "}
+              <span className="text-foreground">{totalNumOfUsers}</span> users
+            </p>
+          ) : (
+            <p className="text-sm font-medium text-muted-foreground max-md:text-center">
+              No users match the search criteria.
+            </p>
+          )}
 
-        <div className="rounded-lg border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-muted/50">
-                <TableHead className="w-[50px]"></TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id} className="hover:bg-muted/50">
-                  <TableCell className="text-center">
-                    <Link
-                      href={`/users/${user.id}`}
-                      prefetch={false}
-                      className="inline-block transition-colors hover:text-primary"
-                    >
-                      <ExternalLinkIcon size={18} />
-                    </Link>
-                  </TableCell>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <span className="capitalize">{user.role}</span>
-                  </TableCell>
-                  <TableCell>
-                    <UserStatusBadge status={user.applicationStatus} />
-                  </TableCell>
+          <div className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50 transition-colors hover:bg-muted">
+                  <TableHead className="w-[50px] py-4"></TableHead>
+                  <TableHead className="py-4 font-semibold">Name</TableHead>
+                  <TableHead className="py-4 font-semibold">Email</TableHead>
+                  <TableHead className="py-4 font-semibold">Role</TableHead>
+                  <TableHead className="py-4 font-semibold">Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow
+                    key={user.id}
+                    className="transition-colors hover:bg-muted/50"
+                  >
+                    <TableCell className="text-center">
+                      <Link
+                        href={`/users/${user.id}`}
+                        prefetch={false}
+                        className="inline-block rounded-md p-1 transition-all duration-200 hover:bg-primary/10 hover:text-primary"
+                      >
+                        <ExternalLinkIcon size={18} />
+                      </Link>
+                    </TableCell>
+                    <TableCell className="py-4 font-medium">
+                      {user.name}
+                    </TableCell>
+                    <TableCell className="py-4">{user.email}</TableCell>
+                    <TableCell className="py-4">
+                      <span className="capitalize">{user.role}</span>
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <UserStatusBadge status={user.applicationStatus} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
-        {users.length ? (
-          <PaginationControls
-            totalNumOfUsers={totalNumOfUsers}
-            search={params.toString()}
-            table="users"
-            className="mx-auto mt-6 max-w-lg rounded-lg border bg-card p-2"
-          />
-        ) : null}
-      </div>
+          {users.length ? (
+            <PaginationControls
+              totalNumOfUsers={totalNumOfUsers}
+              search={params.toString()}
+              table="users"
+              className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
+            />
+          ) : null}
+        </section>
+      </main>
     </Container>
   );
 };

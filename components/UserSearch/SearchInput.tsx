@@ -27,12 +27,14 @@ export const SearchInput = ({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="text-sm font-medium">{label}</FormLabel>
+        <FormItem className="w-full">
+          <FormLabel className="text-sm font-medium text-muted-foreground">
+            {label}
+          </FormLabel>
           <FormControl>
             <Input
               placeholder={placeholder}
-              className="h-9 border-input bg-background px-3 py-1 text-sm transition-colors hover:bg-muted focus-visible:ring-1"
+              className="h-9 border-input bg-background px-3 py-1 text-sm shadow-sm transition-all duration-200 hover:bg-muted/50 focus:ring-1 focus:ring-primary/20"
               {...field}
             />
           </FormControl>

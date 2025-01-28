@@ -40,25 +40,30 @@ const DownloadOptions = ({ entity }: Props) => {
   };
 
   return (
-    <div className="h-fit w-fit rounded-lg border p-6 max-md:w-full md:p-10">
-      <p className="text-lg font-semibold text-foreground md:text-xl">
-        Download Options
-      </p>
-      <p>Export all {entity} in the database into the file of your choice.</p>
-      <div className="mt-4 flex gap-4 max-sm:flex-col">
+    <div className="h-fit w-fit rounded-xl border bg-card p-6 shadow-sm transition-all duration-200 hover:shadow-md max-md:w-full">
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold text-foreground">
+          Download Options
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Export all {entity} in the database into the file of your choice.
+        </p>
+      </div>
+      <div className="mt-6 flex items-center gap-3">
         <Button
           disabled={isPending}
-          className="w-full"
+          variant="outline"
+          className="flex-1 bg-background transition-all duration-200 hover:bg-muted"
           onClick={() => handleDownload("csv")}
         >
-          Download as CSV
+          Download CSV
         </Button>
         <Button
           disabled={isPending}
-          className="w-full"
+          className="flex-1 transition-all duration-200"
           onClick={() => handleDownload("json")}
         >
-          Download as JSON
+          Download JSON
         </Button>
       </div>
     </div>
@@ -69,17 +74,21 @@ export default DownloadOptions;
 //helper fn to convert data into csv like string
 const convertArrayToCSV = (userList: any) => {
   const keys = Object.keys(userList[0]);
-  
+
   const csv = [
     keys.join(","), // header row
-    ...userList.map((row: any) => 
-      keys.map((key: any) => {
-        const value = row[key] !== null && row[key] !== undefined ? row[key].toString() : '';
-        return `"${value.replace(/"/g, '""')}"`; 
-      }).join(",")
+    ...userList.map((row: any) =>
+      keys
+        .map((key: any) => {
+          const value =
+            row[key] !== null && row[key] !== undefined
+              ? row[key].toString()
+              : "";
+          return `"${value.replace(/"/g, '""')}"`;
+        })
+        .join(","),
     ),
   ].join("\n");
-  
 
   return csv;
 };
