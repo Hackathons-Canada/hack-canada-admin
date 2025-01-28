@@ -1,8 +1,9 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { User } from "@/types/user";
 import { eq, count, desc, like, and } from "drizzle-orm";
+
+type User = typeof users.$inferSelect;
 
 /**
  * Retrieves a user by their ID from the database.
@@ -40,13 +41,9 @@ export const getAdminUsers = async () => {
 export const getAllUsers = async (offsetAmt: number = 0) => {
   try {
     const all = await db
-
       .select()
-
       .from(users)
-
       .limit(RESULTS_PER_PAGE)
-
       .offset(offsetAmt)
       .orderBy(desc(users.createdAt));
     return all;
@@ -73,20 +70,26 @@ export const getUsersSearch = async (
   lastName: string | string[],
   offsetAmt: number,
 ) => {
-  role = role === "all" ? "" : role;
-  return await db
-    .select()
-    .from(users)
-    .limit(RESULTS_PER_PAGE)
-    .offset(offsetAmt)
-    .orderBy(desc(users.createdAt))
-    .where(
-      and(
-        like(users.role, `${role}%`),
-        like(users.firstName, `${firstName}%`),
-        like(users.lastName, `${lastName}%`),
-      ),
-    );
+  try {
+    role = role === "all" ? "" : role;
+    const searchName = `${firstName} ${lastName}`.trim();
+
+    return await db
+      .select()
+      .from(users)
+      .limit(RESULTS_PER_PAGE)
+      .offset(offsetAmt)
+      .orderBy(desc(users.createdAt))
+      .where(
+        and(
+          role ? eq(users.role, role) : undefined,
+          searchName ? like(users.name, `${searchName}%`) : undefined,
+        ),
+      );
+  } catch (error) {
+    console.log("Error searching users", error);
+    return [];
+  }
 };
 
 export const getNumUsersSearch = async (
@@ -95,26 +98,23 @@ export const getNumUsersSearch = async (
   lastName: string | string[],
 ) => {
   try {
+    const searchName = `${firstName} ${lastName}`.trim();
+
     if (role === "all") {
       const results = await db
         .select({ count: count() })
         .from(users)
-        .where(
-          and(
-            like(users.firstName, `${String(firstName)}%`),
-            like(users.lastName, `${String(lastName)}%`),
-          ),
-        );
+        .where(searchName ? like(users.name, `${searchName}%`) : undefined);
       return results[0].count;
     }
+
     const results = await db
       .select({ count: count() })
       .from(users)
       .where(
         and(
           eq(users.role, role),
-          like(users.firstName, `${String(firstName)}%`),
-          like(users.lastName, `${String(lastName)}%`),
+          searchName ? like(users.name, `${searchName}%`) : undefined,
         ),
       );
     return results[0].count;

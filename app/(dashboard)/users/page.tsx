@@ -3,7 +3,6 @@ import React from "react";
 import { getUsersSearch, getNumUsersSearch } from "@/data/user";
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
-import Image from "next/image";
 import PaginationControls from "@/components/UsersTable/PaginationControls";
 import PageBanner from "@/components/PageBanner";
 import DownloadOptions from "@/components/DownloadOptions";
@@ -28,7 +27,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
   const firstName = searchParams["firstName"] ?? "";
   const lastName = searchParams["lastName"] ?? "";
 
-  const start = (Number(page) - 1) * Number(perPage); //the 50*(page-1)th user
+  const start = (Number(page) - 1) * Number(perPage);
   const end = start + Number(perPage);
 
   const params = new URLSearchParams();
@@ -57,26 +56,20 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
             No users match the search criteria.
           </p>
         )}
-        {/* <PaginationControls
-          totalNumOfUsers={totalNumOfUsers}
-          table={"users"}
-          search={params.toString()}
-        /> */}
 
         <table className="w-full">
           <thead className="border-2 text-sm">
             <tr>
               <th></th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Role</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr key={index} className="flexbox align-middle">
+            {users.map((user) => (
+              <tr key={user.id} className="flexbox align-middle">
                 <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
                   <Link
                     href={`/users/${user.id}`}
@@ -87,10 +80,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
                   </Link>
                 </td>
                 <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  {user.name.split(" ")[0]}
-                </td>
-                <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
-                  {user.name.split(" ")[1]}
+                  {user.name}
                 </td>
                 <td className="overflow-x-hidden border-2 border-inherit px-3 py-2">
                   {user.email}

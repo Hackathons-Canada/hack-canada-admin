@@ -29,7 +29,7 @@ const UserProfile = ({ isMinimized }: UserProfileProps) => {
         isMinimized ? "opacity-0 duration-100" : "opacity-100 delay-300",
       )}
     >
-      <div className="flex gap-3.5 rounded-lg bg-muted p-3 shadow-lg shadow-black/30">
+      <div className="flex gap-3.5 rounded-lg border p-3 shadow-black/30">
         <div className="relative aspect-square size-9 overflow-hidden rounded-full border border-primary/20">
           <Image
             src="/default-avatar.webp"
