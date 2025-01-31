@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hackathon Control (HC) Admin Dashboard
 
-## Getting Started
+## Overview
+A modern admin dashboard for managing hackathon participants, applications, and event logistics. Provides real-time analytics, user management, and communication tools for organizers.
 
-First, run the development server:
+## Tech Stack
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS with CSS Variables
+- **UI Components**: Shadcn/ui + Radix Primitives
+- **Authentication**: NextAuth.js
+- **Database**: PostgreSQL + Drizzle ORM
+- **Charts**: Recharts
+- **Deployment**: Vercel
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Design System
+### Colors
+**Core Palette (HSL Values):**
+- Primary: `hsl(210 100% 56%)` (#0084FF) - Vibrant blue for primary actions
+- Secondary: `hsl(33 100% 57%)` (#FF8A00) - Orange for secondary elements
+- Destructive: `hsl(0 68% 58%)` (#E53E3E) - Red for errors/destructive actions
+- Accent: `hsl(199 84% 55%)` (#1DA1F2) - Twitter-like blue for highlights
+
+**Theme Variables:**
+```css
+/* Light Mode */
+--background: 0 0% 100% (White)
+--foreground: 215 28% 17% (Dark slate)
+--muted: 220 14% 96% (Light gray)
+--border: 220 13% 91% (Medium gray)
+
+/* Dark Mode */
+--background: 215 28% 17% (Dark slate)
+--foreground: 210 40% 98% (Off white)
+--muted: 215 28% 25% (Dark gray)
+--border: 215 28% 25% (Medium slate)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Chart Colors:**
+- Light Mode: Earth tones (Terracotta, Forest Green, Navy, Mustard, Clay)
+- Dark Mode: Vibrant palette (Royal Blue, Emerald, Amber, Violet, Coral)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Typography
+**Font Stack:**
+- **Primary Font**: `Fredoka`
+- **Secondary Font**: `Rubik`
+- Optimal readability for dashboard interfaces with x-height balance
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Animations
+- Built-in tailwindcss-animate plugin
 
-## Learn More
+## Project Structure
+```
+hc-admin/
+├── app/               # Next.js app router
+│   ├── (auth)/        # Authentication routes
+│   ├── (dashboard)/   # Protected admin routes
+│   └── api/           # API endpoints
+├── components/        # Reusable components
+│   ├── ui/            # Shadcn/ui primitives
+│   ├── Charts/        # Data visualization
+├── lib/               # Utilities/config
+│   ├── db/            # Database config
+│   └── validations/   # Form validations
+├── actions/           # Server actions
+└── types/             # TypeScript definitions
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Getting Started
+1. Install dependencies:
+```bash
+pnpm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Configure environment variables:
+```bash
+cp .env.example .env.local
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. Run development server:
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+## Environment Variables
+```env
+DATABASE_URL="postgres://..."
+NEXTAUTH_SECRET="..."
+NEXTAUTH_URL="http://localhost:3000"
+AWS_SES_REGION="..."
+AWS_SES_ACCESS_KEY="..."
+AWS_SES_SECRET_ACCESS_KEY="..."
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> Note: Actual color values are defined in CSS variables via `app/globals.css`
