@@ -42,22 +42,19 @@ const HackerInfo = ({ hacker }: Props) => {
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
           <p className="w-1/2">Email Address</p>
-          <p title={hacker.email} className="w-1/2 break-words text-right">
+          <p
+            title={hacker.email || undefined}
+            className="w-1/2 break-words text-right"
+          >
             {hacker.email}
           </p>
         </div>
 
         {/* <p className="py-4 text-lg text-foreground">Demographic Info</p> */}
 
-        <div
-          className={cn("flex justify-between gap-12 py-4 lg:gap-12", {
-            "bg-destructive px-4 text-red-100": hacker.age < 18,
-          })}
-        >
+        <div className={cn("flex justify-between gap-12 py-4 lg:gap-12")}>
           <p className="w-1/2">Age</p>
-          <p className="w-1/2 text-right">
-            {hacker.age + " years old" + (hacker.age < 18 ? " (too tiny)" : "")}
-          </p>
+          <p className="w-1/2 text-right">{hacker.age}</p>
         </div>
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
@@ -77,7 +74,7 @@ const HackerInfo = ({ hacker }: Props) => {
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
           <p className="w-1/2">Race / Ethnicity</p>
-          <p className="w-1/2 text-right">{hacker.raceEthnicity}</p>
+          <p className="w-1/2 text-right">{hacker.race}</p>
         </div>
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
@@ -87,7 +84,7 @@ const HackerInfo = ({ hacker }: Props) => {
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
           <p className="w-1/2">Major / Field of Study</p>
-          <p className="w-1/2 text-right">{hacker.majorFieldOfStudy}</p>
+          <p className="w-1/2 text-right">{hacker.major}</p>
         </div>
 
         <div className="flex justify-between gap-12 py-4 lg:gap-12">
@@ -104,7 +101,7 @@ const HackerInfo = ({ hacker }: Props) => {
             If you could have any superpower for the duration of the hackathon,
             what would it be and why?
           </p>
-          <p className="">{hacker.applicationQuestion1}</p>
+          <p className="">{hacker.shortAnswer1}</p>
         </div>
 
         <div className="flex flex-col gap-2.5 py-4">
@@ -113,7 +110,7 @@ const HackerInfo = ({ hacker }: Props) => {
             would you pick and why? Feel free to draw inspiration from shows,
             anime, video games, etc.
           </p>
-          <p className="">{hacker.applicationQuestion2}</p>
+          <p className="">{hacker.shortAnswer2}</p>
         </div>
 
         <p className="py-4 text-lg text-foreground">Hackathon Questions</p>
@@ -122,7 +119,7 @@ const HackerInfo = ({ hacker }: Props) => {
           <p className="w-1/2">Resume</p>
           <Link
             target="_blank"
-            href={hacker.resumeUrl}
+            href={hacker.resumeUrl || ""}
             className="flex w-1/2 items-center justify-end gap-2 text-nowrap text-right underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Click to view <SquareArrowOutUpRight className="size-4" />
@@ -133,35 +130,6 @@ const HackerInfo = ({ hacker }: Props) => {
           <p className="w-1/2">Share Resume?</p>
           <p className="w-1/2 text-right">
             {hacker.shareResume ? "Yes" : "No"}
-          </p>
-        </div>
-
-        <div className="flex justify-between gap-12 py-4 lg:gap-12">
-          <p className="w-1/2">T-Shirt Size</p>
-          <p className="w-1/2 text-right">{hacker.tshirtSize}</p>
-        </div>
-
-        <div className="flex justify-between gap-12 py-4 lg:gap-12">
-          <p className="w-1/2">Dietary Restrictions</p>
-          <p className="w-1/2 text-right">{hacker.dietaryRestrictions}</p>
-        </div>
-
-        <div className="flex flex-col gap-2.5 py-4">
-          <p className="">
-            I will be 18 years old or older by September 27, 2024.
-          </p>
-          <p className="flex items-center gap-1.5">
-            {hacker.isOver18 ? (
-              <>
-                <CheckCircle className="size-4 text-green-800" />
-                <span>Checked</span>
-              </>
-            ) : (
-              <>
-                <CircleX className="size-4 text-red-800" />
-                <span>Unchecked</span>
-              </>
-            )}
           </p>
         </div>
 
@@ -188,25 +156,6 @@ const HackerInfo = ({ hacker }: Props) => {
           </p>
           <p className="flex items-center gap-1.5">
             {hacker.mlhCheckbox2 ? (
-              <>
-                <CheckCircle className="size-4 text-green-800" />
-                <span>Checked</span>
-              </>
-            ) : (
-              <>
-                <CircleX className="size-4 text-red-800" />
-                <span>Unchecked</span>
-              </>
-            )}
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-2.5 py-4">
-          <p className="">
-            I agree to receive emails from Major League Hacking.
-          </p>
-          <p className="flex items-center gap-1.5">
-            {hacker.isOver18 ? (
               <>
                 <CheckCircle className="size-4 text-green-800" />
                 <span>Checked</span>

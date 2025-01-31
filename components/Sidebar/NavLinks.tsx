@@ -9,12 +9,13 @@ import {
   ShieldCheck,
   ScrollText,
   HardHat,
+  Clipboard,
 } from "lucide-react";
 
 const iconMap = {
   Home: LayoutDashboard,
   Users: Users,
-  Hackers: HardHat,
+  Applications: Clipboard,
   Statistics: BarChart3,
   "Role Management": ShieldCheck,
   Logs: ScrollText,

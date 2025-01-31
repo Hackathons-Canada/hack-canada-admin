@@ -3,7 +3,7 @@ import React from "react";
 import { getUsersSearch, getNumUsersSearch } from "@/data/user";
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
-import PaginationControls from "@/components/UsersTable/PaginationControls";
+import PaginationControls from "@/components/PaginationControls";
 import PageBanner from "@/components/PageBanner";
 import DownloadOptions from "@/components/DownloadOptions";
 import { UserSearch } from "@/components/UserSearch";

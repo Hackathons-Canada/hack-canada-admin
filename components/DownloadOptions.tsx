@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { getDownloadableFile } from "@/actions/download-file";
 import { saveAs } from "file-saver";
@@ -17,7 +17,7 @@ const DownloadOptions = ({ entity }: Props) => {
     startTransition(async () => {
       try {
         //getting data from db
-        const data = await getDownloadableFile(entity, fileType);
+        const data = await getDownloadableFile(entity);
         if (fileType === "csv") {
           // Format data into a csv-like string
           const csvData = convertArrayToCSV(data);

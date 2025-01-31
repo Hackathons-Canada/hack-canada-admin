@@ -1,7 +1,7 @@
 "use server";
 
 import { getCurrentUser } from "@/auth";
-import { getHackerById } from "@/data/hacker";
+import { getApplicationById } from "@/data/applications";
 import { getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import { hackerApplications, users } from "@/lib/db/schema";
@@ -51,7 +51,7 @@ export const updateHackerStatus = async (
       };
     }
 
-    const existingHackerProfile = await getHackerById(userId);
+    const existingHackerProfile = await getApplicationById(userId);
     const existingUser = await getUserById(userId);
 
     if (!existingHackerProfile || !existingUser) {

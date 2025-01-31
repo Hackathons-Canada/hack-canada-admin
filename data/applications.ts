@@ -1,22 +1,9 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { hackerApplications, users } from "@/lib/db/schema";
-import {
-  eq,
-  count,
-  desc,
-  and,
-  like,
-  lt,
-  gte,
-  ne,
-  isNotNull,
-  asc,
-  or,
-  sql,
-} from "drizzle-orm";
+import { eq, count, desc, and, like, asc } from "drizzle-orm";
 
-export const getHackerWithUserById = async (id: string) => {
+export const getApplicationWithUserById = async (id: string) => {
   try {
     const [result] = await db
       .select({
@@ -34,7 +21,7 @@ export const getHackerWithUserById = async (id: string) => {
   }
 };
 
-export const getHackerById = async (userId: string) => {
+export const getApplicationById = async (userId: string) => {
   try {
     const [hacker] = await db
       .select()

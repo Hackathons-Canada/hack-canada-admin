@@ -4,7 +4,7 @@ import EmergencyContactInfo from "@/components/EmergencyContactInfo";
 import HackerApplicationStatus from "@/components/HackerApplicationStatus";
 import HackerInfo from "@/components/ApplicationInfo";
 import PageBanner from "@/components/PageBanner";
-import { getHackerWithUserById } from "@/data/hacker";
+import { getApplicationWithUserById } from "@/data/applications";
 import { redirect } from "next/navigation";
 import ApplicationActions from "@/components/ApplicationActions";
 
@@ -23,7 +23,7 @@ const HackerPage = async ({
     redirect("https://app.hackcanada.org/login");
   }
 
-  const userWithHackerApplication = await getHackerWithUserById(id);
+  const userWithHackerApplication = await getApplicationWithUserById(id);
   if (!userWithHackerApplication) {
     return null;
   }
@@ -47,7 +47,7 @@ const HackerPage = async ({
                 status={hackerUser.applicationStatus as ApplicationStatus}
               />
               <HackerInfo hacker={hacker} />
-              <EmergencyContactInfo userId={hacker.userId} />
+              {/* <EmergencyContactInfo userId={hacker.userId} /> */}
             </div>
             <ApplicationActions
               hacker={hacker}

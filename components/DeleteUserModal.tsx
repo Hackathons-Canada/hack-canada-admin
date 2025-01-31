@@ -6,13 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "./ui/dialog";
 import { toast } from "sonner";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { deleteUser } from "@/actions/delete-user";
 import { useRouter } from "next/navigation";
-import { Label } from "../ui/label";
+import { Label } from "./ui/label";
 import { Loader2 } from "lucide-react";
 
 type Props = {

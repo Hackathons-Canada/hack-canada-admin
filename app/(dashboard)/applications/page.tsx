@@ -1,8 +1,11 @@
 import Container from "@/components/Container";
 import DownloadOptions from "@/components/DownloadOptions";
 import PageBanner from "@/components/PageBanner";
-import { getApplicationsSearch, getNumApplicationsSearch } from "@/data/hacker";
-import PaginationControls from "@/components/UsersTable/PaginationControls";
+import {
+  getApplicationsSearch,
+  getNumApplicationsSearch,
+} from "@/data/applications";
+import PaginationControls from "@/components/PaginationControls";
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import HackerList from "@/components/ApplicationList";
 import { redirect } from "next/navigation";
