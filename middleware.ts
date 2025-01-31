@@ -1,14 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const authPages = [
-  "/sign-in",
-  "/sign-up",
-  "/forgot-password",
-  "/email-verification",
-  "/reset-password",
-  "/email-verification/new-code",
-];
+const authPages = ["/login"];
 
 function isAuthenticated(request: NextRequest): boolean {
   const token = request.cookies.get("authjs.session-token");
