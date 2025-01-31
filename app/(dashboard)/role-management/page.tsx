@@ -15,7 +15,7 @@ const RoleManagementPage = async () => {
   const adminUsersData = await getAdminUsers();
 
   const adminUsers = adminUsersData.map((user) => ({
-    name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+    name: user.name,
     email: user.email,
     role: user.role,
   }));

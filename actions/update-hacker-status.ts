@@ -6,7 +6,6 @@ import { getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import { hackerApplications, users } from "@/lib/db/schema";
 import { sendAcceptanceEmail, sendRejectionEmail } from "@/lib/ses";
-import { HackerApplicationStatus } from "@/types/user";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -30,10 +29,10 @@ type UpdateResult = {
 
 export const updateHackerStatus = async (
   userId: string,
-  status: HackerApplicationStatus,
+  status: ApplicationStatus,
 ): Promise<UpdateResult> => {
   try {
-    const user = await getCurrentUser();
+    const currentUser = await getCurrentUser();
 
     if (!currentUser || currentUser.role !== "admin") {
       return {
@@ -82,32 +81,32 @@ export const updateHackerStatus = async (
       };
     }
 
-    await db.transaction(async (tx) => {
-      await tx
-        .update(users)
-        .set({
-          applicationStatus: status,
-        })
-        .where(eq(users.id, existingUser.id));
+    // await db.transaction(async (tx) => {
+    //   await tx
+    //     .update(users)
+    //     .set({
+    //       applicationStatus: status,
+    //     })
+    //     .where(eq(users.id, existingUser.id));
 
-      await tx
-        .update(hackerApplications)
-        .set({ applicationStatus: status })
-        .where(eq(hackerApplications.userId, existingHackerProfile.userId));
+    //   await tx
+    //     .update(hackerApplications)
+    //     .set({ applicationStatus: status })
+    //     .where(eq(hackerApplications.userId, existingHackerProfile.userId));
 
-      if (status === "accepted" || status === "rejected") {
-        const sendEmail =
-          status === "accepted" ? sendAcceptanceEmail : sendRejectionEmail;
-        const response = await sendEmail(
-          existingHackerProfile.firstName || existingUser.firstName || "hacker",
-          existingHackerProfile.email,
-        );
+    //   if (status === "accepted" || status === "rejected") {
+    //     const sendEmail =
+    //       status === "accepted" ? sendAcceptanceEmail : sendRejectionEmail;
+    //     const response = await sendEmail(
+    //       existingHackerProfile.firstName || existingUser.firstName || "hacker",
+    //       existingHackerProfile.email,
+    //     );
 
-        if (response.error) {
-          throw new Error(`Failed to send ${status} email: ${response.error}`);
-        }
-      }
-    });
+    //     if (response.error) {
+    //       throw new Error(`Failed to send ${status} email: ${response.error}`);
+    //     }
+    //   }
+    // });
 
     revalidatePath(`/applications/${userId}`);
     revalidatePath(`/users/${userId}`);

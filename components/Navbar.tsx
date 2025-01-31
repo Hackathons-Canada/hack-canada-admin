@@ -28,14 +28,7 @@ const Navbar = async ({}: Props) => {
         <div className="flex items-center gap-6">
           <ThemeToggle />
 
-          {user ? (
-            <div className="flex items-center gap-2 rounded-full bg-secondary/20 px-4 py-2">
-              <div className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-              <p className="text-sm font-medium text-muted-foreground">
-                {user.role === "admin" ? "Administrator" : user.role}
-              </p>
-            </div>
-          ) : (
+          {user ? null : (
             <Button asChild>
               <Link href="/login">Sign in</Link>
             </Button>

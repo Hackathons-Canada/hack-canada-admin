@@ -19,7 +19,7 @@ const chartConfig = {
 
 type Props = {
   data: {
-    race: string;
+    race: string | null;
     count: number;
   }[];
 };

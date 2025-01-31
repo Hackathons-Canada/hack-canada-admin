@@ -8,11 +8,11 @@ type Props = {};
 const ProgramData = async ({}: Props) => {
   const results = await db
     .select({
-      major: hackerApplications.majorFieldOfStudy,
+      major: hackerApplications.major,
       applicants: sql<number>`COUNT(${hackerApplications.userId})`,
     })
     .from(hackerApplications)
-    .groupBy(hackerApplications.majorFieldOfStudy)
+    .groupBy(hackerApplications.major)
     .execute();
 
   return (

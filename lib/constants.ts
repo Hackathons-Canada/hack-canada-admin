@@ -13,10 +13,10 @@ export const navLinks = [
     name: "Applications",
     href: "/applications",
   },
-  {
-    name: "Statistics",
-    href: "/statistics",
-  },
+  // {
+  //   name: "Statistics",
+  //   href: "/statistics",
+  // },
   {
     name: "Role Management",
     href: "/role-management",

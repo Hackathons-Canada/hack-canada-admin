@@ -6,11 +6,11 @@ import RaceBarChart from "./RaceBarChart";
 const RaceData = async () => {
   const results = await db
     .select({
-      race: hackerApplications.raceEthnicity,
+      race: hackerApplications.race,
       count: sql<number>`COUNT(${hackerApplications.userId})`,
     })
     .from(hackerApplications)
-    .groupBy(hackerApplications.raceEthnicity)
+    .groupBy(hackerApplications.race)
     .execute();
 
   return <RaceBarChart data={results} />;

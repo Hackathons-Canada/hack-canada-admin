@@ -19,7 +19,7 @@ const chartConfig = {
 
 type Props = {
   data: {
-    level: string;
+    level: string | null;
     applicants: number;
   }[];
 };

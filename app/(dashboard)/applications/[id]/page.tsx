@@ -46,7 +46,6 @@ const HackerPage = async ({
                 status={hackerUser.applicationStatus as ApplicationStatus}
               />
               <HackerInfo hacker={hacker} />
-              {/* <EmergencyContactInfo userId={hacker.userId} /> */}
             </div>
             <ApplicationActions
               hacker={hacker}

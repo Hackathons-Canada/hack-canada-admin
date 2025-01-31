@@ -23,7 +23,7 @@ const chartConfig = {
 
 type Props = {
   data: {
-    major: string;
+    major: string | null;
     applicants: number;
   }[];
 };
