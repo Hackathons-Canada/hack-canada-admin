@@ -109,32 +109,30 @@ const ApplicationStatusModal = ({
             </DialogHeader>
 
             <div className="space-y-1">
-              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-white/5">
-                <p>User</p>
+              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
+                <p className="font-medium">Name</p>
                 <p>{name}</p>
               </div>
 
-              <div className="flex justify-between gap-4 rounded-md bg-black/10 px-2.5 py-2 dark:bg-white/5">
-                <p className="w-1/2 text-nowrap">Email Address</p>
+              <div className="flex justify-between gap-4 rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
+                <p className="w-1/2 text-nowrap font-medium">Email Address</p>
                 <p className="w-1/2 break-words text-right">{email}</p>
               </div>
 
-              <div
-                className={cn(
-                  "flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-white/5",
-                )}
-              >
-                <p>Age</p>
+              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
+                <p className="font-medium">Age</p>
                 <p>{age}</p>
               </div>
 
-              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-white/5">
-                <p>Current Status</p>
+              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
+                <p className="font-medium">Current Status</p>
                 <p
                   className={cn({
-                    "text-green-500 dark:text-green-600": status === "accepted",
-                    "text-rose-500 dark:text-rose-600": status === "rejected",
-                    "text-yellow-500 dark:text-yellow-600":
+                    "font-medium text-green-400 dark:text-green-400":
+                      status === "accepted",
+                    "font-medium text-rose-400 dark:text-rose-400":
+                      status === "rejected",
+                    "font-medium text-yellow-400 dark:text-yellow-400":
                       status === "waitlisted",
                   })}
                 >
@@ -142,8 +140,6 @@ const ApplicationStatusModal = ({
                 </p>
               </div>
             </div>
-
-            <hr className="border-t-2" />
 
             {displayBanner.show && (
               <Banner
@@ -154,7 +150,7 @@ const ApplicationStatusModal = ({
 
             {(status === "accepted" || status === "rejected") &&
             !displayBanner.show ? (
-              <div className="py-2 text-center text-sm text-muted">
+              <div className="py-2 text-center text-sm text-muted-foreground">
                 <p>
                   Since the user has already received an email, their status
                   cannot be updated at this time.
@@ -172,14 +168,16 @@ const ApplicationStatusModal = ({
             ) : null}
 
             {(status === "pending" || status === "waitlisted") && (
-              <div className="flex flex-col gap-4 text-center text-muted">
+              <div className="flex flex-col gap-4 text-center text-muted-foreground">
+                <hr className="border-t-2" />
+
                 <p className="text-balance text-sm">
                   Upon acceptance or rejection, user will immediately receive an
                   email.
                 </p>
 
                 <p className="">
-                  {name?.split(" ")[0]} is eagerly waiting to be accepted.
+                  {name?.split(" ")[0]} is desperately waiting to be accepted.
                 </p>
 
                 <div className="flex gap-2 max-xs:flex-col md:mt-2">
