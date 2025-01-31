@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "./sidebar/Sidebar";
 import { cn } from "@/lib/utils";
+import Sidebar from "./sidebar/SidebarComponent";
 
 interface DashboardWrapperProps {
   children: React.ReactNode;
