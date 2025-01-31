@@ -37,6 +37,12 @@ export const useAuth = () => {
         const data: ApiResponse = await response.json();
 
         if (!data.success) {
+          if (
+            data.message === "You are not authorized to access this dashboard."
+          ) {
+            router.push("/auth-error");
+            return;
+          }
           toast.error(data.message);
           return;
         }
