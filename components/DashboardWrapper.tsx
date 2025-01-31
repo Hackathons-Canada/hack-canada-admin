@@ -16,7 +16,7 @@ const DashboardWrapper = ({ children }: DashboardWrapperProps) => {
       <Sidebar isMinimized={isMinimized} onMinimize={setIsMinimized} />
       <main
         className={cn(
-          "pt-20 transition-[padding] duration-300",
+          "pb-8 pt-20 transition-[padding] duration-300 md:pb-12",
           isMinimized ? "lg:pl-20" : "lg:pl-72",
         )}
       >
