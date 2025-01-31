@@ -2,13 +2,25 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import LoginForm from "@/components/login-form";
+import { getCurrentUser } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Login | HC Admin",
   description: "Login to access the Hack Canada admin dashboard",
 };
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  const currentUser = await getCurrentUser();
+
+  if (currentUser && currentUser.role === "admin") {
+    redirect("/");
+  }
+
+  if (currentUser && currentUser.role !== "admin") {
+    redirect("https://app.hackcanada.org");
+  }
+
   return (
     <Card className="w-full max-w-md shadow-lg">
       <CardHeader className="flex items-center justify-center pb-2">

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import Sidebar from "./sidebar/SidebarComponent";
+import Sidebar from "./navigation/SidebarComponent";
 
 interface DashboardWrapperProps {
   children: React.ReactNode;

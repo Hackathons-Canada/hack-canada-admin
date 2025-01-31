@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
-import ThemeToggle from "./ThemeToggle";
 import { getCurrentUser } from "@/auth";
 import Image from "next/image";
+import ThemeToggle from "../ThemeToggle";
+import { Button } from "../ui/button";
 
 type Props = {};
 

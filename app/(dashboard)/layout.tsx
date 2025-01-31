@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import DashboardWrapper from "@/components/DashboardWrapper";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navigation/Navbar";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
