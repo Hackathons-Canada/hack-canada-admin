@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, formatApplicationStatus } from "@/lib/utils";
 
 interface UserStatusBadgeProps {
   status: ApplicationStatus;
@@ -19,11 +19,13 @@ export const UserStatusBadge = ({ status }: UserStatusBadgeProps) => {
           "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
         status === "rejected" &&
           "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
+        status === "cancelled" &&
+          "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
         !status &&
           "bg-zinc-100 text-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300",
       )}
     >
-      {status || "No Application"}
+      {formatApplicationStatus(status) || "No Application"}
     </div>
   );
 };

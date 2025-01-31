@@ -18,7 +18,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { UserStatusBadge } from "@/components/UserSearch/UserStatusBadge";
-
 interface UsersPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }

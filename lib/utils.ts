@@ -1,4 +1,3 @@
-import { ApplicationStatus } from "@/types/user";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -33,8 +32,10 @@ export function formatApplicationStatus(status: ApplicationStatus) {
       return "Accepted";
     case "rejected":
       return "Rejected";
-    case "waitListed":
+    case "waitlisted":
       return "Waitlisted";
+    case "cancelled":
+      return "Cancelled";
     default:
       return "Not Applied";
   }
