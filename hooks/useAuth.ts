@@ -43,7 +43,7 @@ export const useAuth = () => {
 
         toast.success(data.message);
         router.refresh();
-        router.push("/");
+        window.location.replace("/");
       } catch (error) {
         console.error("Login error:", error);
         toast.error("Something went wrong");
