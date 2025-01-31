@@ -16,7 +16,17 @@ const schema = z.object({
   school: z.string().optional(),
   major: z.string().optional(),
   levelOfStudy: z.string().optional(),
-  status: z.string().optional(),
+  status: z
+    .enum([
+      "all",
+      "not_applied",
+      "pending",
+      "accepted",
+      "rejected",
+      "waitlisted",
+      "cancelled",
+    ] as const)
+    .optional(),
 });
 
 type SearchFormValues = z.infer<typeof schema>;

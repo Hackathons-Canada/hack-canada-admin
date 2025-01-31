@@ -16,7 +16,9 @@ import {
 import { UseFormReturn } from "react-hook-form";
 
 interface StatusSelectProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<{
+    status?: "all" | ApplicationStatus;
+  }>;
 }
 
 export const StatusSelect = ({ form }: StatusSelectProps) => {
@@ -38,10 +40,12 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
+                <SelectItem value="not_applied">Not Applied</SelectItem>
                 <SelectItem value="pending">Under Review</SelectItem>
                 <SelectItem value="accepted">Accepted</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="waitlisted">Waitlisted</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>
