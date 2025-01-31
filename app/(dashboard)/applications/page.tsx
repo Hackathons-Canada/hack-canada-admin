@@ -7,7 +7,7 @@ import {
 } from "@/data/applications";
 import PaginationControls from "@/components/PaginationControls";
 import { RESULTS_PER_PAGE } from "@/lib/constants";
-import HackerList from "@/components/ApplicationList";
+import ApplicationList from "@/components/ApplicationList";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/auth";
 import { ApplicationSearch } from "@/components/search/ApplicationSearch";
@@ -71,7 +71,7 @@ const ApplicationsPage = async ({ searchParams }: ApplicationsPageProps) => {
   return (
     <Container className="space-y-10">
       <PageBanner
-        subheading="A list of all the applications in the database. Or more specifically, all the applications that have been submitted, whether they have been accepted or not."
+        subheading="A list of all applications in the database. Manage application statuses here or click the external link icon to view full application details."
         className="transition-all duration-200 hover:bg-muted/50"
       />
 
@@ -106,7 +106,7 @@ const ApplicationsPage = async ({ searchParams }: ApplicationsPageProps) => {
               )}
 
               <div className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md">
-                <HackerList applications={applications} />
+                <ApplicationList applications={applications} />
               </div>
 
               {applications.length > 0 && (

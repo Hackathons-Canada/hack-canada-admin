@@ -32,7 +32,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
   return (
     <Container className="space-y-10">
       <PageBanner
-        subheading="List of all users in the database. Note that these are just accounts created with us and not necessarily people who have applied to the hackathon. To view a list of hackers, navigate to the Hackers page."
+        subheading="A list of all users in the system. Manage user roles and permissions here."
         className="transition-all duration-200 hover:bg-muted/50"
       />
 

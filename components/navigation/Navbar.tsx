@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/auth";
 import Image from "next/image";
 import ThemeToggle from "../ThemeToggle";
 import { Button } from "../ui/button";
+import MobileNav from "./MobileNav";
 
 type Props = {};
 
@@ -28,11 +29,15 @@ const Navbar = async ({}: Props) => {
         <div className="flex items-center gap-6">
           <ThemeToggle />
 
-          {user ? null : (
-            <Button asChild>
-              <Link href="/login">Sign in</Link>
-            </Button>
-          )}
+          <div className="hidden lg:block">
+            {user ? null : (
+              <Button asChild>
+                <Link href="/login">Sign in</Link>
+              </Button>
+            )}
+          </div>
+
+          <MobileNav />
         </div>
       </nav>
     </header>
