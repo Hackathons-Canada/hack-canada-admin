@@ -35,7 +35,7 @@ const HackerPage = async ({
     <Container className="space-y-6 md:space-y-8">
       <PageBanner
         name={hacker?.firstName || "Hacker (no name)"}
-        subheading={`More information on a particular hacker. Whether they have been accepted or not, they are considered a hacker (either accepted or rejected) because they have applied for the hackathon.`}
+        subheading={`More information on a particular hacker's application.`}
         backButton
       />
 
