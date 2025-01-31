@@ -20,92 +20,100 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
     redirect("https://app.hackcanada.org");
   }
 
+  // Convert string[] params to string
+  const getParamAsString = (param: string | string[] | undefined): string => {
+    if (Array.isArray(param)) return param[0];
+    return param || "";
+  };
+
   const page = searchParams["page"] ?? "1";
   const perPage = searchParams["perPage"] ?? RESULTS_PER_PAGE;
-  const firstName = searchParams["firstName"] ?? "";
-  const lastName = searchParams["lastName"] ?? "";
-  const age = searchParams["age"] ?? "all";
-  const diet = searchParams["diet"] ?? "all";
-  const school = searchParams["school"] ?? "";
-  const status = searchParams["status"] ?? "all";
+  const firstName = getParamAsString(searchParams["firstName"]);
+  const lastName = getParamAsString(searchParams["lastName"]);
+  const school = getParamAsString(searchParams["school"]);
+  const levelOfStudy = getParamAsString(searchParams["levelOfStudy"]) || "all";
+  const major = getParamAsString(searchParams["major"]);
+  const status = getParamAsString(searchParams["status"]) || "all";
 
   const params = new URLSearchParams();
-  params.append("firstName", firstName.toString());
-  params.append("lastName", lastName.toString());
-  params.append("age", age.toString());
-  params.append("diet", diet.toString());
-  params.append("school", school.toString());
-  params.append("status", status.toString());
-
-  const totalResultHackers =
-    (await getNumHackersSearch(
-      firstName,
-      lastName,
-      school,
-      age,
-      diet,
-      status,
-    )) ?? 0;
+  params.append("firstName", firstName);
+  params.append("lastName", lastName);
+  params.append("school", school);
+  params.append("levelOfStudy", levelOfStudy);
+  params.append("major", major);
+  params.append("status", status);
 
   const start = (Number(page) - 1) * Number(perPage);
 
-  const hackers = await getHackersSearch(
-    firstName,
-    lastName,
-    school,
-    age,
-    diet,
-    status,
-    start,
-  );
+  const [totalResultHackers, hackers] = await Promise.all([
+    getNumHackersSearch(
+      firstName,
+      lastName,
+      school,
+      levelOfStudy,
+      major,
+      status,
+    ) ?? 0,
+    getHackersSearch(
+      firstName,
+      lastName,
+      school,
+      levelOfStudy,
+      major,
+      status,
+      start,
+    ),
+  ]);
 
   return (
-    <Container className="space-y-6 md:space-y-8">
-      <PageBanner subheading="A list of all the hackers in the database. Or more specifically, all the applications that have been submitted, whether they have been accepted or not." />
-      <DownloadOptions entity="hackers" />
-      <HackerSearch />
-      <div className="space-y-2">
-        {hackers?.length ? (
-          <div className="flex flex-col space-y-2 xl:flex-row xl:items-end xl:justify-between">
-            <p className="max-md:text-center max-md:text-sm">
-              Displaying hackers {start + 1} - {start + hackers.length} from{" "}
-              {totalResultHackers} hackers
-            </p>
+    <Container className="space-y-10">
+      <PageBanner
+        subheading="A list of all the hackers in the database. Or more specifically, all the applications that have been submitted, whether they have been accepted or not."
+        className="transition-all duration-200 hover:bg-muted/50"
+      />
 
-            {/* <PaginationControls
-              totalNumOfUsers={totalResultHackers}
-              table={"hackers"}
-              search={params.toString()}
-              className="mt-6 max-w-lg rounded-md border bg-zinc-100 py-2.5 dark:bg-zinc-950 max-md:mx-auto md:mt-8"
-            /> */}
-          </div>
-        ) : (
-          <p className="max-md:text-center max-md:text-sm">
-            No hackers match the search criteria.
-          </p>
-        )}
-
-        <div className="relative mx-auto w-full overflow-x-hidden max-sm:text-center">
-          {hackers ? (
-            <>
-              <HackerList hackers={hackers} />
-            </>
-          ) : (
-            <div className="rounded-b-lg border-2 p-4 md:p-6">
-              <p className="font-medium max-sm:text-sm">
-                Could not find any hackers.
-              </p>
+      <div className="space-y-10">
+        <section aria-label="Search and Download Controls">
+          <div className="flex items-start justify-between gap-8 max-2xl:flex-col-reverse">
+            <div className="w-full flex-1">
+              <HackerSearch />
             </div>
+            <div className="w-full shrink-0 lg:w-auto">
+              <DownloadOptions entity="hackers" />
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Hackers List" className="space-y-6">
+          {hackers && (
+            <>
+              {hackers.length ? (
+                <p className="text-sm font-medium text-muted-foreground max-md:text-center">
+                  Displaying hackers {start + 1} - {start + hackers.length} from{" "}
+                  <span className="text-foreground">{totalResultHackers}</span>{" "}
+                  hackers
+                </p>
+              ) : (
+                <p className="text-sm font-medium text-muted-foreground max-md:text-center">
+                  No hackers match the search criteria.
+                </p>
+              )}
+
+              <div className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md">
+                <HackerList hackers={hackers} />
+              </div>
+
+              {hackers.length > 0 && (
+                <PaginationControls
+                  totalNumOfUsers={totalResultHackers}
+                  search={params.toString()}
+                  table="hackers"
+                  className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
+                />
+              )}
+            </>
           )}
-        </div>
-        {hackers?.length ? (
-          <PaginationControls
-            totalNumOfUsers={totalResultHackers}
-            search={params.toString()}
-            table={"hackers"}
-            className="max-w-lg rounded-md border bg-zinc-100 py-2.5 dark:bg-zinc-950 max-md:mx-auto md:mt-8"
-          />
-        ) : null}
+        </section>
       </div>
     </Container>
   );

@@ -33,8 +33,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
   const page = searchParams["page"] ?? "1";
   const perPage = searchParams["perPage"] ?? "50";
   const role = String(searchParams["role"] ?? "all");
-  const firstName = String(searchParams["firstName"] ?? "");
-  const lastName = String(searchParams["lastName"] ?? "");
+  const name = String(searchParams["name"] ?? "");
   const email = String(searchParams["email"] ?? "");
   const status = String(searchParams["status"] ?? "all");
 
@@ -43,21 +42,13 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
 
   const params = new URLSearchParams();
   params.append("role", role.toString());
-  params.append("firstName", firstName.toString());
-  params.append("lastName", lastName.toString());
+  params.append("name", name.toString());
   params.append("email", email.toString());
   params.append("status", status.toString());
 
   const totalNumOfUsers: number =
-    (await getNumUsersSearch(role, firstName, lastName, email, status)) ?? 0;
-  const users = await getUsersSearch(
-    role,
-    firstName,
-    lastName,
-    email,
-    status,
-    start,
-  );
+    (await getNumUsersSearch(role, name, email, status)) ?? 0;
+  const users = await getUsersSearch(role, name, email, status, start);
 
   return (
     <Container className="space-y-10">
@@ -124,7 +115,9 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
                       <span className="capitalize">{user.role}</span>
                     </TableCell>
                     <TableCell className="py-4">
-                      <UserStatusBadge status={user.applicationStatus} />
+                      <UserStatusBadge
+                        status={user.applicationStatus as ApplicationStatus}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

@@ -6,13 +6,12 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-import { SearchInput } from "./SearchInput";
+import { SearchInput } from "@/components/ui/search-input";
 import { RoleSelect } from "./RoleSelect";
 import { StatusSelect } from "./StatusSelect";
 
 const schema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
+  name: z.string().optional(),
   role: z.string().optional(),
   email: z.string().optional(),
   status: z.string().optional(),
@@ -26,8 +25,7 @@ export const UserSearch = () => {
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       role: "all",
       email: "",
       status: "all",
@@ -55,15 +53,9 @@ export const UserSearch = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <SearchInput
               form={form}
-              name="firstName"
-              label="First Name"
-              placeholder="Search by first name"
-            />
-            <SearchInput
-              form={form}
-              name="lastName"
-              label="Last Name"
-              placeholder="Search by last name"
+              name="name"
+              label="Name"
+              placeholder="Search by name"
             />
             <SearchInput
               form={form}

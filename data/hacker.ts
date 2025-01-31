@@ -12,17 +12,22 @@ import {
   ne,
   isNotNull,
   asc,
+  or,
+  sql,
 } from "drizzle-orm";
 
 export const getHackerWithUserById = async (id: string) => {
   try {
-    const [hacker] = await db
-      .select()
+    const [result] = await db
+      .select({
+        hackerApplication: hackerApplications,
+        user: users,
+      })
       .from(hackerApplications)
       .where(eq(hackerApplications.userId, id))
       .innerJoin(users, eq(users.id, hackerApplications.userId));
 
-    return hacker;
+    return result;
   } catch (error) {
     console.log("Error fetching hacker with ID: " + id, error);
     return null;
@@ -45,13 +50,17 @@ export const getHackerById = async (userId: string) => {
 
 export const getHackers = async (offsetAmt: number) => {
   try {
-    const hackers = await db
-      .select()
+    const results = await db
+      .select({
+        hackerApplication: hackerApplications,
+        user: users,
+      })
       .from(hackerApplications)
       .limit(RESULTS_PER_PAGE)
       .offset(offsetAmt)
-      .orderBy(desc(hackerApplications.createdAt));
-    return hackers;
+      .orderBy(desc(hackerApplications.createdAt))
+      .innerJoin(users, eq(users.id, hackerApplications.userId));
+    return results;
   } catch (error) {
     console.log("Error fetching hackers", error);
     return null;
@@ -71,32 +80,44 @@ export const getNumHackers = async () => {
 };
 
 export const getHackersSearch = async (
-  firstName: string | string[],
-  lastName: string | string[],
-  school: string | string[],
-  age: string | string[],
-  diet: string | string[],
-  status: string | string[],
+  firstName: string | undefined,
+  lastName: string | undefined,
+  school: string | undefined,
+  levelOfStudy: string | undefined,
+  major: string | undefined,
+  status: string | undefined,
   offset: number,
 ) => {
-  diet = diet === "all" ? "" : diet;
-  status = status === "all" ? "" : status;
   try {
+    const conditions = [];
+
+    if (firstName)
+      conditions.push(
+        like(hackerApplications.firstName || "", `${firstName}%`),
+      );
+    if (lastName)
+      conditions.push(like(hackerApplications.lastName || "", `${lastName}%`));
+    if (school)
+      conditions.push(like(hackerApplications.school || "", `%${school}%`));
+    if (major)
+      conditions.push(like(hackerApplications.major || "", `%${major}%`));
+
+    if (levelOfStudy && levelOfStudy !== "all") {
+      conditions.push(eq(hackerApplications.levelOfStudy, levelOfStudy));
+    }
+
+    if (status && status !== "all") {
+      conditions.push(eq(users.applicationStatus, status));
+    }
+
     return await db
-      .select()
+      .select({
+        hackerApplication: hackerApplications,
+        user: users,
+      })
       .from(hackerApplications)
-      .where(
-        and(
-          like(hackerApplications.firstName, `${firstName}%`),
-          like(hackerApplications.lastName, `${lastName}%`),
-          like(hackerApplications.school, `%${school}%`),
-          age === "under"
-            ? lt(hackerApplications.age, 18)
-            : age === "over"
-              ? gte(hackerApplications.age, 18)
-              : isNotNull(hackerApplications.age),
-        ),
-      )
+      .innerJoin(users, eq(users.id, hackerApplications.userId))
+      .where(and(...conditions))
       .limit(RESULTS_PER_PAGE)
       .offset(offset)
       .orderBy(asc(hackerApplications.createdAt));
@@ -107,31 +128,41 @@ export const getHackersSearch = async (
 };
 
 export const getNumHackersSearch = async (
-  firstName: string | string[],
-  lastName: string | string[],
-  school: string | string[],
-  age: string | string[],
-  diet: string | string[],
-  status: string | string[],
+  firstName: string | undefined,
+  lastName: string | undefined,
+  school: string | undefined,
+  levelOfStudy: string | undefined,
+  major: string | undefined,
+  status: string | undefined,
 ) => {
-  diet = diet === "all" ? "" : diet;
-  status = status === "all" ? "" : status;
   try {
+    const conditions = [];
+
+    if (firstName)
+      conditions.push(
+        like(hackerApplications.firstName || "", `${firstName}%`),
+      );
+    if (lastName)
+      conditions.push(like(hackerApplications.lastName || "", `${lastName}%`));
+    if (school)
+      conditions.push(like(hackerApplications.school || "", `%${school}%`));
+    if (major)
+      conditions.push(like(hackerApplications.major || "", `%${major}%`));
+
+    if (levelOfStudy && levelOfStudy !== "all") {
+      conditions.push(eq(hackerApplications.levelOfStudy, levelOfStudy));
+    }
+
+    if (status && status !== "all") {
+      conditions.push(eq(users.applicationStatus, status));
+    }
+
     const hackers = await db
       .select({ count: count() })
       .from(hackerApplications)
-      .where(
-        and(
-          like(hackerApplications.firstName, `${firstName}%`),
-          like(hackerApplications.lastName, `${lastName}%`),
-          like(hackerApplications.school, `%${school}%`),
-          age === "under"
-            ? lt(hackerApplications.age, 18)
-            : age === "over"
-              ? gte(hackerApplications.age, 18)
-              : ne(hackerApplications.age, -1),
-        ),
-      );
+      .innerJoin(users, eq(users.id, hackerApplications.userId))
+      .where(and(...conditions));
+
     return hackers[0].count;
   } catch (error) {
     console.log("Error fetching number of hackers", error);

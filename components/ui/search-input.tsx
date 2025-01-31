@@ -11,7 +11,7 @@ import { UseFormReturn } from "react-hook-form";
 
 interface SearchInputProps {
   form: UseFormReturn<any>;
-  name: "firstName" | "lastName" | "email";
+  name: string;
   label: string;
   placeholder: string;
 }

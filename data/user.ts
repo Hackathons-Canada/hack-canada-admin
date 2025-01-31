@@ -66,8 +66,7 @@ export const getNumUsers = async () => {
 
 export const getUsersSearch = async (
   role: string,
-  firstName: string,
-  lastName: string,
+  name: string,
   email: string,
   status: string,
   offsetAmt: number,
@@ -79,9 +78,8 @@ export const getUsersSearch = async (
       conditions.push(eq(users.role, role));
     }
 
-    const searchName = `${firstName} ${lastName}`.trim();
-    if (searchName) {
-      conditions.push(like(users.name, `%${searchName}%`));
+    if (name) {
+      conditions.push(like(users.name, `%${name}%`));
     }
 
     if (email) {
@@ -111,8 +109,7 @@ export const getUsersSearch = async (
 
 export const getNumUsersSearch = async (
   role: string,
-  firstName: string,
-  lastName: string,
+  name: string,
   email: string,
   status: string,
 ) => {
@@ -123,9 +120,8 @@ export const getNumUsersSearch = async (
       conditions.push(eq(users.role, role));
     }
 
-    const searchName = `${firstName} ${lastName}`.trim();
-    if (searchName) {
-      conditions.push(like(users.name, `%${searchName}%`));
+    if (name) {
+      conditions.push(like(users.name, `%${name}%`));
     }
 
     if (email) {
