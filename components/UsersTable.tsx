@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ExternalLinkIcon } from "lucide-react";
+import UserRoleModal from "@/components/UserRoleModal";
+import { UserRoleModalTrigger } from "@/components/search/UserRoleModalTrigger";
 import { UserStatusBadge } from "@/components/search/UserStatusBadge";
 import {
   Table,
@@ -47,7 +49,14 @@ export const UsersTable = ({ users }: UsersTableProps) => {
               <TableCell className="py-4 font-medium">{user.name}</TableCell>
               <TableCell className="py-4">{user.email}</TableCell>
               <TableCell className="py-4">
-                <span className="capitalize">{user.role}</span>
+                <UserRoleModal
+                  userId={user.id}
+                  name={user.name}
+                  email={user.email}
+                  role={user.role as UserRole}
+                >
+                  <UserRoleModalTrigger role={user.role as UserRole} />
+                </UserRoleModal>
               </TableCell>
               <TableCell className="py-4">
                 <UserStatusBadge
