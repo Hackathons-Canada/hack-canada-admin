@@ -18,7 +18,6 @@ import { UseFormReturn } from "react-hook-form";
 const statuses = [
   { value: "all", label: "All Statuses" },
   { value: "not_applied", label: "Not Applied" },
-  { value: "noApplication", label: "No Application" },
   { value: "pending", label: "Pending Review" },
   { value: "accepted", label: "Accepted" },
   { value: "rejected", label: "Rejected" },
