@@ -28,6 +28,8 @@ export const users = pgTable("user", {
     .default(sql`CURRENT_TIMESTAMP`),
 });
 
+export type User = typeof users.$inferSelect;
+
 export const passwordResetTokens = pgTable("passwordResetToken", {
   id: text("id")
     .primaryKey()

@@ -16,7 +16,7 @@ const UserPage = async ({
   };
 }) => {
   const { id } = params;
-  const user = await getCurrentUser();
+  const currentUser = await getCurrentUser();
 
   if (!currentUser || currentUser.role !== "admin") {
     redirect("https://app.hackcanada.org/login");
@@ -24,10 +24,14 @@ const UserPage = async ({
 
   const user = await getUserById(id);
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <Container className="space-y-6 md:space-y-8">
       <PageBanner
-        name={user?.firstName}
+        name={user.name.split(" ")[0]}
         subheading={`More information on the user. This is a dedicated page for users of all kinds as long as they have an account with us.`}
         backButton
       />
@@ -39,9 +43,9 @@ const UserPage = async ({
         {user && (
           <UserActions
             id={user.id}
-            name={user.firstName || "User (no name)"}
+            name={user.name.split(" ")[0]}
             email={user.email}
-            status={user.applicationStatus}
+            status={user.applicationStatus as ApplicationStatus}
           />
         )}
       </div>

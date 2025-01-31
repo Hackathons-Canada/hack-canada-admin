@@ -1,10 +1,10 @@
 import { formatDate } from "@/lib/utils";
-import { User } from "@/types/user";
 import { SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
+import { User } from "@/lib/db/schema";
 
 type Props = {
-  user: User | null;
+  user: User;
 };
 
 const UserInfo = ({ user }: Props) => {
@@ -25,23 +25,14 @@ const UserInfo = ({ user }: Props) => {
         </div>
 
         <div className="flex items-center justify-between gap-12 lg:gap-12">
-          <p className="w-1/2 text-nowrap">First Name</p>
-          <p className="w-1/2 text-nowrap text-right">{user.firstName}</p>
-        </div>
-
-        <div className="flex items-center justify-between gap-12 lg:gap-12">
-          <p className="w-1/2 text-nowrap">Last Name</p>
-          <p className="w-1/2 text-nowrap text-right">
-            {user.lastName || (
-              <b className="text-zinc-300 dark:text-zinc-600">N/A</b>
-            )}
-          </p>
+          <p className="w-1/2 text-nowrap">Full Name</p>
+          <p className="w-1/2 text-nowrap text-right">{user.name}</p>
         </div>
 
         <div className="flex items-center justify-between gap-12 lg:gap-12">
           <p className="w-1/2 text-nowrap">Email Address</p>
           <p
-            title={user.email}
+            title={user.email || "N/A"}
             className="w-1/2 truncate text-nowrap text-right"
           >
             {user.email}
@@ -58,11 +49,6 @@ const UserInfo = ({ user }: Props) => {
           <p className="w-1/2 text-nowrap text-right">
             {user.applicationStatus}
           </p>
-        </div>
-
-        <div className="flex items-center justify-between gap-12 lg:gap-12">
-          <p className="w-1/2 text-nowrap">Auth Provider</p>
-          <p className="w-1/2 text-nowrap text-right">{user.provider}</p>
         </div>
 
         <div className="flex items-center justify-between gap-12 lg:gap-12">
@@ -85,8 +71,8 @@ const UserInfo = ({ user }: Props) => {
           <p className="w-1/2 text-nowrap">RSVP Status</p>
           <p className="w-1/2 text-nowrap text-right">
             {user.role === "hacker"
-              ? user.rsvp
-                ? formatDate(user.rsvp.toString())
+              ? user.rsvpAt
+                ? formatDate(user.rsvpAt.toString())
                 : "Has Not RSVP'd"
               : "N/A"}
           </p>
@@ -94,7 +80,7 @@ const UserInfo = ({ user }: Props) => {
 
         {user.applicationStatus !== "not_applied" && (
           <div className="flex items-center justify-between gap-12 lg:gap-12">
-            <p className="w-1/2 text-nowrap">Hacker Profile</p>
+            <p className="w-1/2 text-nowrap">Hacker Application</p>
             <Link
               href={`/hackers/${user.id}`}
               className="flex w-1/2 items-center justify-end gap-2 text-nowrap text-right underline underline-offset-4 transition-colors hover:text-foreground"

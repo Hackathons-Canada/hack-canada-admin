@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ApplicationStatus } from "@/types/user";
 import DeleteUserModal from "../DeleteUserModal";
 
 type Props = {
@@ -31,7 +30,7 @@ const UserActions = ({ id, name, email, status }: Props) => {
         <>
           <hr className="border-t-2" />
           <Button asChild variant="outline" className="w-full text-base">
-            <Link href={`/hackers/${id}`}>View Hacker Profile</Link>
+            <Link href={`/hackers/${id}`}>View Hacker Application</Link>
           </Button>
         </>
       )}
