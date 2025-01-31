@@ -55,7 +55,7 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
                   <SelectItem
                     key={status.value}
                     value={status.value}
-                    className="cursor-pointer text-sm transition-colors hover:bg-muted focus:bg-muted"
+                    className="cursor-pointer text-sm transition-colors"
                   >
                     {status.label}
                   </SelectItem>

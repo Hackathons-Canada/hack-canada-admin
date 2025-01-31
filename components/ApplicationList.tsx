@@ -1,8 +1,8 @@
 "use client";
 
-import { Edit2, Edit3, ExternalLinkIcon } from "lucide-react";
+import { Edit3, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-import { UserStatusBadge } from "./search/UserStatusBadge";
+import { ApplicationStatusModalTrigger } from "./search/ApplicationStatusModalTrigger";
 import {
   Table,
   TableBody,
@@ -66,12 +66,9 @@ const HackerList = ({ applications }: Props) => {
                 age={app.hackerApplication.age || 0}
                 status={app.user.applicationStatus as ApplicationStatus}
               >
-                <button className="flex items-center gap-2 rounded-sm bg-muted px-3 py-2 transition hover:bg-foreground/10">
-                  <UserStatusBadge
-                    status={app.user.applicationStatus as ApplicationStatus}
-                  />
-                  <Edit3 size={16} />
-                </button>
+                <ApplicationStatusModalTrigger
+                  status={app.user.applicationStatus as ApplicationStatus}
+                />
               </ApplicationStatusModal>
             </TableCell>
             <TableCell
