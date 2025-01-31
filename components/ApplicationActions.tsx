@@ -1,17 +1,16 @@
 "use client";
 
-import { Hacker } from "@/types/hacker";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import Link from "next/link";
-import HackerStatusModal from "../HackerStatusModal";
-import { HackerApplicationStatus } from "@/types/user";
+import HackerStatusModal from "./ApplicationStatusModal";
+import { HackerApplicationsSelectData } from "@/lib/db/schema";
 
 type Props = {
-  hacker: Hacker;
-  status: HackerApplicationStatus;
+  hacker: HackerApplicationsSelectData;
+  status: ApplicationStatus;
 };
 
-const HackerActions = ({ hacker, status }: Props) => {
+const ApplicationActions = ({ hacker, status }: Props) => {
   return (
     <div className="flex h-fit w-full max-w-screen-md flex-col gap-4 rounded-lg border p-4 md:p-8 xl:max-w-sm xl:gap-6">
       <p className="font-medium">Actions</p>
@@ -39,4 +38,4 @@ const HackerActions = ({ hacker, status }: Props) => {
     </div>
   );
 };
-export default HackerActions;
+export default ApplicationActions;

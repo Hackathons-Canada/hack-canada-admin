@@ -11,8 +11,8 @@ export const navLinks = [
     href: "/users",
   },
   {
-    name: "Hackers",
-    href: "/hackers",
+    name: "Applications",
+    href: "/applications",
   },
   {
     name: "Statistics",

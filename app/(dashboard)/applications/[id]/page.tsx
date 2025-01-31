@@ -1,12 +1,12 @@
 import { getCurrentUser } from "@/auth";
 import Container from "@/components/Container";
 import EmergencyContactInfo from "@/components/EmergencyContactInfo";
-import HackerActions from "@/components/HackerActions";
 import HackerApplicationStatus from "@/components/HackerApplicationStatus";
-import HackerInfo from "@/components/HackerInfo";
+import HackerInfo from "@/components/ApplicationInfo";
 import PageBanner from "@/components/PageBanner";
 import { getHackerWithUserById } from "@/data/hacker";
 import { redirect } from "next/navigation";
+import ApplicationActions from "@/components/ApplicationActions";
 
 const HackerPage = async ({
   params,
@@ -49,9 +49,9 @@ const HackerPage = async ({
               <HackerInfo hacker={hacker} />
               <EmergencyContactInfo userId={hacker.userId} />
             </div>
-            <HackerActions
+            <ApplicationActions
               hacker={hacker}
-              status={hackerUser.applicationStatus}
+              status={hackerUser.applicationStatus as ApplicationStatus}
             />
           </>
         ) : (

@@ -2,8 +2,7 @@
 
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-import HackerStatusModal from "../HackerStatusModal";
-import { UserStatusBadge } from "../UserSearch/UserStatusBadge";
+import { UserStatusBadge } from "./UserSearch/UserStatusBadge";
 import {
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { hackerApplications, users } from "@/lib/db/schema";
+import ApplicationStatusModal from "./ApplicationStatusModal";
 
 type HackerWithUser = {
   user: typeof users.$inferSelect;
@@ -20,11 +20,11 @@ type HackerWithUser = {
 };
 
 type Props = {
-  hackers: HackerWithUser[];
+  applications: HackerWithUser[];
 };
 
-const HackerList = ({ hackers }: Props) => {
-  if (hackers.length === 0) {
+const HackerList = ({ applications }: Props) => {
+  if (applications.length === 0) {
     return null;
   }
 
@@ -41,14 +41,14 @@ const HackerList = ({ hackers }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {hackers.map((hacker) => (
+        {applications.map((app) => (
           <TableRow
-            key={hacker.hackerApplication.id}
+            key={app.hackerApplication.id}
             className="transition-colors hover:bg-muted/50"
           >
             <TableCell className="min-w-20 text-center">
               <Link
-                href={`/hackers/${hacker.hackerApplication.userId}`}
+                href={`/applications/${app.hackerApplication.userId}`}
                 prefetch={false}
                 className="inline-block rounded-md p-1 transition-all duration-200 hover:bg-primary/10 hover:text-primary"
               >
@@ -56,45 +56,42 @@ const HackerList = ({ hackers }: Props) => {
               </Link>
             </TableCell>
             <TableCell className="py-4 font-medium">
-              {hacker.hackerApplication.firstName}{" "}
-              {hacker.hackerApplication.lastName}
+              {app.hackerApplication.firstName} {app.hackerApplication.lastName}
             </TableCell>
             <TableCell className="py-4">
-              <HackerStatusModal
-                userId={hacker.hackerApplication.userId}
-                name={hacker.hackerApplication.firstName || hacker.user.name}
-                email={
-                  hacker.hackerApplication.email || hacker.user.email || ""
-                }
-                age={hacker.hackerApplication.age || 0}
-                status={hacker.user.applicationStatus}
+              <ApplicationStatusModal
+                userId={app.hackerApplication.userId}
+                name={app.hackerApplication.firstName || app.user.name}
+                email={app.hackerApplication.email || app.user.email || ""}
+                age={app.hackerApplication.age || 0}
+                status={app.user.applicationStatus as ApplicationStatus}
               >
                 <div className="cursor-pointer hover:opacity-80">
                   <UserStatusBadge
-                    status={hacker.user.applicationStatus as ApplicationStatus}
+                    status={app.user.applicationStatus as ApplicationStatus}
                   />
                 </div>
-              </HackerStatusModal>
+              </ApplicationStatusModal>
             </TableCell>
             <TableCell
               className="max-w-[200px] truncate py-4"
-              title={hacker.hackerApplication.school || undefined}
+              title={app.hackerApplication.school || undefined}
             >
-              {hacker.hackerApplication.school || "-"}
+              {app.hackerApplication.school || "-"}
             </TableCell>
             <TableCell className="max-w-[200px] truncate py-4">
-              {hacker.hackerApplication.levelOfStudy ? (
+              {app.hackerApplication.levelOfStudy ? (
                 <span className="capitalize">
-                  {hacker.hackerApplication.levelOfStudy}
+                  {app.hackerApplication.levelOfStudy}
                 </span>
               ) : (
                 "-"
               )}
             </TableCell>
             <TableCell className="py-4">
-              {hacker.hackerApplication.major ? (
+              {app.hackerApplication.major ? (
                 <span className="capitalize">
-                  {hacker.hackerApplication.major}
+                  {app.hackerApplication.major}
                 </span>
               ) : (
                 "-"

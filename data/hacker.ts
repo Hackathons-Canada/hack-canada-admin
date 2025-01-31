@@ -48,7 +48,7 @@ export const getHackerById = async (userId: string) => {
   }
 };
 
-export const getHackers = async (offsetAmt: number) => {
+export const getApplications = async (offsetAmt: number) => {
   try {
     const results = await db
       .select({
@@ -62,24 +62,24 @@ export const getHackers = async (offsetAmt: number) => {
       .innerJoin(users, eq(users.id, hackerApplications.userId));
     return results;
   } catch (error) {
-    console.log("Error fetching hackers", error);
+    console.log("Error fetching applications", error);
     return null;
   }
 };
 
-export const getNumHackers = async () => {
+export const getNumApplications = async () => {
   try {
-    const hackers = await db
+    const applications = await db
       .select({ count: count() })
       .from(hackerApplications);
-    return hackers[0].count;
+    return applications[0].count;
   } catch (error) {
-    console.log("Error fetching number of hackers", error);
+    console.log("Error fetching number of applications", error);
     return 0;
   }
 };
 
-export const getHackersSearch = async (
+export const getApplicationsSearch = async (
   firstName: string | undefined,
   lastName: string | undefined,
   school: string | undefined,
@@ -122,12 +122,12 @@ export const getHackersSearch = async (
       .offset(offset)
       .orderBy(asc(hackerApplications.createdAt));
   } catch (error) {
-    console.log("Error fetching hackers", error);
+    console.log("Error fetching applications", error);
     return null;
   }
 };
 
-export const getNumHackersSearch = async (
+export const getNumApplicationsSearch = async (
   firstName: string | undefined,
   lastName: string | undefined,
   school: string | undefined,
@@ -157,15 +157,15 @@ export const getNumHackersSearch = async (
       conditions.push(eq(users.applicationStatus, status));
     }
 
-    const hackers = await db
+    const applications = await db
       .select({ count: count() })
       .from(hackerApplications)
       .innerJoin(users, eq(users.id, hackerApplications.userId))
       .where(and(...conditions));
 
-    return hackers[0].count;
+    return applications[0].count;
   } catch (error) {
-    console.log("Error fetching number of hackers", error);
+    console.log("Error fetching number of applications", error);
     return 0;
   }
 };

@@ -19,7 +19,7 @@ const Home = async () => {
   const [
     [dbUsers],
     [applicants],
-    [hackers],
+    [applications],
     [accepted],
     [rejected],
     [pendingApplications],
@@ -75,12 +75,12 @@ const Home = async () => {
 
         <section className="space-y-2">
           <p className="text-lg font-bold text-foreground md:text-xl">
-            Hackers
+            Applications
           </p>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             <CountCard label="Applications" count={applicants.count} />
-            <CountCard label="Hackers" count={hackers.count} />
+            <CountCard label="Applications" count={applications.count} />
             <CountCard label="Accepted" count={accepted.count} />
             <CountCard label="Rejected" count={rejected.count} />
             <CountCard label="Pending" count={pendingApplications.count} />

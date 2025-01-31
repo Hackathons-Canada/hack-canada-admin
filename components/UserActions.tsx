@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "../ui/button";
-import DeleteUserModal from "../DeleteUserModal";
+import { Button } from "./ui/button";
+import DeleteUserModal from "./DeleteUserModal";
 
 type Props = {
   id: string;
@@ -30,7 +30,7 @@ const UserActions = ({ id, name, email, status }: Props) => {
         <>
           <hr className="border-t" />
           <Button asChild variant="outline" size="lg">
-            <Link href={`/hackers/${id}`}>View Hacker Application</Link>
+            <Link href={`/applications/${id}`}>View Hacker Application</Link>
           </Button>
         </>
       )}

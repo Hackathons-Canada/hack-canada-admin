@@ -1,19 +1,19 @@
 import Container from "@/components/Container";
 import DownloadOptions from "@/components/DownloadOptions";
 import PageBanner from "@/components/PageBanner";
-import { getHackersSearch, getNumHackersSearch } from "@/data/hacker";
+import { getApplicationsSearch, getNumApplicationsSearch } from "@/data/hacker";
 import PaginationControls from "@/components/UsersTable/PaginationControls";
 import { RESULTS_PER_PAGE } from "@/lib/constants";
-import HackerList from "@/components/HackerList";
-import { HackerSearch } from "@/components/HackerSearch";
+import HackerList from "@/components/ApplicationList";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/auth";
+import { ApplicationSearch } from "@/components/ApplicationSearch";
 
-interface HackersPageProps {
+interface ApplicationsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-const HackersPage = async ({ searchParams }: HackersPageProps) => {
+const ApplicationsPage = async ({ searchParams }: ApplicationsPageProps) => {
   const user = await getCurrentUser();
 
   if (!user || user.role !== "admin") {
@@ -45,8 +45,8 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
 
   const start = (Number(page) - 1) * Number(perPage);
 
-  const [totalResultHackers, hackers] = await Promise.all([
-    getNumHackersSearch(
+  const [totalResultApplications, applications] = await Promise.all([
+    getNumApplicationsSearch(
       firstName,
       lastName,
       school,
@@ -54,7 +54,7 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
       major,
       status,
     ) ?? 0,
-    getHackersSearch(
+    getApplicationsSearch(
       firstName,
       lastName,
       school,
@@ -68,7 +68,7 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
   return (
     <Container className="space-y-10">
       <PageBanner
-        subheading="A list of all the hackers in the database. Or more specifically, all the applications that have been submitted, whether they have been accepted or not."
+        subheading="A list of all the applications in the database. Or more specifically, all the applications that have been submitted, whether they have been accepted or not."
         className="transition-all duration-200 hover:bg-muted/50"
       />
 
@@ -76,38 +76,41 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
         <section aria-label="Search and Download Controls">
           <div className="flex items-start justify-between gap-8 max-2xl:flex-col-reverse">
             <div className="w-full flex-1">
-              <HackerSearch />
+              <ApplicationSearch />
             </div>
             <div className="w-full shrink-0 lg:w-auto">
-              <DownloadOptions entity="hackers" />
+              <DownloadOptions entity="applications" />
             </div>
           </div>
         </section>
 
-        <section aria-label="Hackers List" className="space-y-6">
-          {hackers && (
+        <section aria-label="Applications List" className="space-y-6">
+          {applications && (
             <>
-              {hackers.length ? (
+              {applications.length ? (
                 <p className="text-sm font-medium text-muted-foreground max-md:text-center">
-                  Displaying hackers {start + 1} - {start + hackers.length} from{" "}
-                  <span className="text-foreground">{totalResultHackers}</span>{" "}
-                  hackers
+                  Displaying applications {start + 1} -{" "}
+                  {start + applications.length} from{" "}
+                  <span className="text-foreground">
+                    {totalResultApplications}
+                  </span>{" "}
+                  applications
                 </p>
               ) : (
                 <p className="text-sm font-medium text-muted-foreground max-md:text-center">
-                  No hackers match the search criteria.
+                  No applications match the search criteria.
                 </p>
               )}
 
               <div className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md">
-                <HackerList hackers={hackers} />
+                <HackerList applications={applications} />
               </div>
 
-              {hackers.length > 0 && (
+              {applications.length > 0 && (
                 <PaginationControls
-                  totalNumOfUsers={totalResultHackers}
+                  totalNumOfUsers={totalResultApplications}
                   search={params.toString()}
-                  table="hackers"
+                  table="applications"
                   className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
                 />
               )}
@@ -119,4 +122,4 @@ const HackersPage = async ({ searchParams }: HackersPageProps) => {
   );
 };
 
-export default HackersPage;
+export default ApplicationsPage;

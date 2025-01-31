@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { users, hackerApplications } from "@/lib/db/schema";
 
 export const getDownloadableFile = async (
-  entity: "users" | "hackers",
+  entity: "users" | "applications",
   fileType: "csv" | "json",
 ) => {
   const user = await getCurrentUser();
@@ -20,7 +20,7 @@ export const getDownloadableFile = async (
     if (entity === "users") {
       const userList = await db.select().from(users);
       return userList;
-    } else if (entity === "hackers") {
+    } else if (entity === "applications") {
       const hackerList = await db.select().from(hackerApplications);
       return hackerList;
     }

@@ -7,7 +7,7 @@ import { getDownloadableFile } from "@/actions/download-file";
 import { saveAs } from "file-saver";
 
 type Props = {
-  entity: "users" | "hackers";
+  entity: "users" | "applications";
 };
 
 const DownloadOptions = ({ entity }: Props) => {

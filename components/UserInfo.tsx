@@ -102,7 +102,7 @@ const UserInfo = ({ user }: Props) => {
               label="Hacker Application"
               value={
                 <Link
-                  href={`/hackers/${user.id}`}
+                  href={`/applications/${user.id}`}
                   className="inline-flex items-center gap-2 text-primary underline-offset-4 transition-colors hover:text-primary/80 hover:underline"
                 >
                   Click to view{" "}

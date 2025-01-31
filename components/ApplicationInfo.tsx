@@ -1,10 +1,10 @@
+import { HackerApplicationsSelectData } from "@/lib/db/schema";
 import { cn, formatDate } from "@/lib/utils";
-import { Hacker } from "@/types/hacker";
 import { CheckCircle, CircleX, SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
-  hacker: Hacker | null;
+  hacker: HackerApplicationsSelectData | null;
 };
 
 const HackerInfo = ({ hacker }: Props) => {

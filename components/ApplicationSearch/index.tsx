@@ -21,7 +21,7 @@ const schema = z.object({
 
 type SearchFormValues = z.infer<typeof schema>;
 
-export const HackerSearch = () => {
+export const ApplicationSearch = () => {
   const router = useRouter();
 
   const form = useForm<SearchFormValues>({
@@ -37,7 +37,7 @@ export const HackerSearch = () => {
   });
 
   const onSubmit = (values: SearchFormValues) => {
-    router.push("/hackers?" + new URLSearchParams(values).toString());
+    router.push("/applications?" + new URLSearchParams(values).toString());
   };
 
   return (
@@ -47,9 +47,9 @@ export const HackerSearch = () => {
         className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md"
       >
         <div className="border-b p-6">
-          <h2 className="text-lg font-semibold">Search Hackers</h2>
+          <h2 className="text-lg font-semibold">Search Applications</h2>
           <p className="text-sm text-muted-foreground">
-            Filter hackers by their information and application status
+            Filter applications by their information and application status
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export const HackerSearch = () => {
               type="button"
               onClick={() => {
                 form.reset();
-                router.push("/hackers");
+                router.push("/applications");
               }}
               variant="outline"
               className="flex-1 bg-background transition-all duration-200 hover:bg-muted"
