@@ -12,7 +12,7 @@ const ses = new SES({ region: process.env.AWS_SES_REGION });
 
 export const sendEmail = async (to: string, subject: string, body: string) => {
   const params = {
-    Source: `<${process.env.AWS_SES_EMAIL_SOURCE!}>`,
+    Source: `Hack Canada<${process.env.AWS_SES_VERIFIED_EMAIL!}>`,
     Destination: {
       ToAddresses: [to],
     },
@@ -69,7 +69,7 @@ export const sendAcceptanceEmail = async (
 ) => {
   const emailTemplate = render(AcceptanceEmail({ name: recipientName }));
   const emailSubject =
-    "[ACTION REQUIRED] 🎉 You're In! Confirm Your Spot at – RSVP by November 8th";
+    "[ACTION REQUIRED] Congratulations, you have been accepted to HackCanada";
 
   const result = await sendEmail(recipientEmail, emailSubject, emailTemplate);
   return result;
@@ -80,7 +80,7 @@ export const sendRejectionEmail = async (
   recipientEmail: string,
 ) => {
   const emailTemplate = render(RejectionEmail({ name: recipientName }));
-  const emailSubject = "Application Status Update - Hack Canada";
+  const emailSubject = "Thank You for Your Application to HackCanada";
 
   const result = await sendEmail(recipientEmail, emailSubject, emailTemplate);
   return result;

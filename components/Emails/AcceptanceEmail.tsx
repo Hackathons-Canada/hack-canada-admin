@@ -9,6 +9,8 @@ import {
   Heading,
   Button,
   Img,
+  Hr,
+  Link,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 
@@ -17,7 +19,9 @@ type Props = { name: string };
 const AcceptanceEmail = ({ name }: Props) => (
   <Html>
     <Head />
-    <Preview>🎉 Hack Canada Acceptance - RSVP Required</Preview>
+    <Preview>
+      [ACTION REQUIRED] Congratulations, you have been accepted to HackCanada
+    </Preview>
     <Tailwind>
       <Body className="bg-blue-50">
         <Container className="mx-auto max-w-2xl px-3 py-6">
@@ -95,10 +99,10 @@ const AcceptanceEmail = ({ name }: Props) => (
                 also have some additional questions to make sure everything is
                 perfect for you.
               </Text>
-              <Section className="mt-6">
+              <Section className="mt-6 flex justify-center">
                 <Button
                   href="https://app.hackcanada.org/rsvp"
-                  className="rounded-md bg-blue-500 px-6 py-2 font-semibold text-white"
+                  className="inline-block rounded-lg bg-[#0A1F44] px-8 py-3 text-center font-semibold text-white no-underline transition-all duration-200 hover:brightness-110"
                 >
                   RSVP Now
                 </Button>
@@ -114,17 +118,6 @@ const AcceptanceEmail = ({ name }: Props) => (
                 and other exciting updates will be shared with you soon!
               </Text>
               <Text className="mt-4 text-zinc-700">
-                If you&apos;d like to be the first to learn about the news,
-                follow us on{" "}
-                <a
-                  href="https://instagram.com/hackcanada"
-                  className="text-zinc-800 underline"
-                >
-                  Instagram
-                </a>{" "}
-                for more information!
-              </Text>
-              <Text className="mt-6 text-zinc-700">
                 If you have any questions or need anything, feel free to reach
                 out to us at{" "}
                 <a
@@ -139,9 +132,64 @@ const AcceptanceEmail = ({ name }: Props) => (
                 We can&apos;t wait to see you!
               </Text>
               <Text className="mt-8 font-semibold text-zinc-800">Cheers,</Text>
-              <Text className="mt-2 font-semibold text-blue-500">
+              <Text className="mb-8 mt-2 font-semibold text-blue-500">
                 Hack Canada Team 🦫🍁
               </Text>
+
+              <Hr className="my-6 border-gray-200" />
+
+              {/* Footer */}
+              <div className="text-center">
+                <div className="mb-4">
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="https://hackcanada.org"
+                  >
+                    Hack Canada
+                  </Link>
+                  <span className="mx-3 text-gray-400">|</span>
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="https://app.hackcanada.org"
+                  >
+                    Dashboard
+                  </Link>
+                  <span className="mx-3 text-gray-400">|</span>
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="https://discord.gg/wp42amwcWy"
+                  >
+                    Discord
+                  </Link>
+                  <span className="mx-3 text-gray-400">|</span>
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="https://www.instagram.com/hackcanada/"
+                  >
+                    Instagram
+                  </Link>
+                  <span className="mx-3 text-gray-400">|</span>
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="https://www.linkedin.com/company/hack-canada"
+                  >
+                    LinkedIn
+                  </Link>
+                  <span className="mx-3 text-gray-400">|</span>
+                  <Link
+                    className="text-xs text-gray-400 no-underline"
+                    href="mailto:hello@hackcanada.org"
+                  >
+                    Email
+                  </Link>
+                </div>
+                <Text className="m-2 text-xs text-gray-400">
+                  Copyright © 2025 Hack Canada
+                </Text>
+                <Text className="m-2 text-xs text-gray-400">
+                  All rights reserved.
+                </Text>
+              </div>
             </Section>
           </Section>
         </Container>
