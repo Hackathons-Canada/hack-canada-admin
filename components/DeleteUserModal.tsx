@@ -56,8 +56,8 @@ const DeleteUserModal = ({ id, name, children }: Props) => {
         <DialogHeader>
           <DialogTitle>Are you sure you want to delete {name}?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. All trace of their existence will be
-            lost from the database.
+            This action cannot be undone. All traces of their existence will be
+            destroyed forever.
           </DialogDescription>
         </DialogHeader>
 

@@ -176,7 +176,7 @@ const ApplicationStatusModal = ({
                   email.
                 </p>
 
-                <p className="">
+                <p className="font-medium text-foreground">
                   {name?.split(" ")[0]} is desperately waiting to be accepted.
                 </p>
 

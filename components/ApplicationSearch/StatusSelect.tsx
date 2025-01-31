@@ -41,7 +41,7 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="not_applied">Not Applied</SelectItem>
-                <SelectItem value="pending">Under Review</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="accepted">Accepted</SelectItem>
                 <SelectItem value="rejected">Rejected</SelectItem>
                 <SelectItem value="waitlisted">Waitlisted</SelectItem>

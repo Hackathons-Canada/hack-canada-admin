@@ -27,7 +27,7 @@ export function formatApplicationStatus(status: ApplicationStatus) {
     case "not_applied":
       return "Not Applied";
     case "pending":
-      return "Under Review";
+      return "Pending";
     case "accepted":
       return "Accepted";
     case "rejected":

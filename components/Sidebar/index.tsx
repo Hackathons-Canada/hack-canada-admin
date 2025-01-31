@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import React, { useState } from "react";
 import NavLinks from "./NavLinks";
 import UserProfile from "./UserProfile";
 

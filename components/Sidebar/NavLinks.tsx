@@ -8,7 +8,6 @@ import {
   BarChart3,
   ShieldCheck,
   ScrollText,
-  HardHat,
   Clipboard,
 } from "lucide-react";
 

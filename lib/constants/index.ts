@@ -1,7 +1,6 @@
 export const RESULTS_PER_PAGE = 25;
 
 export const navLinks = [
-  // Todo: Add icons or more links as needed
   {
     name: "Home",
     href: "/",

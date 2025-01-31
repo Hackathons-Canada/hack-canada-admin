@@ -66,7 +66,7 @@ const HackerList = ({ applications }: Props) => {
                 age={app.hackerApplication.age || 0}
                 status={app.user.applicationStatus as ApplicationStatus}
               >
-                <button className="flex items-center gap-2 rounded-sm bg-muted px-3 py-2 transition-colors transition-opacity hover:bg-foreground/10 hover:opacity-80">
+                <button className="flex items-center gap-2 rounded-sm bg-muted px-3 py-2 transition hover:bg-foreground/10">
                   <UserStatusBadge
                     status={app.user.applicationStatus as ApplicationStatus}
                   />
