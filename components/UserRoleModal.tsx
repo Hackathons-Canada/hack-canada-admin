@@ -35,6 +35,8 @@ const ROLES: UserRole[] = [
 const UserRoleModal = ({ role, children, name, email, userId }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
   const router = useRouter();
 
   const updateUserRole = async (userId: string, role: UserRole) => {
@@ -70,12 +72,13 @@ const UserRoleModal = ({ role, children, name, email, userId }: Props) => {
       }
 
       toast.success(data.message);
+      setIsOpen(false);
       router.refresh();
     });
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-lg">
         <DialogHeader>

@@ -36,8 +36,8 @@ const HackerList = ({ applications }: Props) => {
           <TableHead className="py-4 font-semibold">Name</TableHead>
           <TableHead className="py-4 font-semibold">Status</TableHead>
           <TableHead className="py-4 font-semibold">School</TableHead>
-          <TableHead className="py-4 font-semibold">Level</TableHead>
           <TableHead className="py-4 font-semibold">Major</TableHead>
+          <TableHead className="py-4 font-semibold">Age</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -77,20 +77,19 @@ const HackerList = ({ applications }: Props) => {
             >
               {app.hackerApplication.school || "-"}
             </TableCell>
-            <TableCell className="max-w-[200px] truncate py-4">
-              {app.hackerApplication.levelOfStudy ? (
-                <span className="capitalize">
-                  {app.hackerApplication.levelOfStudy}
-                </span>
-              ) : (
-                "-"
-              )}
-            </TableCell>
+
             <TableCell className="py-4">
               {app.hackerApplication.major ? (
                 <span className="capitalize">
                   {app.hackerApplication.major}
                 </span>
+              ) : (
+                "-"
+              )}
+            </TableCell>
+            <TableCell className="max-w-[200px] truncate py-4">
+              {app.hackerApplication.age ? (
+                <span className="capitalize">{app.hackerApplication.age}</span>
               ) : (
                 "-"
               )}

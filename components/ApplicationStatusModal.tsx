@@ -233,7 +233,7 @@ const ApplicationStatusModal = ({
                       disabled={isPending}
                       onClick={() => onSubmit("waitlisted")}
                       variant="outline"
-                      className="w-full text-base"
+                      className="w-full text-base hover:border-secondary hover:bg-secondary/10 hover:text-secondary"
                     >
                       Mark as Waitlisted
                     </Button>
