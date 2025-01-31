@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
     !authPages.includes(pathname) &&
     !pathname.startsWith("/reset-password/")
   ) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // Otherwise, allow the request to continue
