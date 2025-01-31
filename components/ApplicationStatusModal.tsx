@@ -48,6 +48,13 @@ const ApplicationStatusModal = ({
   });
 
   const onSubmit = (status: ApplicationStatus) => {
+    const troo = true;
+
+    if (troo) {
+      toast.error("This feature is not yet available.");
+      return;
+    }
+
     setDisplayBanner((prev) => ({
       ...prev,
       show: false,
