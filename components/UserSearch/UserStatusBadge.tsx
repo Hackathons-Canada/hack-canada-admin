@@ -10,7 +10,7 @@ export const UserStatusBadge = ({ status }: UserStatusBadgeProps) => {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors",
+        "inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-semibold transition-colors",
         status === "pending" &&
           "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
         status === "waitlisted" &&

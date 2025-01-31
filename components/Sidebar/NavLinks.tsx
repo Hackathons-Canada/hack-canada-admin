@@ -35,7 +35,7 @@ const NavLinks = ({ isMinimized }: NavLinksProps) => {
           <li
             key={link.name}
             className={cn(
-              "flex rounded-lg border border-border/50 bg-muted/50 text-foreground/70 transition-all duration-200 hover:bg-primary/10 hover:text-foreground",
+              "flex rounded-lg border border-border/75 bg-muted/50 text-foreground/70 transition-[background-color,color] duration-200 hover:bg-primary/10 hover:text-foreground",
               {
                 "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground":
                   pathname === link.href,
@@ -52,17 +52,17 @@ const NavLinks = ({ isMinimized }: NavLinksProps) => {
               {Icon && (
                 <Icon
                   className={cn(
-                    "shrink-0 transition-all",
+                    "shrink-0 transition-[width,height]",
                     isMinimized ? "size-[22px]" : "size-[18px]",
                   )}
                 />
               )}
               <span
                 className={cn(
-                  "origin-left scale-x-100 text-nowrap font-medium transition-all duration-300",
+                  "origin-left text-nowrap font-medium transition-[transform,opacity]",
                   isMinimized
                     ? "scale-x-0 opacity-0 duration-150"
-                    : "scale-x-100 opacity-100 delay-200",
+                    : "scale-x-100 opacity-100 delay-75 duration-200",
                 )}
               >
                 {link.name}
