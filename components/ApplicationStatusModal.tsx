@@ -15,7 +15,7 @@ import { useState, useTransition } from "react";
 import { updateHackerStatus } from "@/actions/update-hacker-status";
 import { toast } from "sonner";
 import Banner from "./Banner";
-import { Loader2 } from "lucide-react";
+import { ArrowUpRightFromSquare, Loader2, Mail } from "lucide-react";
 
 type Props = {
   status: ApplicationStatus;
@@ -109,23 +109,25 @@ const ApplicationStatusModal = ({
             </DialogHeader>
 
             <div className="space-y-1">
-              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
-                <p className="font-medium">Name</p>
+              <div className="flex justify-between rounded-md bg-muted px-2.5 py-2">
+                <p className="text-muted-foreground">Name</p>
                 <p>{name}</p>
               </div>
 
-              <div className="flex justify-between gap-4 rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
-                <p className="w-1/2 text-nowrap font-medium">Email Address</p>
+              <div className="flex justify-between gap-4 rounded-md bg-muted px-2.5 py-2">
+                <p className="w-1/2 text-nowrap text-muted-foreground">
+                  Email Address
+                </p>
                 <p className="w-1/2 break-words text-right">{email}</p>
               </div>
 
-              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
-                <p className="font-medium">Age</p>
+              <div className="flex justify-between rounded-md bg-muted px-2.5 py-2">
+                <p className="text-muted-foreground">Age</p>
                 <p>{age}</p>
               </div>
 
-              <div className="flex justify-between rounded-md bg-black/10 px-2.5 py-2 dark:bg-zinc-800/80">
-                <p className="font-medium">Current Status</p>
+              <div className="flex justify-between rounded-md bg-muted px-2.5 py-2">
+                <p className="text-muted-foreground">Current Status</p>
                 <p
                   className={cn({
                     "font-medium text-green-400 dark:text-green-400":
@@ -138,6 +140,21 @@ const ApplicationStatusModal = ({
                 >
                   {formatApplicationStatus(status)}
                 </p>
+              </div>
+              <div className="pt-4">
+                <Link href={`/applications/${userId}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="group w-full gap-2 text-base transition-all"
+                  >
+                    View Application
+                    <ArrowUpRightFromSquare
+                      strokeWidth={3}
+                      className="size-4"
+                    />
+                  </Button>
+                </Link>
               </div>
             </div>
 
