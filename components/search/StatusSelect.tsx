@@ -17,15 +17,19 @@ import { UseFormReturn } from "react-hook-form";
 
 const statuses = [
   { value: "all", label: "All Statuses" },
+  { value: "not_applied", label: "Not Applied" },
+  { value: "noApplication", label: "No Application" },
   { value: "pending", label: "Pending Review" },
   { value: "accepted", label: "Accepted" },
   { value: "rejected", label: "Rejected" },
-  { value: "waitListed", label: "Waitlisted" },
-  { value: "noApplication", label: "No Application" },
+  { value: "waitlisted", label: "Waitlisted" },
+  { value: "cancelled", label: "Cancelled" },
 ] as const;
 
 interface StatusSelectProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<{
+    status?: "all" | ApplicationStatus;
+  }>;
 }
 
 export const StatusSelect = ({ form }: StatusSelectProps) => {
@@ -39,7 +43,11 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
             Application Status
           </FormLabel>
           <FormControl>
-            <Select {...field} onValueChange={field.onChange}>
+            <Select
+              {...field}
+              onValueChange={field.onChange}
+              defaultValue="all"
+            >
               <SelectTrigger className="h-9 border-input bg-background px-3 py-1 text-sm shadow-sm transition-all duration-200 hover:bg-muted/50 focus:ring-1 focus:ring-primary/20">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
