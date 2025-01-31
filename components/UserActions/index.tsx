@@ -13,14 +13,22 @@ type Props = {
 
 const UserActions = ({ id, name, email, status }: Props) => {
   return (
-    <div className="flex h-fit w-full flex-col gap-4 rounded-lg border p-4 md:p-8 xl:max-w-sm xl:gap-6">
-      <p className="font-medium">Actions</p>
+    <div className="flex h-fit w-full flex-col gap-4 rounded-lg border bg-card p-4 shadow-sm transition-shadow hover:shadow-md md:p-8 xl:max-w-sm xl:gap-6">
+      <p className="text-lg font-medium">Actions</p>
       <div className="gap-4 max-sm:space-y-4 sm:flex xl:block xl:space-y-4">
-        <Button asChild className="w-full text-base">
+        <Button
+          asChild
+          size="lg"
+          className="w-full text-base transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
           <Link href={`mailto:${email}`}>Message {name}</Link>
         </Button>
         <DeleteUserModal id={id} name={name}>
-          <Button variant="destructive" className="w-full text-base">
+          <Button
+            variant="destructive"
+            size="lg"
+            className="w-full text-base transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
             Eradicate {name}
           </Button>
         </DeleteUserModal>
@@ -28,8 +36,13 @@ const UserActions = ({ id, name, email, status }: Props) => {
 
       {status !== "not_applied" && (
         <>
-          <hr className="border-t-2" />
-          <Button asChild variant="outline" className="w-full text-base">
+          <hr className="border-t" />
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full text-base transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
             <Link href={`/hackers/${id}`}>View Hacker Application</Link>
           </Button>
         </>
@@ -37,4 +50,5 @@ const UserActions = ({ id, name, email, status }: Props) => {
     </div>
   );
 };
+
 export default UserActions;
