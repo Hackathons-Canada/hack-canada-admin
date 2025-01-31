@@ -6,7 +6,7 @@ import { ExternalLinkIcon } from "lucide-react";
 import PaginationControls from "@/components/PaginationControls";
 import PageBanner from "@/components/PageBanner";
 import DownloadOptions from "@/components/DownloadOptions";
-import { UserSearch } from "@/components/UserSearch";
+import { UserSearch } from "@/components/search/UserSearch";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/auth";
 import {
@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserStatusBadge } from "@/components/UserSearch/UserStatusBadge";
+import { UserStatusBadge } from "@/components/search/UserStatusBadge";
 interface UsersPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }

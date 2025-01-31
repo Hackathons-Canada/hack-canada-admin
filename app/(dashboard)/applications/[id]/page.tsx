@@ -1,6 +1,5 @@
 import { getCurrentUser } from "@/auth";
 import Container from "@/components/Container";
-import EmergencyContactInfo from "@/components/EmergencyContactInfo";
 import HackerApplicationStatus from "@/components/HackerApplicationStatus";
 import HackerInfo from "@/components/ApplicationInfo";
 import PageBanner from "@/components/PageBanner";

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { SearchInput } from "@/components/ui/search-input";
-import { StatusSelect } from "./StatusSelect";
+import { StatusSelect } from "./ApplicationStatusSelect";
 import { LevelSelect } from "./LevelSelect";
 
 const schema = z.object({

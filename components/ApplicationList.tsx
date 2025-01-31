@@ -2,7 +2,7 @@
 
 import { Edit2, Edit3, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
-import { UserStatusBadge } from "./UserSearch/UserStatusBadge";
+import { UserStatusBadge } from "./search/UserStatusBadge";
 import {
   Table,
   TableBody,

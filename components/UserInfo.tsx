@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { User } from "@/lib/db/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserStatusBadge } from "./UserSearch/UserStatusBadge";
+import { UserStatusBadge } from "./search/UserStatusBadge";
 import InfoRow from "./InfoRow";
 
 type Props = {

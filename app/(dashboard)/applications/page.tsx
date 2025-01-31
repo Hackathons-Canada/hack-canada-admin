@@ -10,7 +10,7 @@ import { RESULTS_PER_PAGE } from "@/lib/constants";
 import HackerList from "@/components/ApplicationList";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/auth";
-import { ApplicationSearch } from "@/components/ApplicationSearch";
+import { ApplicationSearch } from "@/components/search/ApplicationSearch";
 
 interface ApplicationsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
