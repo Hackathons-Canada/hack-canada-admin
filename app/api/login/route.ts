@@ -5,10 +5,14 @@ import { AuthError } from "next-auth";
 import { ApiResponse } from "@/types/api";
 import { getUserByEmail } from "@/lib/db/queries/user";
 import { LoginSchema } from "@/lib/validations/login";
+import { createAuditLog } from "@/lib/db/queries/audit-log";
 
 export async function POST(
   req: NextRequest,
 ): Promise<NextResponse<ApiResponse>> {
+  let existingUser;
+  let email;
+
   try {
     const body = await req.json();
 
@@ -23,9 +27,9 @@ export async function POST(
 
     const { email: validatedEmail, password } = validatedFields.data;
 
-    const email = validatedEmail.toLowerCase();
+    email = validatedEmail.toLowerCase();
 
-    const existingUser = await getUserByEmail(email);
+    existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
       return NextResponse.json({
@@ -35,6 +39,18 @@ export async function POST(
     }
 
     if (existingUser.role !== "admin") {
+      // Log non-admin login attempt
+      await createAuditLog({
+        userId: existingUser.id,
+        action: "create",
+        entityType: "session",
+        entityId: existingUser.id,
+        metadata: {
+          reason: "Unauthorized access attempt - Non-admin user",
+          email: email,
+        },
+      });
+
       return NextResponse.json({
         success: false,
         message: "You are not authorized to access this dashboard.",
@@ -48,11 +64,35 @@ export async function POST(
     });
 
     if (!result) {
+      // Log failed login attempt
+      await createAuditLog({
+        userId: existingUser.id,
+        action: "create",
+        entityType: "session",
+        entityId: existingUser.id,
+        metadata: {
+          reason: "Failed login attempt - Invalid credentials",
+          email: email,
+        },
+      });
+
       return NextResponse.json({
         success: false,
         message: "Invalid email or password.",
       });
     }
+
+    // Log successful login
+    await createAuditLog({
+      userId: existingUser.id,
+      action: "create",
+      entityType: "session",
+      entityId: existingUser.id,
+      metadata: {
+        reason: "Successful admin login",
+        email: email,
+      },
+    });
 
     // If everything is successful
     return NextResponse.json({
@@ -66,11 +106,41 @@ export async function POST(
     if (error instanceof Error) {
       const { type } = error as AuthError;
       if (type === "CredentialsSignin") {
+        // Log failed login attempt
+        if (existingUser) {
+          await createAuditLog({
+            userId: existingUser.id,
+            action: "create",
+            entityType: "session",
+            entityId: existingUser.id,
+            metadata: {
+              reason: "Failed login attempt - Invalid credentials",
+              email: email,
+              error: type,
+            },
+          });
+        }
+
         return NextResponse.json({
           success: false,
           message: "Invalid email or password.",
         });
       }
+    }
+
+    // Log unhandled error
+    if (existingUser) {
+      await createAuditLog({
+        userId: existingUser.id,
+        action: "create",
+        entityType: "session",
+        entityId: existingUser.id,
+        metadata: {
+          reason: "Failed login attempt - Unhandled error",
+          email: email,
+          error: error instanceof Error ? error.message : "Unknown error",
+        },
+      });
     }
 
     // Any other unhandled errors
