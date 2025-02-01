@@ -178,3 +178,24 @@ export const rsvp = pgTable("rsvp", {
 
 export type RsvpInsert = typeof rsvp.$inferInsert;
 export type RsvpSelect = typeof rsvp.$inferSelect;
+
+export const auditLogs = pgTable("auditLog", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id), // user who performed the action
+  action: text("action").notNull(), // 'create', 'update', 'delete', 'view'
+  entityType: text("entityType").notNull(), // table name (e.g., 'user', 'hackerApplication')
+  entityId: text("entityId").notNull(), // record id
+  previousValue: text("previousValue"), // JSON stringified previous state (optional)
+  newValue: text("newValue"), // JSON stringified new state (optional)
+  metadata: text("metadata"), // Additional context as JSON stringified (optional)
+  createdAt: timestamp("createdAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type NewAuditLog = typeof auditLogs.$inferInsert;
