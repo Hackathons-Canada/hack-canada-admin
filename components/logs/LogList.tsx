@@ -8,7 +8,7 @@ interface LogListProps {
 
 export function LogList({ logs, userMap }: LogListProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 md:space-y-6">
       {logs.map((log) => {
         const user = userMap.get(log.userId);
         return (

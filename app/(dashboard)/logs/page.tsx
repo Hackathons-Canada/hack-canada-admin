@@ -39,29 +39,27 @@ async function LogsPage({
   );
 
   return (
-    <Container className="space-y-10">
+    <Container className="space-y-6 md:space-y-10">
       <PageBanner
         heading="Audit Logs"
         subheading="A detailed record of all system actions and changes."
         className="transition-all duration-200 hover:bg-muted/50"
       />
 
-      <main className="space-y-10">
-        <section aria-label="Audit Logs List" className="space-y-6">
-          <LogsStats totalLogs={logs.length} displayedLogs={logs.length} />
+      <section aria-label="Audit Logs List" className="space-y-6 md:space-y-10">
+        <LogsStats totalLogs={logs.length} displayedLogs={logs.length} />
 
-          <LogList logs={logs} userMap={userMap} />
+        <LogList logs={logs} userMap={userMap} />
 
-          {logs.length > 0 && (
-            <PaginationControls
-              totalNumOfUsers={logs.length}
-              search={search}
-              table="/logs"
-              className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
-            />
-          )}
-        </section>
-      </main>
+        {logs.length > 0 && (
+          <PaginationControls
+            totalNumOfUsers={logs.length}
+            search={search}
+            table="/logs"
+            className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
+          />
+        )}
+      </section>
     </Container>
   );
 }
