@@ -42,10 +42,10 @@ export async function getReviewerStats(
       reviewCount: sql<number>`COUNT(*)`,
       timeSpent: sql<string>`
         CONCAT(
-          EXTRACT(HOUR FROM SUM(${applicationReviews.updatedAt} - ${applicationReviews.createdAt}))::integer,
-          ' hrs ',
-          EXTRACT(MINUTE FROM SUM(${applicationReviews.updatedAt} - ${applicationReviews.createdAt}))::integer,
-          ' mins'
+          FLOOR(SUM(${applicationReviews.reviewDuration})::numeric / 60)::integer,
+          ' min ',
+          MOD(ROUND(SUM(${applicationReviews.reviewDuration}))::integer, 60),
+          ' secs'
         )
       `,
       averageRating: sql<number>`ROUND(AVG(${applicationReviews.rating})::numeric, 2)`,

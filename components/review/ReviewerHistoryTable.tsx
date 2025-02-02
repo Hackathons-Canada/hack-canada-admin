@@ -42,7 +42,7 @@ export default function ReviewerHistoryTable({
                 Rating
               </TableHead>
               <TableHead className="py-4 text-center font-semibold">
-                Duration (s)
+                Duration
               </TableHead>
               <TableHead className="py-4 text-right font-semibold">
                 Review Date
@@ -69,7 +69,8 @@ export default function ReviewerHistoryTable({
                   {review.rating}/10
                 </TableCell>
                 <TableCell className="py-4 text-center">
-                  {review.duration}
+                  {Math.floor(review.duration / 60)} min{" "}
+                  {Math.round(review.duration % 60)} secs
                 </TableCell>
                 <TableCell className="py-4 text-right">
                   {new Date(review.reviewedAt).toLocaleString()}
