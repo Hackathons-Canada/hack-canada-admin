@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 const LoginPage = async () => {
   const currentUser = await getCurrentUser();
 
-  if (currentUser && currentUser.role === "admin") {
-    redirect("/");
-  }
-
   if (currentUser && currentUser.role !== "admin") {
     redirect("https://app.hackcanada.org");
+  }
+
+  if (currentUser && currentUser.role === "admin") {
+    redirect("/");
   }
 
   return (

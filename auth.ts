@@ -21,7 +21,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   cookies: {
     sessionToken: {
-      name: "authjs.session-token",
+      name: "authjs.session-token-admin",
     },
   },
   adapter: DrizzleAdapter(db),

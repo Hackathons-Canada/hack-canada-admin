@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 const authPages = ["/login", "/auth-error"];
 
 function isAuthenticated(request: NextRequest): boolean {
-  const token = request.cookies.get("authjs.session-token");
+  const token = request.cookies.get("authjs.session-token-admin");
   return !!token;
 }
 // TODO: add a rate limiter for api or server-side routes.
