@@ -13,8 +13,8 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import Banner from "./Banner";
-import { ArrowUpRightFromSquare, Loader2, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowUpRightFromSquare, Loader2 } from "lucide-react";
 
 type Props = {
   status: ApplicationStatus;
@@ -25,12 +25,6 @@ type Props = {
   age: number | null;
 };
 
-type DisplayBannerType = {
-  show: boolean;
-  message: string;
-  type: "error" | "success";
-};
-
 const ApplicationStatusModal = ({
   status,
   children,
@@ -39,19 +33,11 @@ const ApplicationStatusModal = ({
   age,
   userId,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [displayBanner, setDisplayBanner] = useState<DisplayBannerType>({
-    show: false,
-    message: "",
-    type: "error",
-  });
+  const router = useRouter();
 
   const onSubmit = (status: ApplicationStatus) => {
-    setDisplayBanner((prev) => ({
-      ...prev,
-      show: false,
-    }));
-
     startTransition(async () => {
       try {
         const response = await fetch(`/api/update-status/${userId}`, {
@@ -65,23 +51,13 @@ const ApplicationStatusModal = ({
         const data = await response.json();
 
         if (!data.success) {
-          if (data.message) {
-            setDisplayBanner({
-              show: true,
-              message: data.message,
-              type: "error",
-            });
-          } else {
-            toast.error("Failed to update status");
-          }
+          toast.error(data.message || "Failed to update status");
           return;
         }
 
-        setDisplayBanner({
-          show: true,
-          message: data.message,
-          type: "success",
-        });
+        toast.success(data.message);
+        router.refresh();
+        setIsOpen(false);
       } catch (error) {
         toast.error("An error occurred while updating the status");
       }
@@ -89,7 +65,7 @@ const ApplicationStatusModal = ({
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-lg">
         {status === "not_applied" ? (
@@ -166,22 +142,13 @@ const ApplicationStatusModal = ({
               </div>
             </div>
 
-            {displayBanner.show && (
-              <Banner
-                message={displayBanner.message}
-                type={displayBanner.type}
-              />
-            )}
-
-            {(status === "accepted" || status === "rejected") &&
-            !displayBanner.show ? (
+            {(status === "accepted" || status === "rejected") && (
               <div className="py-2 text-center text-sm text-muted-foreground">
                 <p>
                   Since the user has already received an email, their status
                   cannot be updated at this time.
                 </p>
                 <p className="mb-4 py-2">
-                  {" "}
                   To undo the action, please contact the user and update the
                   status manually in the database as needed.
                 </p>
@@ -190,7 +157,7 @@ const ApplicationStatusModal = ({
                   <Link href={`mailto:${email}`}>Message {name}</Link>
                 </Button>
               </div>
-            ) : null}
+            )}
 
             {(status === "pending" || status === "waitlisted") && (
               <div className="flex flex-col gap-4 text-center text-muted-foreground">
