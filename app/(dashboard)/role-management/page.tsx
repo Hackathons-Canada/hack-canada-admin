@@ -1,6 +1,6 @@
 import Container from "@/components/Container";
 import AdminUsersTable from "@/components/AdminUsersTable";
-import { getAdminUsers } from "@/data/user";
+import { getAdminsAndOrganizers, getAdminUsers } from "@/data/user";
 import PageBanner from "@/components/PageBanner";
 import { getCurrentUser } from "@/auth";
 import { redirect } from "next/navigation";
@@ -12,9 +12,9 @@ const RoleManagementPage = async () => {
     redirect("https://app.hackcanada.org/login");
   }
 
-  const adminUsersData = await getAdminUsers();
+  const organizers = await getAdminsAndOrganizers();
 
-  const adminUsers = adminUsersData.map((user) => ({
+  const orgUsers = organizers.map((user) => ({
     name: user.name,
     email: user.email,
     role: user.role,
@@ -27,7 +27,7 @@ const RoleManagementPage = async () => {
         className="mb-4 md:mb-8"
         subheading="Get an overview of all the users with special roles like Admin and Organizer."
       />
-      <AdminUsersTable users={adminUsers} />
+      <AdminUsersTable users={orgUsers} />
     </Container>
   );
 };
