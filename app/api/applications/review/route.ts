@@ -10,12 +10,12 @@ import { isReviewer } from "@/lib/utils";
 
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   // Remove when done testing
-  const troo = true;
-  if (troo)
-    return NextResponse.json({
-      success: true,
-      message: "Review submitted successfully",
-    });
+  // const troo = true;
+  // if (troo)
+  //   return NextResponse.json({
+  //     success: true,
+  //     message: "Review submitted successfully",
+  //   });
 
   try {
     const currentUser = await getCurrentUser();

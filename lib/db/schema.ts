@@ -163,6 +163,9 @@ export const applicationReviews = pgTable("applicationReview", {
   createdAt: timestamp("createdAt")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp("updatedAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
 });
 
 export type ApplicationReview = typeof applicationReviews.$inferSelect;
@@ -206,13 +209,13 @@ export const auditLogs = pgTable("auditLog", {
     .$defaultFn(() => crypto.randomUUID()),
   userId: text("userId")
     .notNull()
-    .references(() => users.id), // user who performed the action
-  action: text("action").notNull(), // 'create', 'update', 'delete', 'view'
-  entityType: text("entityType").notNull(), // table name (e.g., 'user', 'hackerApplication')
-  entityId: text("entityId").notNull(), // record id
-  previousValue: text("previousValue"), // JSON stringified previous state (optional)
-  newValue: text("newValue"), // JSON stringified new state (optional)
-  metadata: text("metadata"), // Additional context as JSON stringified (optional)
+    .references(() => users.id),
+  action: text("action").notNull(),
+  entityType: text("entityType").notNull(),
+  entityId: text("entityId").notNull(),
+  previousValue: text("previousValue"),
+  newValue: text("newValue"),
+  metadata: text("metadata"),
   createdAt: timestamp("createdAt")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

@@ -1,107 +1,123 @@
 import { getCurrentUser } from "@/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { and, eq, lt, sql } from "drizzle-orm";
-import { applicationReviews, hackerApplications } from "@/lib/db/schema";
-import ReviewInterface from "@/components/reviews/ReviewInterface";
+import { sql } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ApplicationInfo from "@/components/ApplicationInfo";
-import { Suspense } from "react";
-import { isReviewer } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { applicationReviews, hackerApplications } from "@/lib/db/schema";
+import { isAdmin, isReviewer } from "@/lib/utils";
 
-interface ReviewStats {
-  totalReviews: number;
-  averageRating: number;
+interface SystemStatus {
+  pendingReviews: number;
 }
 
-export default async function ReviewsPage() {
+export default async function ReviewApplicationsPage() {
   const user = await getCurrentUser();
 
   if (!user?.id || !isReviewer(user.role)) {
     redirect("/");
   }
 
-  // Fetch application and review stats in parallel
-  const [nextApplication, reviewStats] = await Promise.all([
-    // Get next unreviewed application
-    db
-      .select()
-      .from(hackerApplications)
-      .where(
-        and(
-          lt(hackerApplications.reviewCount, 3),
-          eq(hackerApplications.submissionStatus, "submitted"),
-          eq(hackerApplications.internalResult, "pending"),
-          sql`NOT EXISTS (
-            SELECT 1 FROM ${applicationReviews}
-            WHERE ${applicationReviews.applicationId} = ${hackerApplications.id}
-            AND ${applicationReviews.reviewerId} = ${user.id}
-          )`,
-        ),
-      )
-      .orderBy(sql`RANDOM()`)
-      .limit(1)
-      .execute(),
+  // Fetch pending reviews count
+  const [systemStats] = await db
+    .select({
+      pendingReviews: sql<number>`
+        COUNT(DISTINCT CASE
+          WHEN ${hackerApplications.reviewCount} < 3
+          AND ${hackerApplications.submissionStatus} = 'submitted'
+          AND ${hackerApplications.internalResult} = 'pending'
+          THEN ${hackerApplications.id}
+        END)`,
+    })
+    .from(hackerApplications)
+    .execute();
 
-    // Get organizers's review stats using aggregates
-    db
-      .select({
-        count: sql<number>`count(*)`,
-        average: sql<number>`ROUND(AVG(${applicationReviews.rating})::numeric, 2)`,
-      })
-      .from(applicationReviews)
-      .where(eq(applicationReviews.reviewerId, user.id))
-      .execute(),
-  ]);
-
-  const stats: ReviewStats = {
-    totalReviews: reviewStats[0].count ?? 0,
-    averageRating: reviewStats[0].average ?? 0,
+  const status: SystemStatus = {
+    pendingReviews: systemStats?.pendingReviews ?? 0,
   };
 
-  const application = nextApplication[0] ?? null;
-
   return (
-    <div className="container max-w-screen-xl space-y-6 py-6">
-      <Suspense fallback={<div>Loading stats...</div>}>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Review Stats</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <p className="text-sm font-medium">Total Reviews</p>
-                  <p className="text-2xl font-bold">{stats.totalReviews}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium">Average Rating</p>
-                  <p className="text-2xl font-bold">{stats.averageRating}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </Suspense>
+    <div className="container max-w-screen-xl space-y-8 py-6">
+      {/* Instructional Content */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Review Guidelines</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h3 className="font-semibold">Review Process</h3>
+            <p className="text-muted-foreground">
+              Review applications thoroughly and fairly. Each application
+              requires three independent reviews before a decision can be made.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Rating Criteria</h3>
+            <ul className="list-inside list-disc text-muted-foreground">
+              <li>Consider technical experience and project history</li>
+              <li>Evaluate enthusiasm and willingness to learn</li>
+              <li>Assess potential contribution to the hackathon community</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Application Review Section */}
-      <Suspense fallback={<div>Loading application...</div>}>
-        {application ? (
-          <Card className="space-y-6 p-6 md:space-y-10">
-            <ApplicationInfo hacker={application} />
-            <ReviewInterface initialApplication={application} />
-          </Card>
-        ) : (
-          <Card className="p-6">
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
-                No more applications to review!
-              </p>
-            </div>
-          </Card>
-        )}
-      </Suspense>
+      {/* System Status */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Pending Reviews</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{status.pendingReviews}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Role-based CTAs */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col items-center justify-center gap-4">
+            {isAdmin(user.role) ? (
+              <>
+                <div className="grid w-full max-w-2xl gap-4">
+                  <Button asChild size="lg">
+                    <Link href="/review-applications/admin/applications">
+                      Manage Applications
+                    </Link>
+                  </Button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button asChild variant="secondary">
+                      <Link href="/review-applications/admin/reviewers">
+                        Review Stats
+                      </Link>
+                    </Button>
+                    <Button asChild variant="secondary">
+                      <Link href="/review-applications/review">
+                        Review Applications
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : isReviewer(user.role) ? (
+              <Button
+                asChild
+                size="lg"
+                className="w-full max-w-md"
+                disabled={status.pendingReviews === 0}
+              >
+                <Link href="/review-applications/review">
+                  {status.pendingReviews === 0
+                    ? "No Applications Available"
+                    : "Start Reviewing"}
+                </Link>
+              </Button>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
