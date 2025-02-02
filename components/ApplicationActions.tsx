@@ -2,7 +2,6 @@
 
 import { Button } from "./ui/button";
 import Link from "next/link";
-import HackerStatusModal from "./ApplicationStatusModal";
 import { HackerApplicationsSelectData } from "@/lib/db/schema";
 import {
   ArrowUpRightFromSquare,
@@ -10,7 +9,7 @@ import {
   UserCircle2,
   RefreshCcw,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import ApplicationStatusModal from "./ApplicationStatusModal";
 
 type Props = {
   hacker: HackerApplicationsSelectData;
@@ -40,18 +39,17 @@ const ApplicationActions = ({ hacker, status }: Props) => {
       </div>
 
       <div className="flex flex-col gap-3">
-        <HackerStatusModal
+        <ApplicationStatusModal
           userId={hacker.userId}
           name={hacker.firstName + " " + hacker.lastName}
           email={hacker.email}
-          age={hacker.age}
           status={status}
         >
           <Button className="group w-full gap-2 text-base transition-all">
             <RefreshCcw className="size-4 transition-transform group-hover:rotate-180" />
             Update Status
           </Button>
-        </HackerStatusModal>
+        </ApplicationStatusModal>
 
         <hr />
 
