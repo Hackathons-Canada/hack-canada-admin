@@ -69,7 +69,7 @@ const AcceptanceEmail = ({ name }: Props) => (
               <div className="mt-4 text-zinc-700">
                 <div className="mb-6">
                   <div className="mb-2">
-                    <strong className="text-xs font-bold text-blue-400">
+                    <strong className="text-xs font-bold text-zinc-800">
                       📍 WHERE
                     </strong>
                   </div>
@@ -80,7 +80,7 @@ const AcceptanceEmail = ({ name }: Props) => (
                 </div>
                 <div>
                   <div className="mb-2">
-                    <strong className="text-xs font-bold text-blue-400">
+                    <strong className="text-xs font-bold text-zinc-800">
                       📅 WHEN
                     </strong>
                   </div>
@@ -115,7 +115,8 @@ const AcceptanceEmail = ({ name }: Props) => (
               <Text className="mt-4 text-zinc-700">
                 At this moment we are still hammering out some of the logistics,
                 but event schedule, discord server, team formation information,
-                and other exciting updates will be shared with you soon!
+                and other exciting updates will be shared with you closer to the
+                hackathon date!
               </Text>
               <Text className="mt-4 text-zinc-700">
                 If you have any questions or need anything, feel free to reach
