@@ -84,6 +84,7 @@ export async function PATCH(
         .update(users)
         .set({
           applicationStatus: status,
+          acceptedAt: status === "accepted" ? new Date() : null,
         })
         .where(eq(users.id, existingUser.id));
 
