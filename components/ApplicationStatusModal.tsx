@@ -22,7 +22,6 @@ type Props = {
   userId: string;
   name: string | null;
   email: string | null;
-  age: number | null;
 };
 
 const ApplicationStatusModal = ({
@@ -30,14 +29,20 @@ const ApplicationStatusModal = ({
   children,
   name,
   email,
-  age,
   userId,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const onSubmit = (status: ApplicationStatus) => {
+  type ActionType = Extract<
+    ApplicationStatus,
+    "accepted" | "rejected" | "waitlisted"
+  >;
+  const [actionType, setActionType] = useState<ActionType | null>(null);
+
+  const onSubmit = (status: ActionType) => {
+    setActionType(status);
     startTransition(async () => {
       try {
         const response = await fetch(`/api/update-status/${userId}`, {
@@ -79,16 +84,9 @@ const ApplicationStatusModal = ({
           <>
             <DialogHeader>
               <DialogTitle>Update Status</DialogTitle>
-              <DialogDescription className="space-y-2 py-2">
-                <p>
-                  Accept or reject the hacker&apos;s applications. Can only be
-                  done once. When the user receives an email, it cannot be
-                  undone.
-                </p>
-                <p className="">
-                  Upon accepting or rejecting {name}, they will receive an
-                  acceptance or rejection email automatically.
-                </p>
+              <DialogDescription className="py-2">
+                This action will trigger an automatic email notification and
+                cannot be undone.
               </DialogDescription>
             </DialogHeader>
 
@@ -103,11 +101,6 @@ const ApplicationStatusModal = ({
                   Email Address
                 </p>
                 <p className="w-1/2 break-words text-right">{email}</p>
-              </div>
-
-              <div className="flex justify-between rounded-md bg-muted px-2.5 py-2">
-                <p className="text-muted-foreground">Age</p>
-                <p>{age}</p>
               </div>
 
               <div className="flex justify-between rounded-md bg-muted px-2.5 py-2">
@@ -163,23 +156,18 @@ const ApplicationStatusModal = ({
               <div className="flex flex-col gap-4 text-center text-muted-foreground">
                 <hr className="border-t-2" />
 
-                <p className="text-balance text-sm">
-                  Upon acceptance or rejection, user will immediately receive an
-                  email.
+                <p className="text-sm font-medium text-foreground">
+                  Ready to update application status
                 </p>
 
-                <p className="font-medium text-foreground">
-                  {name?.split(" ")[0]} is desperately waiting to be accepted.
-                </p>
-
-                <div className="flex gap-2 max-xs:flex-col md:mt-2">
+                <div className="flex gap-2 max-xs:flex-col">
                   <Button
                     disabled={isPending}
                     onClick={() => onSubmit("accepted")}
                     className="w-full text-base"
                     variant="default"
                   >
-                    {isPending ? (
+                    {isPending && actionType === "accepted" ? (
                       <Loader2 className="size-5 animate-spin" />
                     ) : (
                       "Accept"
@@ -192,7 +180,7 @@ const ApplicationStatusModal = ({
                     variant="destructive"
                     className="w-full text-base"
                   >
-                    {isPending ? (
+                    {isPending && actionType === "rejected" ? (
                       <Loader2 className="size-5 animate-spin" />
                     ) : (
                       "Reject"
@@ -202,15 +190,17 @@ const ApplicationStatusModal = ({
 
                 {status === "pending" && (
                   <>
-                    <hr className="my-2 border-t-2" />
-
                     <Button
                       disabled={isPending}
                       onClick={() => onSubmit("waitlisted")}
                       variant="outline"
                       className="w-full text-base hover:border-secondary hover:bg-secondary/10 hover:text-secondary"
                     >
-                      Mark as Waitlisted
+                      {isPending && actionType === "waitlisted" ? (
+                        <Loader2 className="size-5 animate-spin" />
+                      ) : (
+                        "Mark as Waitlisted"
+                      )}
                     </Button>
                   </>
                 )}

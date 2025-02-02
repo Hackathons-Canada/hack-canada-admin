@@ -63,7 +63,6 @@ const HackerList = ({ applications }: Props) => {
                 userId={app.hackerApplication.userId}
                 name={app.hackerApplication.firstName || app.user.name}
                 email={app.hackerApplication.email || app.user.email || ""}
-                age={app.hackerApplication.age || 0}
                 status={app.user.applicationStatus as ApplicationStatus}
               >
                 <ApplicationStatusModalTrigger
