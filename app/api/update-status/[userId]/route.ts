@@ -91,7 +91,7 @@ export async function PATCH(
           previousValue: { applicationStatus: existingUser.applicationStatus },
           newValue: { applicationStatus: status },
           metadata: {
-            description: `${existingApplication.firstName}'s status was ${status} by ${currentUser.name || currentUser.email}`,
+            description: `${existingApplication.firstName}'s application was ${status} by ${currentUser.name || currentUser.email}`,
             updatedBy: currentUser.email,
             timestamp: new Date().toISOString(),
           },
