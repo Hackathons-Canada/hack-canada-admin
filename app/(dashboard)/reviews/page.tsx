@@ -7,6 +7,7 @@ import ReviewInterface from "@/components/reviews/ReviewInterface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ApplicationInfo from "@/components/ApplicationInfo";
 import { Suspense } from "react";
+import { isReviewer } from "@/lib/utils";
 
 interface ReviewStats {
   totalReviews: number;
@@ -16,7 +17,7 @@ interface ReviewStats {
 export default async function ReviewsPage() {
   const user = await getCurrentUser();
 
-  if (!user?.id || user.role !== "admin") {
+  if (!user?.id || !isReviewer(user.role)) {
     redirect("/");
   }
 
@@ -42,7 +43,7 @@ export default async function ReviewsPage() {
       .limit(1)
       .execute(),
 
-    // Get admin's review stats using aggregates
+    // Get organizers's review stats using aggregates
     db
       .select({
         count: sql<number>`count(*)`,

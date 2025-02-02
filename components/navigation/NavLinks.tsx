@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   ScrollText,
   Clipboard,
+  Gavel,
 } from "lucide-react";
 
 const iconMap = {
@@ -16,6 +17,7 @@ const iconMap = {
   Users: Users,
   Applications: Clipboard,
   Statistics: BarChart3,
+  "Review Applications": Gavel,
   "Role Management": ShieldCheck,
   Logs: ScrollText,
 };

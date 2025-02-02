@@ -1,4 +1,4 @@
-import { and, eq, lt, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 import { applicationReviews, hackerApplications } from "@/lib/db/schema";
@@ -7,6 +7,7 @@ import { createAuditLog } from "@/lib/db/queries/audit-log";
 import { db } from "@/lib/db";
 
 import { ApiResponse } from "@/types/api";
+import { isReviewer } from "@/lib/utils";
 
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   // Remove when done testing
@@ -20,12 +21,12 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   try {
     const currentUser = await getCurrentUser();
 
-    if (!currentUser?.id || currentUser.role !== "admin") {
+    if (!currentUser?.id || !isReviewer(currentUser.role)) {
       return NextResponse.json(
         {
           success: false,
           message: "Unauthorized access",
-          error: "User must be an admin to review applications",
+          error: "User must be an admin/organizer to review applications",
         },
         { status: 401 },
       );

@@ -4,6 +4,7 @@ import CountCard from "@/components/CountCard";
 import PageBanner from "@/components/PageBanner";
 import { db } from "@/lib/db";
 import { hackerApplications, users } from "@/lib/db/schema";
+import { isAdmin } from "@/lib/utils";
 import { count, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
@@ -12,9 +13,13 @@ export const revalidate = 600;
 const Home = async () => {
   const user = await getCurrentUser();
 
-  if (!user || user.role !== "admin") {
-    redirect("https://app.hackcanada.org");
+  if (!user?.id) {
+    redirect("/");
   }
+
+  if (user.role === "organizer") redirect("/reviews");
+
+  if (!isAdmin(user.role)) redirect("https://app.hackcanada.org");
 
   const [
     [dbUsers],
@@ -25,6 +30,7 @@ const Home = async () => {
     [pendingApplications],
     [waitlisted],
     [admins],
+    [organizers],
   ] = await Promise.all([
     db.select({ count: count() }).from(users),
     db.select({ count: count() }).from(hackerApplications),
@@ -46,9 +52,12 @@ const Home = async () => {
       .from(users)
       .where(eq(users.applicationStatus, "waitlisted")),
     db.select({ count: count() }).from(users).where(eq(users.role, "admin")),
+    db
+      .select({ count: count() })
+      .from(users)
+      .where(eq(users.role, "organizer")),
   ]);
 
-  const organizers = 33;
   const volunteers = 0;
   const mentors = 0;
 
@@ -67,7 +76,7 @@ const Home = async () => {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             <CountCard label="Users" count={dbUsers.count} />
             <CountCard label="Admins" count={admins.count} />
-            <CountCard label="Organizers" count={organizers} />
+            <CountCard label="Organizers" count={organizers.count} />
             <CountCard label="Mentors" count={mentors} />
             <CountCard label="Volunteers" count={volunteers} />
           </div>

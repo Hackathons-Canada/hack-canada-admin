@@ -18,6 +18,10 @@ export const navLinks = [
   //   href: "/statistics",
   // },
   {
+    name: "Review Applications",
+    href: "/reviews",
+  },
+  {
     name: "Role Management",
     href: "/role-management",
   },

@@ -46,3 +46,11 @@ export function formatApplicationStatus(status: ApplicationStatus) {
 export const getResumeUrl = (key: string) => {
   return `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
 };
+
+export const isAdmin = (role: string): boolean => {
+  return role === "admin";
+};
+
+export const isReviewer = (role: string): boolean => {
+  return role === "organizer" || role === "admin";
+};

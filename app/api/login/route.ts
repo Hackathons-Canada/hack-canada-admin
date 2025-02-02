@@ -6,6 +6,7 @@ import { ApiResponse } from "@/types/api";
 import { getUserByEmail } from "@/lib/db/queries/user";
 import { LoginSchema } from "@/lib/validations/login";
 import { createAuditLog } from "@/lib/db/queries/audit-log";
+import { isReviewer } from "@/lib/utils";
 
 export async function POST(
   req: NextRequest,
@@ -38,15 +39,15 @@ export async function POST(
       });
     }
 
-    if (existingUser.role !== "admin") {
-      // Log non-admin login attempt
+    if (!isReviewer(existingUser.role)) {
+      // Log non-organizer login attempt
       await createAuditLog({
         userId: existingUser.id,
         action: "create",
         entityType: "session",
         entityId: existingUser.id,
         metadata: {
-          reason: "Unauthorized access attempt - Non-admin user",
+          reason: "Unauthorized access attempt - Non-organizer user",
           email: email,
         },
       });
@@ -89,7 +90,7 @@ export async function POST(
       entityType: "session",
       entityId: existingUser.id,
       metadata: {
-        reason: "Successful admin login",
+        reason: "Successful organizer login",
         email: email,
       },
     });
