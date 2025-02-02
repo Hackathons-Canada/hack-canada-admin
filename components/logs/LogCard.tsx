@@ -111,7 +111,7 @@ export function LogCard({
             <p className="mb-1 text-xs font-medium text-muted-foreground">
               Additional Context:
             </p>
-            <pre className="max-h-24 overflow-auto rounded-lg bg-muted p-2.5 text-xs">
+            <pre className="max-h-40 overflow-auto rounded-lg bg-muted p-2.5 text-xs">
               {JSON.stringify(JSON.parse(metadata), null, 2)}
             </pre>
           </div>

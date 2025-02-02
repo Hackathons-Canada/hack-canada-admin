@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 import { applicationReviews, hackerApplications } from "@/lib/db/schema";
 import { getCurrentUser } from "@/auth";
-import { createAuditLog } from "@/lib/db/queries/audit-log";
 import { db } from "@/lib/db";
 
 import { ApiResponse } from "@/types/api";
@@ -95,18 +94,6 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
           averageRating,
         })
         .where(eq(hackerApplications.id, applicationId));
-
-      // Create audit log
-      await createAuditLog(
-        {
-          action: "create",
-          entityId: applicationId,
-          entityType: "applicationReview",
-          userId: currentUser.id,
-          metadata: { rating },
-        },
-        tx,
-      );
     });
 
     return NextResponse.json({
