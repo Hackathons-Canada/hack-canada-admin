@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { hackerApplications, applicationReviews } from "@/lib/db/schema";
-import { isAdmin, isReviewer } from "@/lib/utils";
+import { cn, isAdmin, isReviewer } from "@/lib/utils";
 import Container from "@/components/Container";
 import PageBanner from "@/components/PageBanner";
 
@@ -126,15 +126,25 @@ export default async function ReviewApplicationsPage() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {/* Primary Action */}
           <Button
             asChild
             size="lg"
-            className="h-full min-h-28 text-lg font-semibold tracking-wide transition-all duration-200"
+            className={cn(
+              "h-full min-h-28 text-lg font-semibold tracking-wide",
+              status.pendingReviews === 0 ||
+                (!status.canReviewMore && "cursor-not-allowed opacity-50"),
+            )}
             disabled={status.pendingReviews === 0 || !status.canReviewMore}
           >
-            <Link href="/review-applications/review">
+            <Link
+              href={
+                status.pendingReviews > 0 || status.canReviewMore
+                  ? ""
+                  : "/review-applications/review"
+              }
+            >
               {!status.canReviewMore
                 ? "Review Limit Reached"
                 : status.pendingReviews === 0
@@ -148,8 +158,8 @@ export default async function ReviewApplicationsPage() {
             <div className="flex flex-col gap-4 xl:col-span-2 xl:flex-row">
               <Button
                 asChild
-                variant="outline"
-                className="flex-1 py-4 xl:h-full"
+                variant="ghost"
+                className="flex-1 bg-primary/20 py-4 text-primary hover:bg-primary hover:text-white xl:h-full xl:text-lg"
               >
                 <Link href="/review-applications/admin/applications">
                   Accept/Reject Applications
@@ -157,8 +167,8 @@ export default async function ReviewApplicationsPage() {
               </Button>
               <Button
                 asChild
-                variant="outline"
-                className="flex-1 py-4 xl:h-full"
+                variant="ghost"
+                className="flex-1 bg-primary/20 py-4 text-primary hover:bg-primary hover:text-white xl:h-full xl:text-lg"
               >
                 <Link href="/review-applications/admin/reviewers">
                   Individual Reviewer Stats
