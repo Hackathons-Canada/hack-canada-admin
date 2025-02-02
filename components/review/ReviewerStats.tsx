@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Suspense } from "react";
 import ReviewerStatsCards from "./ReviewerStatsCards";
 import ReviewerHistoryTable from "./ReviewerHistoryTable";
+import { ClipboardX } from "lucide-react";
 
 interface ReviewerStats {
   reviewerId: string;
@@ -29,9 +30,13 @@ export default function ReviewerStats({
   if (!stats && selectedReviewer) {
     return (
       <Card>
-        <CardContent>
-          <div className="py-8 text-center text-muted-foreground">
-            No reviews found for this organizer
+        <CardContent className="flex flex-col items-center justify-center gap-4 py-8">
+          <ClipboardX className="h-12 w-12 text-muted-foreground" />
+          <div className="text-center">
+            <p className="text-lg font-medium">No Reviews Found</p>
+            <p className="text-sm text-muted-foreground">
+              This kid hasn&apos;t reviewed any applications yet
+            </p>
           </div>
         </CardContent>
       </Card>

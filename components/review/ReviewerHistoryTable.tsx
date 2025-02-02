@@ -7,13 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ExternalLink } from "lucide-react";
 
 interface Review {
   applicationId: string;
@@ -31,59 +26,59 @@ export default function ReviewerHistoryTable({
   reviews,
 }: ReviewerHistoryTableProps) {
   return (
-    <Card className="transition-all duration-200 hover:shadow-md">
-      <CardHeader>
-        <CardTitle>Reviews History</CardTitle>
-        <CardDescription>
+    <div className="space-y-4">
+      <div className="space-y-0.5">
+        <h3 className="font-medium md:text-lg">Reviews History</h3>
+        <p className="text-xs text-muted-foreground md:text-sm">
           Chronological list of applications reviewed by this organizer
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50 transition-colors hover:bg-muted">
-                <TableHead className="py-4 font-semibold">Applicant</TableHead>
-                <TableHead className="py-4 text-center font-semibold">
-                  Rating
-                </TableHead>
-                <TableHead className="py-4 text-center font-semibold">
-                  Duration (s)
-                </TableHead>
-                <TableHead className="py-4 text-right font-semibold">
-                  Review Date
-                </TableHead>
+        </p>
+      </div>
+      <div className="overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:shadow-md">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50 transition-colors hover:bg-muted">
+              <TableHead className="py-4 font-semibold">Applicant</TableHead>
+              <TableHead className="py-4 text-center font-semibold">
+                Rating
+              </TableHead>
+              <TableHead className="py-4 text-center font-semibold">
+                Duration (s)
+              </TableHead>
+              <TableHead className="py-4 text-right font-semibold">
+                Review Date
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {reviews.map((review, index) => (
+              <TableRow
+                key={index}
+                className="transition-colors hover:bg-muted/50"
+              >
+                <TableCell className="py-4">
+                  <Link
+                    className="group relative flex w-fit items-center gap-1.5"
+                    href={`/applications/${review.applicationId}`}
+                  >
+                    {review.applicantName}
+                    <ExternalLink size={16} />
+                    <span className="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 bg-foreground transition-transform group-hover:scale-x-100"></span>
+                  </Link>
+                </TableCell>
+                <TableCell className="py-4 text-center">
+                  {review.rating}/10
+                </TableCell>
+                <TableCell className="py-4 text-center">
+                  {review.duration}
+                </TableCell>
+                <TableCell className="py-4 text-right">
+                  {new Date(review.reviewedAt).toLocaleString()}
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {reviews.map((review, index) => (
-                <TableRow
-                  key={index}
-                  className="transition-colors hover:bg-muted/50"
-                >
-                  <TableCell className="py-4">
-                    <Link
-                      href={`/applications/${review.applicationId}`}
-                      className="text-primary hover:underline"
-                    >
-                      {review.applicantName}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="py-4 text-center">
-                    {review.rating}/10
-                  </TableCell>
-                  <TableCell className="py-4 text-center">
-                    {review.duration}
-                  </TableCell>
-                  <TableCell className="py-4 text-right">
-                    {new Date(review.reviewedAt).toLocaleString()}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 }
