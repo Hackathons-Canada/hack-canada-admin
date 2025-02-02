@@ -9,6 +9,7 @@ import { users } from "@/lib/db/schema";
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { sendAcceptanceEmail, sendRejectionEmail } from "@/lib/ses";
+import { createAuditLog } from "@/lib/db/queries/audit-log";
 
 const updateStatusSchema = z.object({
   status: z.enum(["accepted", "rejected", "waitlisted"]),
@@ -21,7 +22,7 @@ export async function PATCH(
   try {
     const currentUser = await getCurrentUser();
 
-    if (!currentUser || currentUser.role !== "admin") {
+    if (!currentUser || !currentUser.id || currentUser.role !== "admin") {
       return NextResponse.json({
         success: false,
         message: "You do not have permission to perform this action.",
@@ -80,6 +81,24 @@ export async function PATCH(
     }
 
     await db.transaction(async (tx) => {
+      // Create audit log for the status change
+      await createAuditLog(
+        {
+          userId: currentUser.id || "unknown",
+          action: "update",
+          entityType: "user",
+          entityId: userId,
+          previousValue: { applicationStatus: existingUser.applicationStatus },
+          newValue: { applicationStatus: status },
+          metadata: {
+            description: `${existingApplication.firstName}'s status was ${status} by ${currentUser.name || currentUser.email}`,
+            updatedBy: currentUser.email,
+            timestamp: new Date().toISOString(),
+          },
+        },
+        tx,
+      );
+
       await tx
         .update(users)
         .set({

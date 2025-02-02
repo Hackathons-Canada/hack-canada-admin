@@ -1,5 +1,8 @@
+import { NeonDatabase } from "drizzle-orm/neon-serverless";
 import { db } from "..";
 import { auditLogs, type NewAuditLog } from "../schema";
+
+import * as schema from "../schema";
 
 export type CreateAuditLogParams = {
   userId: string;
@@ -56,7 +59,12 @@ export type CreateAuditLogParams = {
  *   metadata: { reason: "Failed login attempt" }
  * });
  */
-export async function createAuditLog(params: CreateAuditLogParams) {
+export async function createAuditLog(
+  params: CreateAuditLogParams,
+  tx?: NeonDatabase<typeof schema>,
+) {
+  const dbTransaction = tx || db;
+
   const auditLog: NewAuditLog = {
     userId: params.userId,
     action: params.action,
@@ -69,7 +77,10 @@ export async function createAuditLog(params: CreateAuditLogParams) {
     metadata: params.metadata ? JSON.stringify(params.metadata) : null,
   };
 
-  const [createdLog] = await db.insert(auditLogs).values(auditLog).returning();
+  const [createdLog] = await dbTransaction
+    .insert(auditLogs)
+    .values(auditLog)
+    .returning();
   return createdLog;
 }
 
