@@ -140,9 +140,9 @@ export default async function ReviewApplicationsPage() {
           >
             <Link
               href={
-                status.pendingReviews > 0 || status.canReviewMore
-                  ? ""
-                  : "/review-applications/review"
+                status.pendingReviews > 0 && status.canReviewMore
+                  ? "/review-applications/review"
+                  : ""
               }
             >
               {!status.canReviewMore
