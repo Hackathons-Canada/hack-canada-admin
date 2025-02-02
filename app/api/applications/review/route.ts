@@ -6,69 +6,43 @@ import { getCurrentUser } from "@/auth";
 import { createAuditLog } from "@/lib/db/queries/audit-log";
 import { db } from "@/lib/db";
 
-export async function GET() {
-  try {
-    const currentUser = await getCurrentUser();
+import { ApiResponse } from "@/types/api";
 
-    if (!currentUser?.id || currentUser.role !== "admin") {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    // Get applications that:
-    // 1. Have less than 3 reviews
-    // 2. Haven't been reviewed by the current admin
-    // 3. Are submitted (not drafts)
-    const [application] = await db
-      .select()
-      .from(hackerApplications)
-      .where(
-        and(
-          lt(hackerApplications.reviewCount, 3),
-          eq(hackerApplications.submissionStatus, "submitted"),
-          eq(hackerApplications.internalResult, "pending"),
-          sql`NOT EXISTS (
-            SELECT 1 FROM ${applicationReviews}
-            WHERE ${applicationReviews.applicationId} = ${hackerApplications.id}
-            AND ${applicationReviews.reviewerId} = ${currentUser.id}
-          )`,
-        ),
-      )
-      .orderBy(sql`RANDOM()`)
-      .limit(1)
-      .execute();
-
-    if (!application) {
-      return new NextResponse(
-        JSON.stringify({ message: "No applications left to review" }),
-        { status: 404 },
-      );
-    }
-
-    return NextResponse.json(application);
-  } catch (error) {
-    console.error("[APPLICATIONS_REVIEW_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
-}
-
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
   // Remove when done testing
   const troo = true;
   if (troo)
-    return new NextResponse("Review submitted successfully", { status: 200 });
+    return NextResponse.json({
+      success: true,
+      message: "Review submitted successfully",
+    });
 
   try {
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id || currentUser.role !== "admin") {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized access",
+          error: "User must be an admin to review applications",
+        },
+        { status: 401 },
+      );
     }
 
     const body = await req.json();
     const { applicationId, rating } = body;
 
     if (!applicationId || !rating || rating < 1 || rating > 10) {
-      return new NextResponse("Invalid request body", { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid request data",
+          error: "Application ID and rating (1-10) are required",
+        },
+        { status: 400 },
+      );
     }
 
     // Start a transaction to ensure data consistency
@@ -134,12 +108,29 @@ export async function POST(req: Request) {
       );
     });
 
-    return new NextResponse("Review submitted successfully", { status: 200 });
+    return NextResponse.json({
+      success: true,
+      message: "Review submitted successfully",
+    });
   } catch (error) {
     console.error("[APPLICATIONS_REVIEW_POST]", error);
     if (error instanceof Error) {
-      return new NextResponse(error.message, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Failed to submit review",
+          error: error.message,
+        },
+        { status: 400 },
+      );
     }
-    return new NextResponse("Internal Error", { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to submit review",
+        error: "Internal server error",
+      },
+      { status: 500 },
+    );
   }
 }

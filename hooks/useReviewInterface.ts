@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { HackerApplicationsSelectData } from "@/lib/db/schema";
+import { ApiResponse } from "@/types/api";
 
 export const RATINGS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 const MAX_RETRIES = 3;
@@ -36,13 +37,15 @@ export const useReviewInterface = (
               rating,
             }),
           });
+          const data: ApiResponse = await res.json();
 
-          if (!res.ok) {
-            const error = await res.text();
-            throw new Error(error || "Failed to submit review");
+          if (!res.ok || !data.success) {
+            throw new Error(
+              data.error || data.message || "Failed to submit review",
+            );
           }
 
-          toast.success("Review submitted successfully!");
+          toast.success(data.message || "Review submitted successfully!");
           router.refresh();
           window.scrollTo({ top: 0, behavior: "smooth" });
           setRating(null);
