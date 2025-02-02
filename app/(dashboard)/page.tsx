@@ -19,11 +19,11 @@ const Home = async () => {
   const [
     [dbUsers],
     [applicants],
-    [applications],
+    [hackers],
     [accepted],
     [rejected],
     [pendingApplications],
-    [waitListed],
+    [waitlisted],
     [admins],
   ] = await Promise.all([
     db.select({ count: count() }).from(users),
@@ -44,7 +44,7 @@ const Home = async () => {
     db
       .select({ count: count() })
       .from(users)
-      .where(eq(users.applicationStatus, "waitListed")),
+      .where(eq(users.applicationStatus, "waitlisted")),
     db.select({ count: count() }).from(users).where(eq(users.role, "admin")),
   ]);
 
@@ -80,11 +80,11 @@ const Home = async () => {
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             <CountCard label="Applications" count={applicants.count} />
-            <CountCard label="Applications" count={applications.count} />
+            <CountCard label="Hackers" count={hackers.count} />
             <CountCard label="Accepted" count={accepted.count} />
             <CountCard label="Rejected" count={rejected.count} />
             <CountCard label="Pending" count={pendingApplications.count} />
-            <CountCard label="Waitlisted" count={waitListed.count} />
+            <CountCard label="Waitlisted" count={waitlisted.count} />
           </div>
         </section>
       </div>

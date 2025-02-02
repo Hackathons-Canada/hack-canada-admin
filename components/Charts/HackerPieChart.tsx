@@ -26,7 +26,7 @@ const chartConfig = {
     label: "Rejected",
     color: "hsl(var(--chart-3))",
   },
-  waitListed: {
+  waitlisted: {
     label: "WaitListed",
     color: "hsl(var(--chart-4))",
   },

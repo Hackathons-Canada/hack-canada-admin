@@ -37,10 +37,10 @@ const StatisticsPage = async () => {
     .from(users)
     .where(eq(users.applicationStatus, "rejected"));
 
-  const [waitListedApps] = await db
+  const [waitlistedApps] = await db
     .select({ count: count() })
     .from(users)
-    .where(eq(users.applicationStatus, "waitListed"));
+    .where(eq(users.applicationStatus, "waitlisted"));
 
   const applicationData = [
     {
@@ -59,9 +59,9 @@ const StatisticsPage = async () => {
       fill: "var(--color-rejected)",
     },
     {
-      status: "waitListed",
-      applicants: waitListedApps.count,
-      fill: "var(--color-waitListed)",
+      status: "waitlisted",
+      applicants: waitlistedApps.count,
+      fill: "var(--color-waitlisted)",
     },
   ];
 

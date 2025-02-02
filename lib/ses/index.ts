@@ -12,7 +12,7 @@ const ses = new SES({ region: process.env.AWS_SES_REGION });
 
 export const sendEmail = async (to: string, subject: string, body: string) => {
   const params = {
-    Source: `Hack Canada<${process.env.AWS_SES_VERIFIED_EMAIL!}>`,
+    Source: `Hack Canada <${process.env.AWS_SES_NO_REPLY_EMAIL!}>`,
     Destination: {
       ToAddresses: [to],
     },
