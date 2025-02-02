@@ -13,6 +13,7 @@ export const useReviewInterface = (
 ) => {
   const [rating, setRating] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [startTime] = useState<number>(Date.now()); // Start timer when component mounts
   const router = useRouter();
 
   const submitReview = async () => {
@@ -35,6 +36,7 @@ export const useReviewInterface = (
             body: JSON.stringify({
               applicationId: initialApplication.id,
               rating,
+              reviewDuration: Math.floor((Date.now() - startTime) / 1000), // Convert to seconds
             }),
           });
           const data: ApiResponse = await res.json();

@@ -160,6 +160,7 @@ export const applicationReviews = pgTable("applicationReview", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
+  reviewDuration: integer("reviewDuration"), // Duration in seconds
   createdAt: timestamp("createdAt")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

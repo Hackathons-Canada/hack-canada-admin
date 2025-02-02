@@ -36,7 +36,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
         className="transition-all duration-200 hover:bg-muted/50"
       />
 
-      <main className="space-y-10">
+      <div className="space-y-10">
         <UsersSearchControls />
 
         <section aria-label="Users List" className="space-y-6">
@@ -57,7 +57,7 @@ const UsersPage = async ({ searchParams }: UsersPageProps) => {
             />
           ) : null}
         </section>
-      </main>
+      </div>
     </Container>
   );
 };

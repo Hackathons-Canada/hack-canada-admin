@@ -32,14 +32,21 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
     }
 
     const body = await req.json();
-    const { applicationId, rating } = body;
+    const { applicationId, rating, reviewDuration } = body;
 
-    if (!applicationId || !rating || rating < 1 || rating > 10) {
+    if (
+      !applicationId ||
+      !rating ||
+      rating < 1 ||
+      rating > 10 ||
+      !reviewDuration
+    ) {
       return NextResponse.json(
         {
           success: false,
           message: "Invalid request data",
-          error: "Application ID and rating (1-10) are required",
+          error:
+            "Application ID, rating (1-10), and review duration are required",
         },
         { status: 400 },
       );
@@ -70,6 +77,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
         applicationId,
         reviewerId: currentUser.id,
         rating,
+        reviewDuration,
       });
 
       // Update the application's review count and average rating

@@ -7,7 +7,6 @@ import { desc, eq } from "drizzle-orm";
 import Container from "@/components/Container";
 import PageBanner from "@/components/PageBanner";
 import AdminApplicationList from "@/components/review/AdminApplicationList";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import PaginationControls from "@/components/PaginationControls";
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { count } from "drizzle-orm";
@@ -29,6 +28,9 @@ export default async function AdminApplicationsPage({
   const perPage = Number(searchParams["perPage"] ?? RESULTS_PER_PAGE);
   const start = (page - 1) * perPage;
 
+  const params = new URLSearchParams();
+  // We don't need to add page/perPage as they're handled by PaginationControls
+
   const [totalApplications, applications] = await Promise.all([
     db
       .select({ count: count() })
@@ -45,7 +47,6 @@ export default async function AdminApplicationsPage({
         averageRating: hackerApplications.averageRating,
         internalResult: hackerApplications.internalResult,
         userId: hackerApplications.userId,
-        applicationStatus: users.applicationStatus,
       })
       .from(hackerApplications)
       .innerJoin(users, eq(users.id, hackerApplications.userId))
@@ -56,33 +57,28 @@ export default async function AdminApplicationsPage({
   ]);
 
   return (
-    <Container className="space-y-10">
+    <Container className="space-y-6 md:space-y-10">
       <PageBanner
         heading="Review Applications"
         subheading="Review and manage submitted hacker applications. View internal results and update application statuses."
-        className="transition-all duration-200 hover:bg-muted/50"
       />
 
-      <Card className="transition-all duration-200 hover:shadow-md">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Submitted Applications</CardTitle>
-          {applications.length > 0 && (
-            <p className="text-sm text-muted-foreground">
-              Displaying applications {start + 1} -{" "}
-              {start + applications.length} from{" "}
-              <span className="font-medium">{totalApplications}</span>{" "}
-              applications
-            </p>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
+        {applications.length > 0 && (
+          <p className="text-sm font-medium text-muted-foreground max-md:text-center">
+            Displaying users {start + 1} - {start + applications.length} from{" "}
+            <span className="text-foreground">{totalApplications}</span> users
+          </p>
+        )}
+
+        <div className="space-y-6">
           {applications.length > 0 ? (
             <>
               <AdminApplicationList applications={applications} />
               <PaginationControls
                 totalNumOfUsers={totalApplications}
-                table="review-applications"
-                search=""
+                table="applications"
+                search={params.toString()}
                 className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
               />
             </>
@@ -91,8 +87,8 @@ export default async function AdminApplicationsPage({
               No applications have been submitted yet.
             </p>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Container>
   );
 }

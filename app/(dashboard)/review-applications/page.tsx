@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { applicationReviews, hackerApplications } from "@/lib/db/schema";
+import { hackerApplications } from "@/lib/db/schema";
 import { isAdmin, isReviewer } from "@/lib/utils";
 
 interface SystemStatus {
