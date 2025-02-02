@@ -17,7 +17,7 @@ const Home = async () => {
     redirect("/");
   }
 
-  if (user.role === "organizer") redirect("/reviews");
+  if (user.role === "organizer") redirect("/review-applications");
 
   if (!isAdmin(user.role)) redirect("https://app.hackcanada.org");
 

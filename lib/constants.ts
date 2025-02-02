@@ -19,7 +19,7 @@ export const navLinks = [
   // },
   {
     name: "Review Applications",
-    href: "/reviews",
+    href: "/review-applications",
   },
   {
     name: "Role Management",
