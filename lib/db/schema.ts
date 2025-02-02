@@ -145,7 +145,28 @@ export const hackerApplications = pgTable("hackerApplication", {
     .default(sql`CURRENT_TIMESTAMP`),
   internalResult: text("internalResult").default("pending"),
   internalNotes: text("internalNotes"),
+  reviewCount: integer("reviewCount").default(0).notNull(),
+  averageRating: integer("averageRating"),
 });
+
+export const applicationReviews = pgTable("applicationReview", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  applicationId: text("applicationId")
+    .notNull()
+    .references(() => hackerApplications.id, { onDelete: "cascade" }),
+  reviewerId: text("reviewerId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(),
+  createdAt: timestamp("createdAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export type ApplicationReview = typeof applicationReviews.$inferSelect;
+export type NewApplicationReview = typeof applicationReviews.$inferInsert;
 
 export type HackerApplicationsInsertData =
   typeof hackerApplications.$inferInsert;
