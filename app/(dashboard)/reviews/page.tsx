@@ -6,6 +6,12 @@ import { applicationReviews, hackerApplications } from "@/lib/db/schema";
 import ReviewInterface from "@/components/reviews/ReviewInterface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ApplicationInfo from "@/components/ApplicationInfo";
+import { Suspense } from "react";
+
+interface ReviewStats {
+  totalReviews: number;
+  averageRating: number;
+}
 
 export default async function ReviewsPage() {
   const user = await getCurrentUser();
@@ -47,7 +53,7 @@ export default async function ReviewsPage() {
       .execute(),
   ]);
 
-  const stats = {
+  const stats: ReviewStats = {
     totalReviews: reviewStats[0].count ?? 0,
     averageRating: reviewStats[0].average ?? 0,
   };
@@ -56,41 +62,45 @@ export default async function ReviewsPage() {
 
   return (
     <div className="container max-w-screen-xl space-y-6 py-6">
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Review Stats</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <p className="text-sm font-medium">Total Reviews</p>
-                <p className="text-2xl font-bold">{stats.totalReviews}</p>
+      <Suspense fallback={<div>Loading stats...</div>}>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Your Review Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <p className="text-sm font-medium">Total Reviews</p>
+                  <p className="text-2xl font-bold">{stats.totalReviews}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Average Rating</p>
+                  <p className="text-2xl font-bold">{stats.averageRating}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium">Average Rating</p>
-                <p className="text-2xl font-bold">{stats.averageRating}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Suspense>
 
       {/* Application Review Section */}
-      {application ? (
-        <Card className="space-y-6 p-6 md:space-y-10">
-          <ApplicationInfo hacker={application} />
-          <ReviewInterface initialApplication={application} />
-        </Card>
-      ) : (
-        <Card className="p-6">
-          <div className="py-8 text-center">
-            <p className="text-muted-foreground">
-              No more applications to review!
-            </p>
-          </div>
-        </Card>
-      )}
+      <Suspense fallback={<div>Loading application...</div>}>
+        {application ? (
+          <Card className="space-y-6 p-6 md:space-y-10">
+            <ApplicationInfo hacker={application} />
+            <ReviewInterface initialApplication={application} />
+          </Card>
+        ) : (
+          <Card className="p-6">
+            <div className="py-8 text-center">
+              <p className="text-muted-foreground">
+                No more applications to review!
+              </p>
+            </div>
+          </Card>
+        )}
+      </Suspense>
     </div>
   );
 }
