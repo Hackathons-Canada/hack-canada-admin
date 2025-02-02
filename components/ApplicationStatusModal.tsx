@@ -12,7 +12,6 @@ import { cn, formatApplicationStatus } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { updateHackerStatus } from "@/actions/update-hacker-status";
 import { toast } from "sonner";
 import Banner from "./Banner";
 import { ArrowUpRightFromSquare, Loader2, Mail } from "lucide-react";
@@ -48,41 +47,43 @@ const ApplicationStatusModal = ({
   });
 
   const onSubmit = (status: ApplicationStatus) => {
-    const troo = true;
-
-    if (troo) {
-      toast.error("This feature is not yet available.");
-      return;
-    }
-
     setDisplayBanner((prev) => ({
       ...prev,
       show: false,
     }));
 
     startTransition(async () => {
-      const data = await updateHackerStatus(userId, status);
-
-      if (data.error && !data.displayBanner) {
-        toast.error(data.error);
-        return;
-      }
-
-      if (data.error) {
-        setDisplayBanner({
-          show: true,
-          message: data.error,
-          type: "error",
+      try {
+        const response = await fetch(`/api/update-status/${userId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status }),
         });
-        return;
-      }
 
-      if (data.success) {
+        const data = await response.json();
+
+        if (!data.success) {
+          if (data.message) {
+            setDisplayBanner({
+              show: true,
+              message: data.message,
+              type: "error",
+            });
+          } else {
+            toast.error("Failed to update status");
+          }
+          return;
+        }
+
         setDisplayBanner({
           show: true,
-          message: data.success,
+          message: data.message,
           type: "success",
         });
+      } catch (error) {
+        toast.error("An error occurred while updating the status");
       }
     });
   };

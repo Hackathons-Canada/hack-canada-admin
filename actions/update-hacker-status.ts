@@ -3,10 +3,6 @@
 import { getCurrentUser } from "@/auth";
 import { getApplicationById } from "@/data/applications";
 import { getUserById } from "@/data/user";
-import { db } from "@/lib/db";
-import { hackerApplications, users } from "@/lib/db/schema";
-import { sendAcceptanceEmail, sendRejectionEmail } from "@/lib/ses";
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
