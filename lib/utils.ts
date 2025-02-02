@@ -12,11 +12,13 @@ export function formatDate(dateString: string): string {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
+    timeZone: "America/Toronto",
   });
   const datePart = date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "America/Toronto",
   });
 
   return `${timePart} | ${datePart}`;
