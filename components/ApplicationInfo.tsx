@@ -15,8 +15,6 @@ import {
   Flag,
   BookOpen,
   MessageSquare,
-  CheckCircle,
-  CircleX,
   PenBox,
   Clock,
   FileSpreadsheet,
