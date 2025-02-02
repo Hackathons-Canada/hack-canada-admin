@@ -2,7 +2,13 @@ import { getCurrentUser } from "@/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,6 +22,8 @@ import { eq, or } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { Suspense } from "react";
 import ReviewerSelector from "@/components/review/ReviewerSelector";
+import Container from "@/components/Container";
+import PageBanner from "@/components/PageBanner";
 
 interface ReviewerStats {
   reviewerId: string;
@@ -102,19 +110,33 @@ export default async function ReviewerStatsPage({
   }
 
   return (
-    <div className="container max-w-screen-xl space-y-6 py-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Reviewer Statistics</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <ReviewerSelector
-            selectedReviewer={selectedReviewer}
-            reviewers={reviewers}
-          />
+    <Container className="space-y-10">
+      <PageBanner
+        heading="Reviewer Statistics"
+        subheading="Track individual reviewer performance and statistics"
+        className="transition-all duration-200 hover:bg-muted/50"
+      />
 
-          {reviewerStats ? (
-            <Suspense fallback={<div>Loading stats...</div>}>
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Select an Organizer to View Stats</CardTitle>
+            <CardDescription>
+              Choose an organizer from the dropdown below to view their review
+              statistics and performance metrics
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ReviewerSelector
+              selectedReviewer={selectedReviewer}
+              reviewers={reviewers}
+            />
+          </CardContent>
+        </Card>
+
+        {reviewerStats ? (
+          <Suspense fallback={<div>Loading stats...</div>}>
+            <div className="space-y-6">
               <div className="grid gap-4 md:grid-cols-3">
                 <Card>
                   <CardHeader>
@@ -150,38 +172,57 @@ export default async function ReviewerStatsPage({
                 </Card>
               </div>
 
-              <div className="rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Applicant</TableHead>
-                      <TableHead className="text-center">Rating</TableHead>
-                      <TableHead className="text-right">Review Date</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {reviewerStats.applicationsReviewed.map((review, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{review.applicantName}</TableCell>
-                        <TableCell className="text-center">
-                          {review.rating}/5
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {new Date(review.reviewedAt).toLocaleString()}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </Suspense>
-          ) : selectedReviewer ? (
-            <div className="py-8 text-center text-muted-foreground">
-              No reviews found for this organizer
+              <Card>
+                <CardHeader>
+                  <CardTitle>Reviews History</CardTitle>
+                  <CardDescription>
+                    Chronological list of applications reviewed by this
+                    organizer
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="rounded-lg border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Applicant</TableHead>
+                          <TableHead className="text-center">Rating</TableHead>
+                          <TableHead className="text-right">
+                            Review Date
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {reviewerStats.applicationsReviewed.map(
+                          (review, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{review.applicantName}</TableCell>
+                              <TableCell className="text-center">
+                                {review.rating}/5
+                              </TableCell>
+                              <TableCell className="text-right">
+                                {new Date(review.reviewedAt).toLocaleString()}
+                              </TableCell>
+                            </TableRow>
+                          ),
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          ) : null}
-        </CardContent>
-      </Card>
-    </div>
+          </Suspense>
+        ) : selectedReviewer ? (
+          <Card>
+            <CardContent>
+              <div className="py-8 text-center text-muted-foreground">
+                No reviews found for this organizer
+              </div>
+            </CardContent>
+          </Card>
+        ) : null}
+      </div>
+    </Container>
   );
 }

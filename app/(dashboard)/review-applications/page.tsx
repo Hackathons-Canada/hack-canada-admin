@@ -60,13 +60,13 @@ export default async function ReviewApplicationsPage() {
   };
 
   return (
-    <Container className="space-y-10">
+    <Container className="space-y-6 md:space-y-10">
       <PageBanner
+        heading="Review Applications"
         subheading="Review submitted applications. Each application requires three independent reviews for a decision."
-        className="transition-all duration-200 hover:bg-muted/50"
       />
 
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Review Guidelines</CardTitle>
