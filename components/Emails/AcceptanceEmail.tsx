@@ -20,13 +20,13 @@ const AcceptanceEmail = ({ name }: Props) => (
   <Html>
     <Head />
     <Preview>
-      [ACTION REQUIRED] Congratulations, you have been accepted to HackCanada
+      [ACTION REQUIRED] Congratulations, you have been accepted to Hack Canada
     </Preview>
     <Tailwind>
       <Body className="bg-blue-50">
         <Container className="mx-auto max-w-2xl px-3 py-6">
           <Img
-            src="https://i.imgur.com/hzjyuYn.png"
+            src="https://i.imgur.com/N36vrSu.png"
             width={500}
             alt="Hack Canada Banner"
             className="w-full rounded-t-lg"

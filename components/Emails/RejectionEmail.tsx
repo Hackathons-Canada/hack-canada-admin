@@ -19,12 +19,12 @@ type Props = { name: string };
 const RejectionEmail = ({ name }: Props) => (
   <Html>
     <Head />
-    <Preview>Thank You for Your Application to HackCanada</Preview>
+    <Preview>Thank You for Your Application to Hack Canada</Preview>
     <Tailwind>
       <Body className="bg-blue-50">
         <Container className="mx-auto max-w-2xl px-3 py-6">
           <Img
-            src="https://i.imgur.com/hzjyuYn.png"
+            src="https://i.imgur.com/oSOENiE.png"
             width={500}
             alt="Hack Canada Banner"
             className="w-full rounded-t-lg"
@@ -36,24 +36,20 @@ const RejectionEmail = ({ name }: Props) => (
             <Text className="mt-4 text-zinc-700">
               We truly loved reading your application. We loved seeing all the
               passion, creativity and love that you put into your application to
-              HackCanada.
+              Hack Canada.
             </Text>
             <Text className="mt-4 text-zinc-700">
-              We wish we could bring every single person who applied to our
-              hackathon, but unfortunately, that&apos;s just not possible. It
-              was an extremely competitive process, and we regret to inform you
-              that we are unable to offer you a spot at this time.
+              We wish we could bring everyone who applied to our hackathon, but
+              unfortunately, that&apos;s just not possible. We regret to inform
+              you that we are unable to offer you a spot at this time.
             </Text>
             <Text className="mt-4 text-zinc-700">
-              Please understand that this decision was not made lightly, and we
-              hope to see you at our future events. Furthermore, we enjoyed
-              reading your application and would like to offer you to apply as a
-              volunteer or mentor.
+              We hope to see you at our future events. Furthermore, if
+              interested, we encourage you to apply as a mentor!
             </Text>
             <Text className="mt-4 text-zinc-700">
-              We encourage you to keep building, innovating, and solving
-              problems—qualities that make the hackathon community so vibrant
-              and inspiring.
+              Keep building, innovating, and solving problems—qualities that
+              make the hackathon community so vibrant and inspiring!
             </Text>
             <Section className="mt-6 flex justify-center">
               <Button
@@ -82,7 +78,7 @@ const RejectionEmail = ({ name }: Props) => (
                 </a>{" "}
                 and{" "}
                 <a
-                  href="https://linkedin.com/company/hackcanada"
+                  href="https://www.linkedin.com/company/hack-canada"
                   className="text-zinc-800 underline"
                 >
                   LinkedIn
@@ -90,13 +86,13 @@ const RejectionEmail = ({ name }: Props) => (
                 for updates on upcoming events and resources for hackers.
               </Text>
             </Section>
-            <Text className="mt-6 text-zinc-700">
-              Thank you once again for your interest in HackCanada. We wish you
+            <Text className="mt-4 text-zinc-700">
+              Thank you once again for your interest in Hack Canada. We wish you
               all the best in your future endeavours!
             </Text>
             <Text className="mt-8 font-semibold text-zinc-800">Cheers,</Text>
             <Text className="mb-8 mt-2 font-semibold text-blue-500">
-              HackCanada Team 🦫🍁
+              Hack Canada Team 🦫🍁
             </Text>
 
             <Hr className="my-6 border-gray-200" />
@@ -134,7 +130,7 @@ const RejectionEmail = ({ name }: Props) => (
                 <span className="mx-3 text-gray-400">|</span>
                 <Link
                   className="text-xs text-gray-400 no-underline"
-                  href="https://www.linkedin.com/company/hack-canada"
+                  href="https://www.linkedin.com/company/hack-canada/"
                 >
                   LinkedIn
                 </Link>
