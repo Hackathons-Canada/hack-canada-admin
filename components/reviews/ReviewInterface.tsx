@@ -45,6 +45,7 @@ export default function ReviewInterface({
 
       toast.success("Review submitted successfully!");
       router.refresh();
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setRating(null);
     } catch (error) {
       toast.error(
@@ -81,15 +82,17 @@ export default function ReviewInterface({
           <Button
             key={value}
             onClick={() => setRating(value)}
-            variant={rating === value ? "default" : "outline"}
+            variant={rating === value ? "default" : "rating"}
             className={cn(
               "h-12 text-lg font-semibold",
-              rating === value && "ring-2 ring-primary",
-              value <= 3 && "hover:bg-red-100 dark:hover:bg-red-900",
+              rating === value && "scale-105 shadow-md",
+              value <= 3 &&
+                "hover:!border-red-500 hover:!text-red-500 dark:hover:!text-red-400",
               value > 3 &&
                 value <= 7 &&
-                "hover:bg-yellow-100 dark:hover:bg-yellow-900",
-              value > 7 && "hover:bg-green-100 dark:hover:bg-green-900",
+                "hover:!border-yellow-500 hover:!text-yellow-500 dark:hover:!text-yellow-400",
+              value > 7 &&
+                "hover:!border-green-500 hover:!text-green-500 dark:hover:!text-green-400",
             )}
             disabled={submitting}
           >

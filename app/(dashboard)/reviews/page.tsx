@@ -78,7 +78,7 @@ export default async function ReviewsPage() {
 
       {/* Application Review Section */}
       {application ? (
-        <Card className="p-6">
+        <Card className="space-y-6 p-6 md:space-y-10">
           <ApplicationInfo hacker={application} />
           <ReviewInterface initialApplication={application} />
         </Card>
