@@ -1,6 +1,7 @@
 import { NeonDatabase } from "drizzle-orm/neon-serverless";
 import { db } from "..";
 import { auditLogs, type NewAuditLog } from "../schema";
+import { sql } from "drizzle-orm";
 
 import * as schema from "../schema";
 
@@ -99,6 +100,16 @@ export async function getAuditLogsForEntity(
       and(eq(logs.entityType, entityType), eq(logs.entityId, entityId)),
     orderBy: (logs, { desc }) => desc(logs.createdAt),
   });
+}
+
+/**
+ * Gets the total number of audit logs
+ */
+export async function getNumAuditLogs() {
+  const [result] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(auditLogs);
+  return Number(result.count);
 }
 
 /**
