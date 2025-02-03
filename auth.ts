@@ -5,6 +5,7 @@ import NextAuth, { DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 import { db } from "./lib/db";
 import { getUserById } from "./lib/db/queries/user";
+import { isReviewer } from "./lib/utils";
 
 declare module "next-auth" {
   interface Session {
@@ -37,9 +38,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const existingUser = await getUserById(user.id);
 
       if (
-        !existingUser ||
+        !existingUser?.id ||
         !existingUser.email ||
-        existingUser.role !== "admin"
+        !isReviewer(existingUser.role)
       ) {
         return false;
       }
