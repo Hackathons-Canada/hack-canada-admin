@@ -8,13 +8,15 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import UserProfile from "./UserProfile";
+import { useState } from "react";
 
 const MobileNav = () => {
   const { data: session } = useSession();
   const user = session?.user;
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild className="lg:hidden">
         <Button variant="ghost" size="icon" className="size-10">
           <Menu className="size-5" />
@@ -36,7 +38,7 @@ const MobileNav = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto px-4">
-            <NavLinks isMinimized={false} />
+            <NavLinks isMinimized={false} onNavigate={() => setIsOpen(false)} />
           </div>
 
           <div className="mt-auto border-t">

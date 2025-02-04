@@ -26,9 +26,10 @@ const iconMap = {
 
 interface NavLinksProps {
   isMinimized: boolean;
+  onNavigate?: () => void;
 }
 
-const NavLinks = ({ isMinimized }: NavLinksProps) => {
+const NavLinks = ({ isMinimized, onNavigate }: NavLinksProps) => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
@@ -87,6 +88,7 @@ const NavLinks = ({ isMinimized }: NavLinksProps) => {
                   isMinimized ? "" : "gap-3",
                 )}
                 href={link.href}
+                onClick={onNavigate}
               >
                 {Icon && (
                   <Icon
