@@ -62,7 +62,7 @@ export default async function ReviewsPage() {
   const application = nextApplication[0] ?? null;
 
   return (
-    <div className="container max-w-screen-xl space-y-6 py-6">
+    <div className="container max-w-screen-lg space-y-6 py-6 md:space-y-10">
       <Suspense fallback={<LoadingStats />}>
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
@@ -88,10 +88,10 @@ export default async function ReviewsPage() {
       {/* Application Review Section */}
       <Suspense fallback={<LoadingApplication />}>
         {application ? (
-          <Card className="space-y-6 p-6 md:space-y-10">
+          <div className="space-y-4 md:space-y-8">
             <ApplicationInfo hacker={application} hideBackgroundInfo />
             <ReviewInterface initialApplication={application} />
-          </Card>
+          </div>
         ) : (
           <Card className="p-6">
             <div className="py-8 text-center">

@@ -108,7 +108,7 @@ export default async function ReviewApplicationsPage() {
                   "cursor-not-allowed opacity-50 hover:shadow-none hover:before:scale-x-0 hover:after:opacity-0",
               )}
             >
-              <span className="text-center text-xl font-semibold tracking-wider xl:w-36 xl:text-2xl 2xl:w-52 2xl:text-3xl">
+              <span className="text-center text-xl font-semibold tracking-wider text-black xl:w-36 xl:text-2xl 2xl:w-52 2xl:text-3xl">
                 {!status.canReviewMore
                   ? "Review Limit Reached"
                   : status.pendingReviews === 0

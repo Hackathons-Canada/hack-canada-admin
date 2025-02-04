@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { HackerApplicationsSelectData } from "@/lib/db/schema";
 import { ApiResponse } from "@/types/api";
 
-export const RATINGS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+export const RATINGS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // milliseconds
 

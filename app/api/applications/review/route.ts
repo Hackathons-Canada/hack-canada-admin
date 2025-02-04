@@ -9,14 +9,6 @@ import { ApiResponse } from "@/types/api";
 import { isReviewer } from "@/lib/utils";
 
 export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
-  // Remove when done testing
-  // const troo = true;
-  // if (troo)
-  //   return NextResponse.json({
-  //     success: true,
-  //     message: "Review submitted successfully",
-  //   });
-
   try {
     const currentUser = await getCurrentUser();
 
@@ -37,7 +29,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
     if (
       !applicationId ||
       !rating ||
-      rating < 1 ||
+      rating < 0 ||
       rating > 10 ||
       !reviewDuration
     ) {
@@ -46,7 +38,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
           success: false,
           message: "Invalid request data",
           error:
-            "Application ID, rating (1-10), and review duration are required",
+            "Application ID, rating (0-10), and review duration are required",
         },
         { status: 400 },
       );

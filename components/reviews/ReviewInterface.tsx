@@ -35,7 +35,7 @@ export default function ReviewInterface({
   return (
     <div className="space-y-4">
       <p className="text-lg font-semibold">Rating</p>
-      <div className="grid grid-cols-5 gap-2 sm:grid-cols-10 sm:gap-2">
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 sm:gap-2 md:grid-cols-11">
         {RATINGS.map((value) => (
           <Button
             key={value}
@@ -50,6 +50,7 @@ export default function ReviewInterface({
               value > 7 &&
                 "hover:border-green-500 hover:text-green-500 dark:hover:text-green-400",
               rating === value && "scale-105 shadow-md hover:text-white",
+              value === 10 && "max-md:col-span-2",
             )}
             disabled={submitting}
           >
