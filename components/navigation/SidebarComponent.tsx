@@ -14,7 +14,7 @@ const Sidebar = ({ isMinimized, onMinimize }: SidebarProps) => {
   return (
     <div
       className={cn(
-        "fixed inset-y-0 z-30 hidden flex-col overflow-hidden border-r bg-background pt-24 transition-all duration-300 ease-in-out lg:flex",
+        "fixed inset-y-0 z-30 hidden flex-col overflow-hidden overflow-y-auto border-r bg-background pt-24 transition-all duration-300 ease-in-out lg:flex",
         isMinimized ? "w-20" : "w-72",
       )}
     >

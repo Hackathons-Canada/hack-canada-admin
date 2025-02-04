@@ -18,6 +18,7 @@ const iconMap = {
   Applications: Clipboard,
   Statistics: BarChart3,
   "Review Applications": Gavel,
+  "Reviewer Leaderboards": BarChart3,
   "Role Management": ShieldCheck,
   Logs: ScrollText,
 };
@@ -30,7 +31,7 @@ const NavLinks = ({ isMinimized }: NavLinksProps) => {
   const pathname = usePathname();
 
   return (
-    <ul className="w-full space-y-2">
+    <ul className="w-full space-y-2 pb-8">
       {navLinks.map((link) => {
         const Icon = iconMap[link.name as keyof typeof iconMap];
         return (

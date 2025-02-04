@@ -22,6 +22,10 @@ export const navLinks = [
     href: "/review-applications",
   },
   {
+    name: "Reviewer Leaderboards",
+    href: "/reviewers/leaderboards",
+  },
+  {
     name: "Role Management",
     href: "/role-management",
   },
