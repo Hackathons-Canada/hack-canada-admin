@@ -72,7 +72,7 @@ export default async function ReviewApplicationsPage() {
         <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 xl:flex-row-reverse">
           <ReviewGuidelines />
           <div className="group relative flex min-h-28 w-full flex-1 overflow-hidden rounded-[6px] p-1 shadow-[0px_0px_0x_white] transition-shadow delay-200 duration-500 ease-in hover:shadow-[-12px_0px_32px_#ec6aff77,12px_0px_32px_#00d3f477] xl:w-1/3">
-            <div className="animate-gradient-spin absolute -inset-x-40 -inset-y-80 bg-gradient-to-br from-blue-400 to-fuchsia-400" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-fuchsia-400" />
             <Link
               href={
                 status.pendingReviews > 0 && status.canReviewMore
@@ -138,10 +138,10 @@ export default async function ReviewApplicationsPage() {
           </Card>
         </div>
 
-        <div className="rounded-md border p-3 md:p-6">
-          <p className="mb-4 font-medium md:text-lg">Admin-Only Actions</p>
+        {isAdmin(user.role) && (
+          <div className="rounded-md border p-3 md:p-6">
+            <p className="mb-4 font-medium md:text-lg">Admin-Only Actions</p>
 
-          {isAdmin(user.role) && (
             <div className="flex flex-col gap-2.5 xl:col-span-2 xl:flex-row">
               <Button asChild variant="default">
                 <Link href="/review-applications/decisions">
@@ -152,8 +152,8 @@ export default async function ReviewApplicationsPage() {
                 <Link href="/reviewers">Individual Reviewer Stats</Link>
               </Button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </Container>
   );

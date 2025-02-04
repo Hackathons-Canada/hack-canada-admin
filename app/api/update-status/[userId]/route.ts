@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { sendAcceptanceEmail, sendRejectionEmail } from "@/lib/ses";
 import { createAuditLog } from "@/lib/db/queries/audit-log";
+import { isAdmin } from "@/lib/utils";
 
 const updateStatusSchema = z.object({
   status: z.enum(["accepted", "rejected", "waitlisted"]),
@@ -22,7 +23,7 @@ export async function PATCH(
   try {
     const currentUser = await getCurrentUser();
 
-    if (!currentUser || !currentUser.id || currentUser.role !== "admin") {
+    if (!currentUser?.id || !isAdmin(currentUser.role)) {
       return NextResponse.json({
         success: false,
         message: "You do not have permission to perform this action.",
