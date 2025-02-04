@@ -1,6 +1,12 @@
 export const RESULTS_PER_PAGE = 25;
 
-export const navLinks = [
+type NavigationLink = {
+  name: string;
+  href: string;
+  adminOnly?: boolean;
+};
+
+export const navLinks: NavigationLink[] = [
   {
     name: "Home",
     href: "/",
@@ -8,10 +14,12 @@ export const navLinks = [
   {
     name: "Users",
     href: "/users",
+    adminOnly: true,
   },
   {
     name: "Applications",
     href: "/applications",
+    adminOnly: true,
   },
   // {
   //   name: "Statistics",
@@ -28,9 +36,11 @@ export const navLinks = [
   {
     name: "Role Management",
     href: "/role-management",
+    adminOnly: true,
   },
   {
     name: "Logs",
     href: "/logs",
+    adminOnly: true,
   },
 ];
