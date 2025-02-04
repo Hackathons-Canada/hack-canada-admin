@@ -3,6 +3,14 @@ import { applicationReviews, users, hackerApplications } from "@/lib/db/schema";
 import { eq, or } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 
+export interface LeaderboardStats {
+  id: string;
+  name: string;
+  reviewCount: number;
+  averageRating: number;
+  totalTimeSpent: number;
+}
+
 interface ReviewerStats {
   reviewerId: string;
   reviewCount: number;
@@ -80,4 +88,21 @@ export async function getReviewerStats(
     .execute();
 
   return reviews.length > 0 ? reviews[0] : null;
+}
+
+export async function getLeaderboardStats(): Promise<LeaderboardStats[]> {
+  return db
+    .select({
+      id: users.id,
+      name: users.name,
+      reviewCount: sql<number>`COUNT(${applicationReviews.id})`,
+      averageRating: sql<number>`ROUND(AVG(${applicationReviews.rating})::numeric, 2)`,
+      totalTimeSpent: sql<number>`COALESCE(SUM(${applicationReviews.reviewDuration}), 0)`,
+    })
+    .from(users)
+    .leftJoin(applicationReviews, eq(applicationReviews.reviewerId, users.id))
+    .where(or(eq(users.role, "organizer"), eq(users.role, "admin")))
+    .groupBy(users.id)
+    .orderBy(sql`COUNT(${applicationReviews.id}) DESC`)
+    .execute();
 }

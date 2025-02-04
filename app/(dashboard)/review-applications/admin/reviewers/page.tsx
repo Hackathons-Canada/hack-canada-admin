@@ -34,6 +34,7 @@ export default async function ReviewerStatsPage({
   return (
     <Container className="space-y-6 md:space-y-10">
       <PageBanner
+        backButton
         heading="Reviewer Statistics"
         subheading="Track individual reviewer performance and statistics"
         className="transition-all duration-200 hover:bg-muted/50"

@@ -59,6 +59,7 @@ export default async function AdminApplicationsPage({
   return (
     <Container className="space-y-6 md:space-y-10">
       <PageBanner
+        backButton
         heading="Review Applications"
         subheading="Review and manage submitted hacker applications. View internal results and update application statuses."
       />

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 interface Review {
   applicationId: string;
@@ -72,7 +73,7 @@ export default function ReviewerHistoryTable({
                   {Math.round(review.duration % 60)} secs
                 </TableCell>
                 <TableCell className="py-4 text-right">
-                  {new Date(review.reviewedAt).toLocaleString()}
+                  {formatDate(review.reviewedAt.toString())}
                 </TableCell>
               </TableRow>
             ))}
