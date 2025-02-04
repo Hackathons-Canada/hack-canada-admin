@@ -48,7 +48,7 @@ const HackerList = ({ applications }: Props) => {
           >
             <TableCell className="min-w-20 text-center">
               <Link
-                href={`/applications/${app.hackerApplication.userId}`}
+                href={`/applications/${app.hackerApplication.id}`}
                 prefetch={false}
                 className="inline-block rounded-md p-1 transition-all duration-200 hover:bg-primary/10 hover:text-primary"
               >

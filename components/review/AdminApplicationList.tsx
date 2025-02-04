@@ -56,10 +56,10 @@ export default function AdminApplicationList({
             <TableHead className="py-4 font-semibold">Email</TableHead>
             <TableHead className="py-4 font-semibold">Status</TableHead>
             <TableHead className="py-4 text-center font-semibold">
-              Reviews
+              Review Count
             </TableHead>
             <TableHead className="py-4 text-center font-semibold">
-              Rating
+              Average Rating
             </TableHead>
           </TableRow>
         </TableHeader>

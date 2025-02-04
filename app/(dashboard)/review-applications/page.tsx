@@ -30,14 +30,14 @@ export default async function ReviewApplicationsPage() {
       .select({
         pendingReviews: sql<number>`
           COUNT(DISTINCT CASE
-            WHEN ${hackerApplications.reviewCount} < 3
+            WHEN ${hackerApplications.reviewCount} < 5
             AND ${hackerApplications.submissionStatus} = 'submitted'
             AND ${hackerApplications.internalResult} = 'pending'
             THEN ${hackerApplications.id}
           END)`,
         finishedReviews: sql<number>`
           COUNT(DISTINCT CASE
-            WHEN ${hackerApplications.reviewCount} >= 3
+            WHEN ${hackerApplications.reviewCount} = 5
             THEN ${hackerApplications.id}
           END)`,
       })

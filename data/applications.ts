@@ -11,7 +11,7 @@ export const getApplicationWithUserById = async (id: string) => {
         user: users,
       })
       .from(hackerApplications)
-      .where(eq(hackerApplications.userId, id))
+      .where(eq(hackerApplications.id, id))
       .innerJoin(users, eq(users.id, hackerApplications.userId));
 
     return result;

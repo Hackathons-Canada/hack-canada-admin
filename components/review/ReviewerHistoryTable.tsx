@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink } from "lucide-react";
 
 interface Review {
@@ -42,7 +41,7 @@ export default function ReviewerHistoryTable({
                 Rating
               </TableHead>
               <TableHead className="py-4 text-center font-semibold">
-                Duration
+                Time Spent
               </TableHead>
               <TableHead className="py-4 text-right font-semibold">
                 Review Date

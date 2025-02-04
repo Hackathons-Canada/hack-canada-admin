@@ -6,6 +6,7 @@ import PageBanner from "@/components/PageBanner";
 import { getApplicationWithUserById } from "@/data/applications";
 import { redirect } from "next/navigation";
 import ApplicationActions from "@/components/ApplicationActions";
+import { isAdmin } from "@/lib/utils";
 
 const HackerPage = async ({
   params,
@@ -18,12 +19,14 @@ const HackerPage = async ({
   const user = await getCurrentUser();
   const currentUser = user;
 
-  if (!currentUser || currentUser.role !== "admin") {
+  if (!currentUser || !isAdmin(currentUser.role)) {
     redirect("https://app.hackcanada.org/login");
   }
 
   const userWithHackerApplication = await getApplicationWithUserById(id);
   if (!userWithHackerApplication) {
+    console.log("No user with id: " + id);
+
     return null;
   }
 
