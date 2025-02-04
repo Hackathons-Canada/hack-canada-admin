@@ -1,6 +1,6 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { hackerApplications, users } from "@/lib/db/schema";
+import { hackerApplications, users, applicationReviews } from "@/lib/db/schema";
 import { eq, count, desc, and, like, asc } from "drizzle-orm";
 
 export const getApplicationWithUserById = async (id: string) => {
@@ -17,6 +17,28 @@ export const getApplicationWithUserById = async (id: string) => {
     return result;
   } catch (error) {
     console.log("Error fetching hacker with ID: " + id, error);
+    return null;
+  }
+};
+
+export const getApplicationReviews = async (applicationId: string) => {
+  try {
+    const reviews = await db
+      .select({
+        id: applicationReviews.id,
+        rating: applicationReviews.rating,
+        createdAt: applicationReviews.createdAt,
+        reviewerName: users.name,
+        reviewerId: users.id,
+      })
+      .from(applicationReviews)
+      .where(eq(applicationReviews.applicationId, applicationId))
+      .innerJoin(users, eq(users.id, applicationReviews.reviewerId))
+      .orderBy(desc(applicationReviews.createdAt));
+
+    return reviews;
+  } catch (error) {
+    console.log("Error fetching application reviews: ", error);
     return null;
   }
 };

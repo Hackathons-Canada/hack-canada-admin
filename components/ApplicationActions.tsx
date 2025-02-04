@@ -18,7 +18,7 @@ type Props = {
 
 const ApplicationActions = ({ hacker, status }: Props) => {
   return (
-    <div className="flex h-fit w-full max-w-screen-md flex-col gap-5 rounded-lg border bg-gradient-to-br from-background via-background/80 to-background p-6 md:p-8 xl:max-w-sm xl:gap-6">
+    <div className="flex h-fit w-full max-w-screen-md flex-col gap-5 rounded-lg border bg-background p-6 md:p-8 xl:max-w-sm xl:gap-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h3 className="font-semibold">Actions</h3>
