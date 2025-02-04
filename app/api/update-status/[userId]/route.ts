@@ -5,7 +5,7 @@ import { ApiResponse } from "@/types/api";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { users } from "@/lib/db/schema";
+import { hackerApplications, users } from "@/lib/db/schema";
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { sendAcceptanceEmail, sendRejectionEmail } from "@/lib/ses";
@@ -106,6 +106,13 @@ export async function PATCH(
           acceptedAt: status === "accepted" ? new Date() : null,
         })
         .where(eq(users.id, existingUser.id));
+
+      await tx
+        .update(hackerApplications)
+        .set({
+          internalResult: status,
+        })
+        .where(eq(hackerApplications.userId, existingUser.id));
 
       if (status === "accepted" || status === "rejected") {
         const sendEmail =
