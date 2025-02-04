@@ -63,7 +63,7 @@ export default async function ReviewApplicationsPage() {
     <Container className="space-y-6 md:space-y-10">
       <PageBanner
         heading="Review Applications"
-        subheading="Review submitted applications. Each application requires three independent reviews for a decision."
+        subheading="Review submitted applications. Each application requires five independent reviews for a decision."
       />
 
       <div className="space-y-4 md:space-y-6">
@@ -76,8 +76,7 @@ export default async function ReviewApplicationsPage() {
               <h3 className="font-semibold">Review Process</h3>
               <p className="text-muted-foreground">
                 Review applications thoroughly and fairly. Each application
-                requires three independent reviews before a decision can be
-                made.
+                requires five independent reviews before a decision can be made.
               </p>
             </div>
             <div>

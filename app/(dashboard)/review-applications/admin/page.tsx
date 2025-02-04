@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
         END)`,
           completedReviews: sql<number>`
         COUNT(DISTINCT CASE 
-          WHEN ${hackerApplications.reviewCount} >= 3 
+          WHEN ${hackerApplications.reviewCount} = 5 
           THEN ${hackerApplications.id}
         END)`,
         })

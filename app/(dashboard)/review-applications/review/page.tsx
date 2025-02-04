@@ -28,7 +28,7 @@ export default async function ReviewsPage() {
       .from(hackerApplications)
       .where(
         and(
-          lt(hackerApplications.reviewCount, 3),
+          lt(hackerApplications.reviewCount, 5),
           eq(hackerApplications.submissionStatus, "submitted"),
           eq(hackerApplications.internalResult, "pending"),
           sql`NOT EXISTS (
