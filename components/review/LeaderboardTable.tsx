@@ -29,7 +29,7 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-0.5">
+      <div>
         <h3 className="font-medium md:text-lg">Current Rankings</h3>
         <p className="text-xs text-muted-foreground md:text-sm">
           Ranked by total number of applications reviewed

@@ -167,7 +167,7 @@ export default async function ReviewApplicationsPage() {
           {isAdmin(user.role) && (
             <div className="flex flex-col gap-2.5 xl:col-span-2 xl:flex-row">
               <Button asChild variant="default">
-                <Link href="/review-applications/admin/decisions">
+                <Link href="/review-applications/decisions">
                   Accept/Reject Applications
                 </Link>
               </Button>

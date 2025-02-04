@@ -70,10 +70,7 @@ const ApplicationsPage = async ({ searchParams }: ApplicationsPageProps) => {
 
   return (
     <Container className="space-y-10">
-      <PageBanner
-        subheading="A list of all applications in the database. Manage application statuses here or click the external link icon to view full application details."
-        className="transition-all duration-200 hover:bg-muted/50"
-      />
+      <PageBanner subheading="A list of all applications in the database. Manage application statuses here or click the external link icon to view full application details." />
 
       <div className="space-y-10">
         <section aria-label="Search and Download Controls">
