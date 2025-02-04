@@ -87,7 +87,7 @@ export default async function ReviewsPage() {
       <Suspense fallback={<div>Loading application...</div>}>
         {application ? (
           <Card className="space-y-6 p-6 md:space-y-10">
-            <ApplicationInfo hacker={application} />
+            <ApplicationInfo hacker={application} hideBackgroundInfo />
             <ReviewInterface initialApplication={application} />
           </Card>
         ) : (

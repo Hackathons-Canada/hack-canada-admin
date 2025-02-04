@@ -38,9 +38,10 @@ import InfoRow from "./InfoRow";
 
 type Props = {
   hacker: HackerApplicationsSelectData | null;
+  hideBackgroundInfo?: boolean;
 };
 
-const ApplicationInfo = ({ hacker }: Props) => {
+const ApplicationInfo = ({ hacker, hideBackgroundInfo }: Props) => {
   if (!hacker) {
     return (
       <Card className="border-destructive/50 bg-destructive/10">
@@ -90,26 +91,35 @@ const ApplicationInfo = ({ hacker }: Props) => {
             value={hacker.age?.toString() || <EmptyValue />}
             icon={<CircleUserRound className="size-4" />}
           />
-          <InfoRow
-            label="Pronouns"
-            value={hacker.pronouns || <EmptyValue />}
-            icon={<CircleUserRound className="size-4" />}
-          />
-          <InfoRow
-            label="Gender"
-            value={hacker.gender || <EmptyValue />}
-            icon={<CircleUserRound className="size-4" />}
-          />
-          <InfoRow
-            label="Race/Ethnicity"
-            value={hacker.race || <EmptyValue />}
-            icon={<Flag className="size-4" />}
-          />
-          <InfoRow
-            label="Country"
-            value={hacker.country || <EmptyValue />}
-            icon={<Globe className="size-4" />}
-          />
+          {!hideBackgroundInfo && (
+            <InfoRow
+              label="Pronouns"
+              value={hacker.pronouns || <EmptyValue />}
+              icon={<CircleUserRound className="size-4" />}
+            />
+          )}
+          {!hideBackgroundInfo && (
+            <InfoRow
+              label="Gender"
+              value={hacker.gender || <EmptyValue />}
+              icon={<CircleUserRound className="size-4" />}
+            />
+          )}
+          {!hideBackgroundInfo && (
+            <InfoRow
+              label="Race/Ethnicity"
+              value={hacker.race || <EmptyValue />}
+              icon={<Flag className="size-4" />}
+            />
+          )}
+
+          {!hideBackgroundInfo && (
+            <InfoRow
+              label="Country"
+              value={hacker.country || <EmptyValue />}
+              icon={<Globe className="size-4" />}
+            />
+          )}
 
           {/* Education Information */}
           <h3 className="mt-4 text-lg font-semibold">Education</h3>
