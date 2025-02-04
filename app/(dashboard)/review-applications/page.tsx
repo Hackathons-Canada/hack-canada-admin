@@ -9,6 +9,7 @@ import { hackerApplications, applicationReviews } from "@/lib/db/schema";
 import { cn, isAdmin, isReviewer } from "@/lib/utils";
 import Container from "@/components/Container";
 import PageBanner from "@/components/PageBanner";
+import { Trophy } from "lucide-react";
 
 interface SystemStatus {
   pendingReviews: number;
@@ -118,6 +119,15 @@ export default async function ReviewApplicationsPage() {
           </div>
         </div>
 
+        <Link
+          href="/reviewers/leaderboards"
+          className="flex h-12 w-full items-center justify-center rounded-md border-2 border-primary/50 bg-primary/5 font-medium tracking-wider text-sky-500 transition duration-300 hover:border-primary hover:bg-primary/15 hover:text-sky-600 md:h-14 md:text-lg xl:h-16 xl:text-xl"
+        >
+          <Trophy className="mr-2 inline-block size-4 stroke-[3px] md:size-5" />
+          Reviewer Leaderboards
+          <Trophy className="ml-2 inline-block size-4 stroke-[3px] md:size-5" />
+        </Link>
+
         {/* System Status */}
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
@@ -151,24 +161,17 @@ export default async function ReviewApplicationsPage() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {/* Secondary Actions */}
+        <div className="rounded-md border p-3 md:p-6">
+          <p className="mb-4 font-medium md:text-lg">Admin-Only Actions</p>
+
           {isAdmin(user.role) && (
-            <div className="flex flex-col gap-4 xl:col-span-2 xl:flex-row">
-              <Button
-                asChild
-                variant="ghost"
-                className="flex-1 bg-primary/20 py-4 text-primary hover:bg-primary hover:text-white xl:h-full xl:text-lg"
-              >
+            <div className="flex flex-col gap-2.5 xl:col-span-2 xl:flex-row">
+              <Button asChild variant="default">
                 <Link href="/review-applications/admin/applications">
                   Accept/Reject Applications
                 </Link>
               </Button>
-              <Button
-                asChild
-                variant="ghost"
-                className="flex-1 bg-primary/20 py-4 text-primary hover:bg-primary hover:text-white xl:h-full xl:text-lg"
-              >
+              <Button asChild variant="default">
                 <Link href="/review-applications/admin/reviewers">
                   Individual Reviewer Stats
                 </Link>
