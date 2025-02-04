@@ -38,7 +38,7 @@ export default async function ReviewsPage() {
           )`,
         ),
       )
-      .orderBy(sql`RANDOM()`)
+      .orderBy(sql`${hackerApplications.reviewCount} ASC, RANDOM()`)
       .limit(1)
       .execute(),
     // Get organizers's review stats using aggregates
