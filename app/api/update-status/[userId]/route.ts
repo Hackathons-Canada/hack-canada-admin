@@ -130,9 +130,6 @@ export async function PATCH(
       }
     });
 
-    revalidatePath(`/applications/${userId}`);
-    revalidatePath(`/users/${userId}`);
-
     console.log(`User ${userId} status updated to ${status}`);
 
     return NextResponse.json({

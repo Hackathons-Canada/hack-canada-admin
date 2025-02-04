@@ -78,7 +78,7 @@ export default async function AdminApplicationsPage({
               <AdminApplicationList applications={applications} />
               <PaginationControls
                 totalNumOfUsers={totalApplications}
-                table="applications"
+                table="decisions"
                 search={params.toString()}
                 className="mx-auto mt-8 max-w-lg rounded-xl border bg-card p-3 shadow-sm transition-all duration-200 hover:shadow-md"
               />

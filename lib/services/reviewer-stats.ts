@@ -68,7 +68,7 @@ export async function getReviewerStats(
       >`
         json_agg(
           json_build_object(
-            'applicationId', ${hackerApplications.id},
+            'applicationId', ${hackerApplications.userId},
             'applicantName', CONCAT(${hackerApplications.firstName}, ' ', ${hackerApplications.lastName}),
             'rating', ${applicationReviews.rating},
             'reviewedAt', ${applicationReviews.createdAt},
