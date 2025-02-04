@@ -59,7 +59,7 @@ export default function AdminApplicationList({
               Review Count
             </TableHead>
             <TableHead className="py-4 text-center font-semibold">
-              Average Rating
+              Avg. Rating
             </TableHead>
           </TableRow>
         </TableHeader>

@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ApplicationInfo from "@/components/ApplicationInfo";
 import { Suspense } from "react";
 import { isReviewer } from "@/lib/utils";
+import LoadingApplication from "./loading-application";
+import LoadingStats from "./loading-stats";
 
 interface ReviewStats {
   totalReviews: number;
@@ -61,7 +63,7 @@ export default async function ReviewsPage() {
 
   return (
     <div className="container max-w-screen-xl space-y-6 py-6">
-      <Suspense fallback={<div>Loading stats...</div>}>
+      <Suspense fallback={<LoadingStats />}>
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader>
@@ -74,7 +76,7 @@ export default async function ReviewsPage() {
                   <p className="text-2xl font-bold">{stats.totalReviews}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Average Rating</p>
+                  <p className="text-sm font-medium">Avg. Rating</p>
                   <p className="text-2xl font-bold">{stats.averageRating}</p>
                 </div>
               </div>
@@ -84,7 +86,7 @@ export default async function ReviewsPage() {
       </Suspense>
 
       {/* Application Review Section */}
-      <Suspense fallback={<div>Loading application...</div>}>
+      <Suspense fallback={<LoadingApplication />}>
         {application ? (
           <Card className="space-y-6 p-6 md:space-y-10">
             <ApplicationInfo hacker={application} hideBackgroundInfo />
