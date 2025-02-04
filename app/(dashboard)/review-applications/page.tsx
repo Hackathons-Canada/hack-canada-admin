@@ -98,7 +98,7 @@ export default async function ReviewApplicationsPage() {
 
         <Link
           href="/reviewers/leaderboards"
-          className="flex h-12 w-full items-center justify-center rounded-md border-2 border-primary/50 bg-primary/5 font-medium tracking-wider text-sky-500 transition duration-300 hover:border-primary hover:bg-primary/15 hover:text-sky-600 md:h-14 md:text-lg xl:h-16 xl:text-xl"
+          className="flex h-12 w-full items-center justify-center rounded-md border-2 border-primary/50 bg-primary/5 font-medium tracking-wider text-sky-500 transition duration-300 hover:border-primary hover:bg-primary/15 hover:text-sky-600 dark:text-blue-400 dark:hover:text-blue-300 md:h-14 md:text-lg xl:h-16 xl:text-xl"
         >
           <Trophy className="mr-2 inline-block size-4 stroke-[3px] md:size-5" />
           Reviewer Leaderboards
