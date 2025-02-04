@@ -13,7 +13,7 @@ export const useReviewInterface = (
 ) => {
   const [rating, setRating] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [startTime] = useState<number>(Date.now()); // Start timer when component mounts
+  const [startTime, setStartTime] = useState<number>(Date.now()); // Start timer when component mounts
   const router = useRouter();
 
   const submitReview = async () => {
@@ -50,6 +50,8 @@ export const useReviewInterface = (
           toast.success(data.message || "Review submitted successfully!");
           router.refresh();
           window.scrollTo({ top: 0, behavior: "smooth" });
+
+          setStartTime(Date.now());
           setRating(null);
           return;
         } catch (error) {
