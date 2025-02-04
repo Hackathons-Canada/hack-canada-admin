@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { and, eq, lt, sql } from "drizzle-orm";
 import { applicationReviews, hackerApplications } from "@/lib/db/schema";
-import ReviewInterface from "@/components/reviews/ReviewInterface";
+import ReviewInterface from "@/components/review/ReviewInterface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ApplicationInfo from "@/components/ApplicationInfo";
 import { Suspense } from "react";

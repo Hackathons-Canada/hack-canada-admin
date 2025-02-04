@@ -10,6 +10,7 @@ import { cn, isAdmin, isReviewer } from "@/lib/utils";
 import Container from "@/components/Container";
 import PageBanner from "@/components/PageBanner";
 import { Trophy } from "lucide-react";
+import ReviewGuidelines from "@/components/review/ReviewGuidelines";
 
 interface SystemStatus {
   pendingReviews: number;
@@ -69,31 +70,7 @@ export default async function ReviewApplicationsPage() {
 
       <div className="space-y-4 md:space-y-6 lg:space-y-8">
         <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 xl:flex-row-reverse">
-          <Card className="xl:w-2/3">
-            <CardHeader>
-              <CardTitle>Review Guidelines</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold">Review Process</h3>
-                <p className="text-muted-foreground">
-                  Review applications thoroughly and fairly. Each application
-                  requires five independent reviews before a decision can be
-                  made.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold">Rating Criteria</h3>
-                <ul className="list-inside list-disc text-muted-foreground">
-                  <li>Consider technical experience and project history</li>
-                  <li>Evaluate enthusiasm and willingness to learn</li>
-                  <li>
-                    Assess potential contribution to the hackathon community
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
+          <ReviewGuidelines />
           <div className="group relative flex min-h-28 w-full flex-1 overflow-hidden rounded-[6px] p-1 shadow-[0px_0px_0x_white] transition-shadow delay-200 duration-500 ease-in hover:shadow-[-12px_0px_32px_#ec6aff77,12px_0px_32px_#00d3f477] xl:w-1/3">
             <div className="animate-gradient-spin absolute -inset-x-40 -inset-y-80 bg-gradient-to-br from-blue-400 to-fuchsia-400" />
             <Link
