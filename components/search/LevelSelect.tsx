@@ -26,7 +26,9 @@ export const LevelSelect = ({ form }: LevelSelectProps) => {
       name="levelOfStudy"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Level of Study</FormLabel>
+          <FormLabel className="text-sm font-medium text-muted-foreground">
+            Level of Study
+          </FormLabel>
           <FormControl>
             <Select
               {...field}

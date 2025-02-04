@@ -47,16 +47,12 @@ export const StatusSelect = ({ form }: StatusSelectProps) => {
               onValueChange={field.onChange}
               defaultValue="all"
             >
-              <SelectTrigger className="h-9 border-input bg-background px-3 py-1 text-sm shadow-sm transition-all duration-200 hover:bg-muted/50 focus:ring-1 focus:ring-primary/20">
+              <SelectTrigger>
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
-              <SelectContent className="max-h-72">
+              <SelectContent>
                 {statuses.map((status) => (
-                  <SelectItem
-                    key={status.value}
-                    value={status.value}
-                    className="cursor-pointer text-sm transition-colors"
-                  >
+                  <SelectItem key={status.value} value={status.value}>
                     {status.label}
                   </SelectItem>
                 ))}
