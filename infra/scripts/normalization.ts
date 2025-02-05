@@ -1,8 +1,3 @@
-import { loadEnvConfig } from "@next/env";
-
-// Load environment variables
-const projectDir = process.cwd();
-
 import { eq, sql } from "drizzle-orm";
 import { applicationReviews, users } from "@/lib/db/schema";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -10,9 +5,6 @@ import { neon } from "@neondatabase/serverless";
 import * as schema from "@/lib/db/schema";
 
 console.log("Normalizing ratings...");
-
-// load .env
-// const { combinedEnv } = loadEnvConfig(projectDir);
 
 const client = neon(process.env.DATABASE_URL!);
 
