@@ -17,6 +17,7 @@ scripts/migrate-data.ts
 # Idk
 scripts/
 dev-docs/
+.idea
 
 # production
 /build

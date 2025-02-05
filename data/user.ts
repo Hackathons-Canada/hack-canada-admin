@@ -1,7 +1,7 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { eq, count, desc, like, and, or } from "drizzle-orm";
+import { and, count, desc, eq, ilike } from "drizzle-orm";
 
 type User = typeof users.$inferSelect;
 
@@ -13,7 +13,7 @@ type User = typeof users.$inferSelect;
  */
 export const getUserById: (id: string) => Promise<User | null> = async (
   id: string,
-) => {
+): Promise<User | null> => {
   try {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
@@ -25,28 +25,13 @@ export const getUserById: (id: string) => Promise<User | null> = async (
 
 export const getAdminUsers = async () => {
   try {
-    const adminUsers = await db
+    return await db
       .select()
       .from(users)
       .where(eq(users.role, "admin"))
       .orderBy(desc(users.createdAt));
-    return adminUsers;
   } catch (error) {
     console.log("Error fetching admin users", error);
-    return [];
-  }
-};
-
-export const getAdminsAndOrganizers = async () => {
-  try {
-    const adminsAndOrganizers = await db
-      .select()
-      .from(users)
-      .where(or(eq(users.role, "admin"), eq(users.role, "organizer")))
-      .orderBy(desc(users.createdAt));
-    return adminsAndOrganizers;
-  } catch (error) {
-    console.log("Error fetching admins and organizers", error);
     return [];
   }
 };
@@ -54,13 +39,12 @@ export const getAdminsAndOrganizers = async () => {
 // getting list of top offset+RESULTS_PER_PAGE users in db
 export const getAllUsers = async (offsetAmt: number = 0) => {
   try {
-    const all = await db
+    return await db
       .select()
       .from(users)
       .limit(RESULTS_PER_PAGE)
       .offset(offsetAmt)
       .orderBy(desc(users.createdAt));
-    return all;
   } catch (error) {
     console.log("Error fetching all users", error);
     return [];
@@ -93,11 +77,11 @@ export const getUsersSearch = async (
     }
 
     if (name) {
-      conditions.push(like(users.name, `%${name}%`));
+      conditions.push(ilike(users.name, `%${name}%`));
     }
 
     if (email) {
-      conditions.push(like(users.email, `%${email}%`));
+      conditions.push(ilike(users.email, `%${email}%`));
     }
 
     if (status !== "all") {
@@ -135,11 +119,11 @@ export const getNumUsersSearch = async (
     }
 
     if (name) {
-      conditions.push(like(users.name, `%${name}%`));
+      conditions.push(ilike(users.name, `%${name}%`));
     }
 
     if (email) {
-      conditions.push(like(users.email, `%${email}%`));
+      conditions.push(ilike(users.email, `%${email}%`));
     }
 
     if (status !== "all") {

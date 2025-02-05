@@ -1,7 +1,7 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
-import { hackerApplications, users, applicationReviews } from "@/lib/db/schema";
-import { eq, count, desc, and, like, asc } from "drizzle-orm";
+import { applicationReviews, hackerApplications, users } from "@/lib/db/schema";
+import { and, asc, count, desc, ilike, eq } from "drizzle-orm";
 
 export const getApplicationWithUserById = async (id: string) => {
   try {
@@ -23,7 +23,7 @@ export const getApplicationWithUserById = async (id: string) => {
 
 export const getApplicationReviews = async (applicationId: string) => {
   try {
-    const reviews = await db
+    return await db
       .select({
         id: applicationReviews.id,
         rating: applicationReviews.rating,
@@ -35,8 +35,6 @@ export const getApplicationReviews = async (applicationId: string) => {
       .where(eq(applicationReviews.applicationId, applicationId))
       .innerJoin(users, eq(users.id, applicationReviews.reviewerId))
       .orderBy(desc(applicationReviews.createdAt));
-
-    return reviews;
   } catch (error) {
     console.log("Error fetching application reviews: ", error);
     return null;
@@ -102,14 +100,14 @@ export const getApplicationsSearch = async (
 
     if (firstName)
       conditions.push(
-        like(hackerApplications.firstName || "", `${firstName}%`),
+        ilike(hackerApplications.firstName || "", `${firstName}%`),
       );
     if (lastName)
-      conditions.push(like(hackerApplications.lastName || "", `${lastName}%`));
+      conditions.push(ilike(hackerApplications.lastName || "", `${lastName}%`));
     if (school)
-      conditions.push(like(hackerApplications.school || "", `%${school}%`));
+      conditions.push(ilike(hackerApplications.school || "", `%${school}%`));
     if (major)
-      conditions.push(like(hackerApplications.major || "", `%${major}%`));
+      conditions.push(ilike(hackerApplications.major || "", `%${major}%`));
 
     if (levelOfStudy && levelOfStudy !== "all") {
       conditions.push(eq(hackerApplications.levelOfStudy, levelOfStudy));
@@ -149,14 +147,14 @@ export const getNumApplicationsSearch = async (
 
     if (firstName)
       conditions.push(
-        like(hackerApplications.firstName || "", `${firstName}%`),
+        ilike(hackerApplications.firstName || "", `${firstName}%`),
       );
     if (lastName)
-      conditions.push(like(hackerApplications.lastName || "", `${lastName}%`));
+      conditions.push(ilike(hackerApplications.lastName || "", `${lastName}%`));
     if (school)
-      conditions.push(like(hackerApplications.school || "", `%${school}%`));
+      conditions.push(ilike(hackerApplications.school || "", `%${school}%`));
     if (major)
-      conditions.push(like(hackerApplications.major || "", `%${major}%`));
+      conditions.push(ilike(hackerApplications.major || "", `%${major}%`));
 
     if (levelOfStudy && levelOfStudy !== "all") {
       conditions.push(eq(hackerApplications.levelOfStudy, levelOfStudy));
