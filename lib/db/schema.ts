@@ -65,6 +65,46 @@ export const accounts = pgTable(
   }),
 );
 
+export const profiles = pgTable("profile", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .unique()
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  bio: text("bio"),
+  hobbies: text("hobbies"),
+  createdAt: timestamp("createdAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp("updatedAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const profileIntegrations = pgTable("profileIntegration", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  profileId: text("profileId")
+    .notNull()
+    .references(() => profiles.id, { onDelete: "cascade" }),
+  platform: text("platform").notNull(),
+  url: text("url").notNull(),
+  createdAt: timestamp("createdAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp("updatedAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export type Profile = typeof profiles.$inferSelect;
+export type NewProfile = typeof profiles.$inferInsert;
+export type ProfileIntegration = typeof profileIntegrations.$inferSelect;
+export type NewProfileIntegration = typeof profileIntegrations.$inferInsert;
+
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").primaryKey(),
   userId: text("userId")
