@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Medal } from "lucide-react";
 import { type LeaderboardStats } from "@/lib/services/reviewer-stats";
+import Link from "next/link";
 
 interface LeaderboardTableProps {
   stats: LeaderboardStats[];
@@ -56,7 +57,7 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
           </TableHeader>
           <TableBody>
             {stats.map((reviewer, index) => (
-              <TableRow
+                <TableRow
                 key={reviewer.id}
                 className="transition-colors hover:bg-muted/50"
               >
@@ -66,8 +67,12 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
                     <Medal className={getMedalColor(index)} size={16} />
                   </div>
                 </TableCell>
-                <TableCell className="py-4">{reviewer.name}</TableCell>
-                <TableCell className="py-4 text-center">
+                  <TableCell className="py-4">
+                    <Link href={`/reviewers?reviewer=${reviewer.id}`} className="block underline-offset-2 underline w-full">
+                      {reviewer.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="py-4 text-center">
                   {reviewer.reviewCount}
                 </TableCell>
                 <TableCell className="py-4 text-center">
@@ -78,7 +83,7 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
                   {Math.round(reviewer.totalTimeSpent % 60)} secs
                 </TableCell>
               </TableRow>
-            ))}
+                ))}
           </TableBody>
         </Table>
       </div>
