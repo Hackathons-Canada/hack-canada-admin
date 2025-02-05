@@ -1,7 +1,7 @@
 import { RESULTS_PER_PAGE } from "@/lib/constants";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { and, count, desc, eq, ilike } from "drizzle-orm";
+import { and, count, desc, eq, ilike, or } from "drizzle-orm";
 
 type User = typeof users.$inferSelect;
 
@@ -47,6 +47,19 @@ export const getAllUsers = async (offsetAmt: number = 0) => {
       .orderBy(desc(users.createdAt));
   } catch (error) {
     console.log("Error fetching all users", error);
+    return [];
+  }
+};
+
+export const getAdminsAndOrganizers = async () => {
+  try {
+    return await db
+      .select()
+      .from(users)
+      .where(or(eq(users.role, "admin"), eq(users.role, "organizer")))
+      .orderBy(desc(users.createdAt));
+  } catch (error) {
+    console.log("Error fetching admins and organizers", error);
     return [];
   }
 };
