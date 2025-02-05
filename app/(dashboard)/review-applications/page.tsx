@@ -19,6 +19,9 @@ interface SystemStatus {
   canReviewMore: boolean;
 }
 
+const MIN_REVIEW_LIMIT = 50;
+const MAX_REVIEW_LIMIT = Math.ceil(MIN_REVIEW_LIMIT * 2.5);
+
 export default async function ReviewApplicationsPage() {
   const user = await getCurrentUser();
 
@@ -58,7 +61,7 @@ export default async function ReviewApplicationsPage() {
     pendingReviews: systemStats[0]?.pendingReviews ?? 0,
     finishedReviews: systemStats[0]?.finishedReviews ?? 0,
     userReviewCount: userReviews[0]?.count ?? 0,
-    canReviewMore: (userReviews[0]?.count ?? 0) < 50,
+    canReviewMore: (userReviews[0]?.count ?? 0) < MAX_REVIEW_LIMIT,
   };
 
   return (
@@ -131,7 +134,7 @@ export default async function ReviewApplicationsPage() {
               <p className="text-2xl font-bold">{status.userReviewCount}</p>
               {!status.canReviewMore && (
                 <p className="text-sm text-destructive">
-                  Review limit reached (50)
+                  Review limit reached ({MAX_REVIEW_LIMIT} reviews)
                 </p>
               )}
             </CardContent>
