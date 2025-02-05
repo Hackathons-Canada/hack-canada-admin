@@ -200,6 +200,7 @@ export const applicationReviews = pgTable("applicationReview", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
+  adjusted_rating: integer("rating"),
   reviewDuration: integer("reviewDuration"), // Duration in seconds
   createdAt: timestamp("createdAt")
     .notNull()
