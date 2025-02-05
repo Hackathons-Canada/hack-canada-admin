@@ -50,13 +50,13 @@ const HackerPage = async ({
       <div className="flex space-y-6 max-xl:flex-col md:space-y-8 xl:space-x-8 xl:space-y-0">
         {hacker ? (
           <>
-            <div className="flex max-w-4xl flex-col space-y-6 md:space-y-8">
+            <div className="flex w-full flex-col space-y-6 max-2xl:max-w-4xl md:space-y-8 2xl:w-2/3">
               <HackerApplicationStatus
                 status={hackerUser.applicationStatus as ApplicationStatus}
               />
               <HackerInfo hacker={hacker} />
             </div>
-            <div className="flex w-full flex-col gap-6 md:gap-8">
+            <div className="flex w-full flex-col gap-6 md:gap-8 xl:w-1/3">
               <div className="rounded-md border">
                 <div className="border-b bg-muted/75 p-4">
                   <h2 className="font-semibold">Application Reviews</h2>
