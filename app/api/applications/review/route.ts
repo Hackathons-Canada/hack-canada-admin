@@ -79,13 +79,11 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
         .where(eq(applicationReviews.applicationId, applicationId))
         .execute();
 
-      const totalRatings = allReviews.length + 1; // Include the new review
-      const averageRating =
-        Math.round(
-          (allReviews.reduce((sum, review) => sum + review.rating, rating) /
-            totalRatings) *
-            100,
-        ) / 100;
+      const averageRating = Math.round(
+        (allReviews.reduce((sum, review) => sum + review.rating, 0) /
+          allReviews.length) *
+          100,
+      );
 
       await tx
         .update(hackerApplications)

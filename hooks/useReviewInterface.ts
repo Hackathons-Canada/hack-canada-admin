@@ -22,6 +22,11 @@ export const useReviewInterface = (
       return;
     }
 
+    if (rating < 0 || rating > 10) {
+      toast.error("Rating must be between 0 and 10");
+      return;
+    }
+
     try {
       setSubmitting(true);
 
@@ -56,7 +61,11 @@ export const useReviewInterface = (
           return;
         } catch (error) {
           retryCount++;
-          if (retryCount === MAX_RETRIES) throw error;
+          if (retryCount === MAX_RETRIES) {
+            throw new Error(
+              `Failed to submit review after ${MAX_RETRIES} attempts. Please try again later.`,
+            );
+          }
           await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
         }
       }
