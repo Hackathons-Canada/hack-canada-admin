@@ -28,7 +28,8 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse>> {
 
     if (
       !applicationId ||
-      !rating ||
+      rating === undefined ||
+      rating === null ||
       rating < 0 ||
       rating > 10 ||
       !reviewDuration
