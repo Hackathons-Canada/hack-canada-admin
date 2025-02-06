@@ -12,9 +12,13 @@ import Link from "next/link";
 
 interface LeaderboardTableProps {
   stats: LeaderboardStats[];
+  currentUserRole: UserRole;
 }
 
-export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
+export default function LeaderboardTable({
+  stats,
+  currentUserRole,
+}: LeaderboardTableProps) {
   const getMedalColor = (position: number) => {
     switch (position) {
       case 0:
@@ -57,7 +61,7 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
           </TableHeader>
           <TableBody>
             {stats.map((reviewer, index) => (
-                <TableRow
+              <TableRow
                 key={reviewer.id}
                 className="transition-colors hover:bg-muted/50"
               >
@@ -67,12 +71,19 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
                     <Medal className={getMedalColor(index)} size={16} />
                   </div>
                 </TableCell>
-                  <TableCell className="py-4">
-                    <Link href={`/reviewers?reviewer=${reviewer.id}`} className="block underline-offset-2 underline w-full">
+                <TableCell className="py-4">
+                  {currentUserRole === "admin" ? (
+                    <Link
+                      href={`/reviewers?reviewer=${reviewer.id}`}
+                      className="block w-fit underline underline-offset-2"
+                    >
                       {reviewer.name}
                     </Link>
-                  </TableCell>
-                  <TableCell className="py-4 text-center">
+                  ) : (
+                    <p>{reviewer.name}</p>
+                  )}
+                </TableCell>
+                <TableCell className="py-4 text-center">
                   {reviewer.reviewCount}
                 </TableCell>
                 <TableCell className="py-4 text-center">
@@ -83,7 +94,7 @@ export default function LeaderboardTable({ stats }: LeaderboardTableProps) {
                   {Math.round(reviewer.totalTimeSpent % 60)} secs
                 </TableCell>
               </TableRow>
-                ))}
+            ))}
           </TableBody>
         </Table>
       </div>

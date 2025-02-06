@@ -23,7 +23,7 @@ export default async function LeaderboardPage() {
         subheading="See who's leading the pack in application reviews"
       />
 
-      <LeaderboardTable stats={leaderboardStats} />
+      <LeaderboardTable stats={leaderboardStats} currentUserRole={user.role} />
     </Container>
   );
 }
