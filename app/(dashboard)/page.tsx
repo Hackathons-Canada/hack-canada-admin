@@ -3,9 +3,9 @@ import Container from "@/components/Container";
 import CountCard from "@/components/CountCard";
 import PageBanner from "@/components/PageBanner";
 import { db } from "@/lib/db";
-import { hackerApplications, users } from "@/lib/db/schema";
+import { hackerApplications, applicationReviews, users } from "@/lib/db/schema";
 import { isReviewer } from "@/lib/utils";
-import { count, eq } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
 export const revalidate = 600;
@@ -29,6 +29,10 @@ const Home = async () => {
     [waitlisted],
     [admins],
     [organizers],
+    [totalReviews],
+    [avgRating],
+    [avgReviewCount],
+    [avgReviewDuration],
   ] = await Promise.all([
     db.select({ count: count() }).from(users),
     db
@@ -57,6 +61,26 @@ const Home = async () => {
       .select({ count: count() })
       .from(users)
       .where(eq(users.role, "organizer")),
+    // New queries for review statistics
+    db.select({ count: count() }).from(applicationReviews),
+    db
+      .select({
+        avg: sql<number>`ROUND(AVG(${applicationReviews.rating})::numeric, 2)`,
+      })
+      .from(applicationReviews)
+      .where(sql`${applicationReviews.rating} IS NOT NULL`),
+    db
+      .select({
+        avg: sql<number>`ROUND(AVG(${hackerApplications.reviewCount})::numeric, 2)`,
+      })
+      .from(hackerApplications)
+      .where(eq(hackerApplications.submissionStatus, "submitted")),
+    db
+      .select({
+        avg: sql<number>`ROUND(AVG(${applicationReviews.reviewDuration})::numeric, 2)`,
+      })
+      .from(applicationReviews)
+      .where(sql`${applicationReviews.reviewDuration} IS NOT NULL`),
   ]);
 
   const volunteers = 0;
@@ -95,6 +119,31 @@ const Home = async () => {
             <CountCard label="Rejected" count={rejected.count} />
             <CountCard label="Pending" count={pendingApplications.count} />
             <CountCard label="Waitlisted" count={waitlisted.count} />
+          </div>
+        </section>
+
+        <section className="space-y-2">
+          <p className="text-lg font-bold text-foreground md:text-xl">
+            Review Statistics
+          </p>
+
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            <CountCard label="Total Reviews" count={totalReviews.count} />
+            <CountCard
+              label="Avg Rating"
+              count={avgRating.avg || 0}
+              isDecimal
+            />
+            <CountCard
+              label="Avg Reviews per App"
+              count={avgReviewCount.avg || 0}
+              isDecimal
+            />
+            <CountCard
+              label="Avg Time per Review (s)"
+              count={avgReviewDuration.avg || 0}
+              isDecimal
+            />
           </div>
         </section>
       </div>

@@ -4,9 +4,10 @@ type Props = {
   label: string;
   count: number;
   className?: string;
+  isDecimal?: boolean;
 };
 
-const CountCard = ({ count, label, className }: Props) => {
+const CountCard = ({ count, label, className, isDecimal }: Props) => {
   return (
     <div
       className={cn(
@@ -19,4 +20,5 @@ const CountCard = ({ count, label, className }: Props) => {
     </div>
   );
 };
+
 export default CountCard;
