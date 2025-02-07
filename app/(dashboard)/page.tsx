@@ -8,7 +8,7 @@ import { isReviewer } from "@/lib/utils";
 import { count, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-export const revalidate = 600;
+export const revalidate = 1800;
 
 const Home = async () => {
   const user = await getCurrentUser();
