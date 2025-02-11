@@ -37,8 +37,9 @@ const getReviewCountColor = (count: number | null) => {
 
 const getRatingColor = (rating: number | null) => {
   if (rating === null) return "text-gray-500";
-  if (rating <= 3) return "text-red-500 font-medium";
-  if (rating <= 6) return "text-yellow-500 font-medium";
+  const normalizedRating = rating / 100;
+  if (normalizedRating <= 3) return "text-red-500 font-medium";
+  if (normalizedRating <= 6) return "text-yellow-500 font-medium";
   return "text-green-500 font-medium";
 };
 
@@ -100,7 +101,9 @@ export default function AdminApplicationList({
               <TableCell
                 className={`py-4 text-center ${getRatingColor(application.averageRating)}`}
               >
-                {application.averageRating?.toFixed(1) ?? "N/A"}
+                {application.averageRating
+                  ? (application.averageRating / 100).toFixed(1)
+                  : "N/A"}
               </TableCell>
             </TableRow>
           ))}
