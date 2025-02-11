@@ -27,8 +27,16 @@ export default async function AdminApplicationsPage({
   const page = Number(searchParams["page"] ?? "1");
   const perPage = Number(searchParams["perPage"] ?? RESULTS_PER_PAGE);
   const start = (page - 1) * perPage;
+  const sortField =
+    (searchParams["sort"] as
+      | "reviewCount"
+      | "averageRating"
+      | "internalResult") ?? "reviewCount";
+  const sortOrder = (searchParams["order"] as "asc" | "desc") ?? "desc";
 
   const params = new URLSearchParams();
+  params.set("sort", sortField);
+  params.set("order", sortOrder);
   // We don't need to add page/perPage as they're handled by PaginationControls
 
   const [totalApplications, applications] = await Promise.all([
@@ -51,7 +59,26 @@ export default async function AdminApplicationsPage({
       .from(hackerApplications)
       .innerJoin(users, eq(users.id, hackerApplications.userId))
       .where(eq(hackerApplications.submissionStatus, "submitted"))
-      .orderBy(desc(hackerApplications.createdAt))
+      .orderBy(
+        (() => {
+          switch (sortField) {
+            case "reviewCount":
+              return sortOrder === "asc"
+                ? hackerApplications.reviewCount
+                : desc(hackerApplications.reviewCount);
+            case "averageRating":
+              return sortOrder === "asc"
+                ? hackerApplications.averageRating
+                : desc(hackerApplications.averageRating);
+            case "internalResult":
+              return sortOrder === "asc"
+                ? hackerApplications.internalResult
+                : desc(hackerApplications.internalResult);
+            default:
+              return desc(hackerApplications.createdAt);
+          }
+        })(),
+      )
       .limit(perPage)
       .offset(start),
   ]);
