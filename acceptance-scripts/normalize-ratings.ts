@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { applicationReviews, hackerApplications } from "@/lib/db/schema";
+import { applicationReviews } from "@/lib/db/schema";
 import { sql } from "drizzle-orm";
 import { TARGET_AVG, MIN_REVIEWS_THRESHOLD, ZSCORE_THRESHOLD } from "./config";
 
