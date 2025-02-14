@@ -30,9 +30,21 @@ async function main() {
   }
 
   // Ask for operation mode
-  const mode = await question(
-    "Choose operation mode (1 for generate list, 2 for accept applicants): ",
+  console.log("\nOperation Modes:");
+  console.log(
+    "1. Generate List - Creates a CSV file of top applicants based on normalized ratings",
   );
+  console.log(
+    "   This will export eligible applicants to 'top-applicants.csv' for review",
+  );
+  console.log(
+    "2. Accept Applicants - Processes applicants from the generated CSV file",
+  );
+  console.log(
+    "   This will send acceptance emails and update applicant statuses\n",
+  );
+
+  const mode = await question("Choose operation mode (1 or 2): ");
 
   if (!["1", "2"].includes(mode)) {
     console.log("Invalid mode selected. Please choose 1 or 2.");
@@ -42,27 +54,55 @@ async function main() {
 
   // Ask for number of applicants to process
   if (!progress || progress.acceptedCount === 0) {
-    const baseCountStr = await question(
-      "How many applicants do you want to process? ",
-    );
-    const baseCount = parseInt(baseCountStr, 10);
+    let baseCount: number;
+    while (true) {
+      const baseCountStr = await question(
+        "How many applicants do you want to process? ",
+      );
+      baseCount = parseInt(baseCountStr, 10);
+      if (!isNaN(baseCount) && baseCount > 0) {
+        break;
+      }
+      console.log("Please enter a valid positive number.");
+    }
 
-    const extraPercentStr = await question(
-      "What percentage extra should we process (e.g., 10 for 10%)? ",
-    );
-    const extraPercent = parseInt(extraPercentStr, 10) || 0;
+    let extraPercent: number;
+    while (true) {
+      const extraPercentStr = await question(
+        "What percentage extra should we process (e.g., 10 for 10%)? ",
+      );
+      extraPercent = parseInt(extraPercentStr, 10);
+      if (!isNaN(extraPercent) && extraPercent >= 0) {
+        break;
+      }
+      console.log("Please enter a valid non-negative number.");
+    }
 
     const totalToProcess = Math.ceil(baseCount * (1 + extraPercent / 100));
+
+    // Initialize or update progress state
     progress = {
-      ...progress,
+      normalizedAt: progress?.normalizedAt || new Date().toISOString(),
       totalToAccept: totalToProcess,
       acceptedCount: 0,
+      lastProcessedId: undefined,
     };
 
-    console.log(
-      `Will process ${totalToProcess} applicants (${baseCount} + ${extraPercent}% buffer)`,
-    );
-    await saveProgress(progress);
+    console.log("\nProgress Configuration:");
+    console.log(`Base applicant count: ${baseCount}`);
+    console.log(`Extra buffer: ${extraPercent}%`);
+    console.log(`Total to process: ${totalToProcess} applicants`);
+
+    try {
+      await saveProgress(progress);
+      console.log("Progress state initialized successfully.");
+    } catch (error: unknown) {
+      console.error(
+        "Failed to save progress:",
+        error instanceof Error ? error.message : "Unknown error occurred",
+      );
+      process.exit(1);
+    }
   } else {
     console.log(
       `Continuing previous run: ${progress.acceptedCount}/${progress.totalToAccept} already processed`,
@@ -96,20 +136,51 @@ async function main() {
       console.log(`Found ${applicants.length} applicants to process`);
 
       let successCount = 0;
+      let failureCount = 0;
+
+      console.log("\nStarting acceptance process...");
+      console.log(
+        "Progress will be saved automatically after each successful acceptance",
+      );
+      console.log("----------------------------------------");
 
       for (let i = 0; i < applicants.length; i++) {
         const applicant = applicants[i];
         const current = progress.acceptedCount + i + 1;
-        console.log(
-          `Processing applicant ${current}/${progress.totalToAccept} (${applicant.firstName} - ${applicant.email})...`,
-        );
+        const percentComplete = (
+          (current / progress.totalToAccept) *
+          100
+        ).toFixed(1);
 
-        const success = await acceptApplicant(applicant);
-        if (success) {
-          successCount++;
-          progress.acceptedCount++;
-          progress.lastProcessedId = applicant.userId;
-          await saveProgress(progress);
+        console.log(
+          `\nProcessing ${current}/${progress.totalToAccept} (${percentComplete}%)`,
+        );
+        console.log(`Applicant: ${applicant.firstName} (${applicant.email})`);
+
+        try {
+          const success = await acceptApplicant(applicant);
+          if (success) {
+            successCount++;
+            progress.acceptedCount++;
+            progress.lastProcessedId = applicant.userId;
+
+            // Save progress after each successful acceptance
+            try {
+              await saveProgress(progress);
+              console.log("✓ Accepted and progress saved");
+            } catch (error) {
+              console.error("Failed to save progress:", error);
+              throw error; // Escalate error to main error handler
+            }
+          } else {
+            failureCount++;
+            console.log("✗ Failed to accept applicant");
+          }
+        } catch (error) {
+          failureCount++;
+          console.error(
+            `Error processing applicant: ${error instanceof Error ? error.message : "Unknown error occurred"}`,
+          );
         }
 
         // Add delay between processing each applicant (200ms)
@@ -118,19 +189,32 @@ async function main() {
         }
       }
 
-      console.log(`\nAcceptance process complete:`);
+      console.log("\n========================================");
+      console.log("Acceptance Process Summary:");
+      console.log("----------------------------------------");
+      console.log(`Total Processed: ${applicants.length}`);
+      console.log(`Successfully Accepted: ${successCount}`);
+      console.log(`Failed: ${failureCount}`);
       console.log(
-        `Successfully processed: ${successCount}/${applicants.length}`,
+        `Overall Progress: ${progress.acceptedCount}/${progress.totalToAccept}`,
       );
-      console.log(`Failed: ${applicants.length - successCount}`);
 
       if (progress.acceptedCount < progress.totalToAccept) {
+        console.log("\nNote: Target not reached");
         console.log(
-          `Note: Could not find enough eligible applicants to reach target of ${progress.totalToAccept}`,
+          `Still need ${progress.totalToAccept - progress.acceptedCount} more acceptances`,
         );
+        console.log(
+          "Run the script again with mode 1 to generate a new list of applicants",
+        );
+      } else {
+        console.log("\n✓ Target number of acceptances reached!");
       }
-    } catch (error) {
-      console.error("Fatal error in acceptance process:", error);
+    } catch (error: unknown) {
+      console.error(
+        "Fatal error in acceptance process:",
+        error instanceof Error ? error.message : "Unknown error occurred",
+      );
       process.exit(1);
     }
   }
@@ -142,8 +226,11 @@ main()
   .then(() => {
     console.log("Success");
   })
-  .catch((error) => {
-    console.error("Fatal error:", error);
+  .catch((error: unknown) => {
+    console.error(
+      "Fatal error:",
+      error instanceof Error ? error.message : "Unknown error occurred",
+    );
   })
   .finally(() => {
     rl.close();
