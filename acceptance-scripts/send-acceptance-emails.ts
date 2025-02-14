@@ -5,7 +5,7 @@ import { parse } from "csv-parse/sync";
 
 async function readTopApplicants() {
   const csvContent = await fs.readFile(
-    path.join(process.cwd(), "bebi.csv"),
+    path.join(process.cwd(), "top-applicants.csv"),
     "utf-8",
   );
   const records = parse(csvContent, {

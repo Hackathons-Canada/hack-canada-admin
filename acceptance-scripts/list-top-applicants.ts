@@ -7,10 +7,11 @@ import * as fs from "fs/promises";
 
 export async function getTopApplicantsList(
   count: number,
-): Promise<Array<{ firstName: string; email: string }>> {
+): Promise<Array<{ userId: string; firstName: string; email: string }>> {
   // Get top applications based on normalized ratings and review count
   return db
     .select({
+      userId: users.id,
       firstName: users.name,
       email: users.email,
     })
@@ -26,7 +27,7 @@ export async function getTopApplicantsList(
         eq(hackerApplications.submissionStatus, "submitted"),
       ),
     )
-    .groupBy(users.name, users.email, hackerApplications.createdAt)
+    .groupBy(users.id, users.name, users.email, hackerApplications.createdAt)
     .having(sql`COUNT(${applicationReviews.id}) >= ${MIN_REVIEWS_THRESHOLD}`)
     .orderBy(
       sql`COALESCE(AVG(${applicationReviews.adjusted_rating}), 0) DESC`,
@@ -37,14 +38,18 @@ export async function getTopApplicantsList(
 }
 
 export async function saveApplicantsToFile(
-  applicants: Array<{ firstName: string; email: string }>,
+  applicants: Array<{ userId: string; firstName: string; email: string }>,
 ) {
   const content = applicants
     .map(
-      (applicant) => `${applicant.firstName.split(" ")[0]},${applicant.email}`,
+      (applicant) =>
+        `${applicant.userId},${applicant.firstName.split(" ")[0]},${applicant.email}`,
     )
     .join("\n");
 
-  await fs.writeFile("top-applicants.csv", "First Name,Email\n" + content);
+  await fs.writeFile(
+    "top-applicants.csv",
+    "userId,First Name,Email\n" + content,
+  );
   return true;
 }

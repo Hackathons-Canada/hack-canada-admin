@@ -1,12 +1,11 @@
 import { rl, question } from "./cli";
 import { loadProgress, saveProgress } from "./progress";
 import { normalizeRatings } from "./normalize-ratings";
-import { getAcceptanceList, acceptApplicant } from "./acceptance";
-// Import for listing applicants (comment out if going back to accepting applicants)
 import {
   getTopApplicantsList,
   saveApplicantsToFile,
 } from "./list-top-applicants";
+import { readApplicantsFromCsv, acceptApplicant } from "./accept-applicants";
 
 async function main() {
   let progress = await loadProgress();
@@ -30,96 +29,111 @@ async function main() {
     await saveProgress(progress);
   }
 
-  // Ask for number of applicants to accept
-  if (!progress || progress.acceptedCount === 0) {
-    const baseCountStr = await question(
-      "How many applicants do you want to accept? ",
-    );
-    const baseCount = parseInt(baseCountStr, 10);
+  // Ask for operation mode
+  const mode = await question(
+    "Choose operation mode (1 for generate list, 2 for accept applicants): ",
+  );
 
-    const extraPercentStr = await question(
-      "What percentage extra should we accept (e.g., 10 for 10%)? ",
-    );
-    const extraPercent = parseInt(extraPercentStr, 10) || 0;
-
-    const totalToAccept = Math.ceil(baseCount * (1 + extraPercent / 100));
-    progress = {
-      ...progress,
-      totalToAccept,
-      acceptedCount: 0,
-    };
-
-    console.log(
-      `Will accept ${totalToAccept} applicants (${baseCount} + ${extraPercent}% buffer)`,
-    );
-    await saveProgress(progress);
-  } else {
-    console.log(
-      `Continuing previous run: ${progress.acceptedCount}/${progress.totalToAccept} already accepted`,
-    );
-  }
-
-  // Get applications to accept
-  const remaining = progress.totalToAccept - progress.acceptedCount;
-  if (remaining <= 0) {
-    console.log("All applicants have already been accepted!");
+  if (!["1", "2"].includes(mode)) {
+    console.log("Invalid mode selected. Please choose 1 or 2.");
     rl.close();
     return;
   }
 
-  console.log(`Getting top ${remaining} applicants...`);
+  // Ask for number of applicants to process
+  if (!progress || progress.acceptedCount === 0) {
+    const baseCountStr = await question(
+      "How many applicants do you want to process? ",
+    );
+    const baseCount = parseInt(baseCountStr, 10);
 
-  // Comment out the next block to switch back to accepting applicants
-  const applicantsToList = await getTopApplicantsList(remaining);
-  console.log(`Found ${applicantsToList.length} eligible applicants`);
+    const extraPercentStr = await question(
+      "What percentage extra should we process (e.g., 10 for 10%)? ",
+    );
+    const extraPercent = parseInt(extraPercentStr, 10) || 0;
 
-  // Save applicants to file
-  const success = await saveApplicantsToFile(applicantsToList);
-  if (success) {
+    const totalToProcess = Math.ceil(baseCount * (1 + extraPercent / 100));
+    progress = {
+      ...progress,
+      totalToAccept: totalToProcess,
+      acceptedCount: 0,
+    };
+
     console.log(
-      "Successfully saved applicant information to top-applicants.csv",
+      `Will process ${totalToProcess} applicants (${baseCount} + ${extraPercent}% buffer)`,
+    );
+    await saveProgress(progress);
+  } else {
+    console.log(
+      `Continuing previous run: ${progress.acceptedCount}/${progress.totalToAccept} already processed`,
     );
   }
 
-  /* Uncomment this block to switch back to accepting applicants
-  const applicantsToAccept = await getAcceptanceList(remaining);
-  console.log(`Found ${applicantsToAccept.length} eligible applicants`);
+  const remaining = progress.totalToAccept - progress.acceptedCount;
+  if (remaining <= 0) {
+    console.log("All applicants have already been processed!");
+    rl.close();
+    return;
+  }
 
-  // Process acceptances
-  let successCount = 0;
-  let index = 0;
-  for (const applicant of applicantsToAccept) {
-    const current = progress.acceptedCount + index + 1;
-    console.log(
-      `Processing applicant ${current}/${progress.totalToAccept} (ID: ${applicant.userId})...`,
-    );
+  if (mode === "1") {
+    // Generate list mode
+    console.log(`Getting top ${remaining} applicants...`);
+    const applicantsToList = await getTopApplicantsList(remaining);
+    console.log(`Found ${applicantsToList.length} eligible applicants`);
 
-    const success = await acceptApplicant(
-      applicant.userId,
-      applicant.applicationId,
-    );
+    // Save applicants to file
+    const success = await saveApplicantsToFile(applicantsToList);
     if (success) {
-      successCount++;
-      progress.acceptedCount++;
-      progress.lastProcessedId = applicant.userId;
-      await saveProgress(progress);
+      console.log(
+        "Successfully saved applicant information to top-applicants.csv",
+      );
     }
-    index++;
-  }
+  } else {
+    // Accept applicants mode
+    try {
+      const applicants = await readApplicantsFromCsv();
+      console.log(`Found ${applicants.length} applicants to process`);
 
-  console.log(
-    `Acceptance process complete. Successfully accepted ${successCount} new applicants.`,
-  );
-  console.log(
-    `Total accepted: ${progress.acceptedCount}/${progress.totalToAccept}`,
-  );
+      let successCount = 0;
 
-  if (progress.acceptedCount < progress.totalToAccept) {
-    console.log(
-      `Note: Could not find enough eligible applicants to reach target of ${progress.totalToAccept}`,
-    );
+      for (let i = 0; i < applicants.length; i++) {
+        const applicant = applicants[i];
+        const current = progress.acceptedCount + i + 1;
+        console.log(
+          `Processing applicant ${current}/${progress.totalToAccept} (${applicant.firstName} - ${applicant.email})...`,
+        );
+
+        const success = await acceptApplicant(applicant);
+        if (success) {
+          successCount++;
+          progress.acceptedCount++;
+          progress.lastProcessedId = applicant.userId;
+          await saveProgress(progress);
+        }
+
+        // Add delay between processing each applicant (200ms)
+        if (i < applicants.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+      }
+
+      console.log(`\nAcceptance process complete:`);
+      console.log(
+        `Successfully processed: ${successCount}/${applicants.length}`,
+      );
+      console.log(`Failed: ${applicants.length - successCount}`);
+
+      if (progress.acceptedCount < progress.totalToAccept) {
+        console.log(
+          `Note: Could not find enough eligible applicants to reach target of ${progress.totalToAccept}`,
+        );
+      }
+    } catch (error) {
+      console.error("Fatal error in acceptance process:", error);
+      process.exit(1);
+    }
   }
-  */
 
   rl.close();
 }
@@ -133,5 +147,5 @@ main()
   })
   .finally(() => {
     rl.close();
-    process.exit(1);
+    process.exit(0); // Changed from 1 to 0 for successful exit
   });
