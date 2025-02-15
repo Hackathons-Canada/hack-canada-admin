@@ -5,7 +5,7 @@ import {
   getTopApplicantsList,
   saveApplicantsToFile,
 } from "./list-top-applicants";
-import { readApplicantsFromCsv, acceptApplicant } from "./accept-applicants";
+import { acceptApplicant } from "./accept-applicants";
 
 async function main() {
   let progress = await loadProgress();
@@ -39,10 +39,10 @@ async function main() {
     "   This will export eligible applicants to 'top-applicants.csv' for review",
   );
   console.log(
-    "2. Accept Applicants - Processes applicants from the generated CSV file",
+    "2. Accept Applicants - Processes top applicants based on normalized ratings",
   );
   console.log(
-    "   This will send acceptance emails and update applicant statuses\n",
+    "   This will send acceptance emails and update applicant statuses directly\n",
   );
 
   const mode = await question("Choose operation mode (1 or 2): ");
@@ -123,10 +123,31 @@ async function main() {
     );
   }
 
-  const remaining = progress.totalToAccept - progress.acceptedCount;
+  let remaining = progress.totalToAccept - progress.acceptedCount;
   if (remaining <= 0) {
-    console.log("All applicants have already been processed!");
-    return;
+    const continueProcessing = await question(
+      "Target number of acceptances reached. Do you want to process more applicants? (y/n): ",
+    );
+    if (continueProcessing.toLowerCase() !== "y") {
+      console.log("Exiting as target has been reached.");
+      return;
+    }
+
+    // Ask for new batch size when continuing
+    while (true) {
+      const batchSizeStr = await question(
+        "How many additional applicants do you want to process? ",
+      );
+      const batchSize = parseInt(batchSizeStr, 10);
+      if (!isNaN(batchSize) && batchSize > 0) {
+        remaining = batchSize;
+        // Update total to reflect new batch
+        progress.totalToAccept = progress.acceptedCount + batchSize;
+        await saveProgress(progress);
+        break;
+      }
+      console.log("Please enter a valid positive number.");
+    }
   }
 
   if (mode === "1") {
@@ -145,7 +166,8 @@ async function main() {
   } else {
     // Accept applicants mode
     try {
-      const applicants = await readApplicantsFromCsv();
+      // Get applicants directly from database
+      const applicants = await getTopApplicantsList(remaining);
       console.log(`Found ${applicants.length} applicants to process`);
 
       let successCount = 0;
@@ -163,14 +185,15 @@ async function main() {
 
       for (let i = 0; i < applicants.length; i++) {
         const applicant = applicants[i];
-        const current = progress.acceptedCount + i + 1;
-        const percentComplete = (
-          (current / progress.totalToAccept) *
-          100
+        const batchProgress = i + 1;
+        const overallProgress = progress.acceptedCount + i;
+        const percentComplete = Math.min(
+          (overallProgress / progress.totalToAccept) * 100,
+          100,
         ).toFixed(1);
 
         console.log(
-          `\nProcessing ${current}/${progress.totalToAccept} (${percentComplete}%)`,
+          `\nProcessing ${batchProgress}/${applicants.length} in current batch (${percentComplete}% overall)`,
         );
         console.log(`Applicant: ${applicant.firstName} (${applicant.email})`);
 
@@ -185,7 +208,6 @@ async function main() {
               successCount++;
               progress.acceptedCount++;
               progress.lastProcessedId = applicant.userId;
-
               // Save progress after each successful acceptance
               try {
                 await saveProgress(progress);
@@ -229,9 +251,7 @@ async function main() {
           console.log(
             `Still need ${progress.totalToAccept - progress.acceptedCount} more acceptances`,
           );
-          console.log(
-            "Run the script again with mode 1 to generate a new list of applicants",
-          );
+          console.log("Run the script again to process more applicants");
         } else {
           console.log("\n✓ Target number of acceptances reached!");
         }
@@ -250,14 +270,13 @@ async function main() {
 
 main()
   .then(() => {
-    console.log("Success");
+    console.log("\nSuccess - Script completed");
+    process.exit(0);
   })
   .catch((error: unknown) => {
     console.error(
       "Fatal error:",
       error instanceof Error ? error.message : "Unknown error occurred",
     );
-  })
-  .finally(() => {
-    rl.close();
+    process.exit(1);
   });

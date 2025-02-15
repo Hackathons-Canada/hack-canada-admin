@@ -37,6 +37,7 @@ export const sendEmail = async (to: string, subject: string, body: string) => {
   try {
     await ses.sendEmail(params);
 
+    console.log("Email sent successfully to " + to);
     return { success: true };
   } catch (error) {
     console.error("Error sending email with SES: ", error);
