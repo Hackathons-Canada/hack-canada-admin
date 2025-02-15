@@ -2,18 +2,21 @@ import { db } from "@/lib/db";
 import { applicationReviews, hackerApplications, users } from "@/lib/db/schema";
 import { sql } from "drizzle-orm";
 import { eq, and } from "drizzle-orm";
-import { MIN_REVIEWS_THRESHOLD } from "./config";
+import { MIN_REVIEW_VALUE_THRESHOLD, MIN_REVIEWS_THRESHOLD } from "./config";
 import * as fs from "fs/promises";
 
 export async function getTopApplicantsList(
   count: number,
-): Promise<Array<{ userId: string; firstName: string; email: string }>> {
+): Promise<
+  Array<{ userId: string; firstName: string; email: string; avgRating: number }>
+> {
   // Get top applications based on normalized ratings and review count
   return db
     .select({
       userId: users.id,
       firstName: users.name,
       email: users.email,
+      avgRating: sql<number>`ROUND(COALESCE(AVG(${applicationReviews.adjusted_rating}), 0), 2)`,
     })
     .from(hackerApplications)
     .innerJoin(users, eq(users.id, hackerApplications.userId))
@@ -28,7 +31,12 @@ export async function getTopApplicantsList(
       ),
     )
     .groupBy(users.id, users.name, users.email, hackerApplications.createdAt)
-    .having(sql`COUNT(${applicationReviews.id}) >= ${MIN_REVIEWS_THRESHOLD}`)
+    .having(
+      sql`
+          COALESCE(AVG(${applicationReviews.adjusted_rating}), 0) > ${MIN_REVIEW_VALUE_THRESHOLD}
+          AND COUNT(${applicationReviews.id}) >= ${MIN_REVIEWS_THRESHOLD}
+      `,
+    )
     .orderBy(
       sql`COALESCE(AVG(${applicationReviews.adjusted_rating}), 0) DESC`,
       hackerApplications.createdAt,
@@ -37,8 +45,9 @@ export async function getTopApplicantsList(
     .execute();
 }
 
+
 export async function saveApplicantsToFile(
-  applicants: Array<{ userId: string; firstName: string; email: string }>,
+  applicants: Array<{ userId: string; firstName: string; email: string, avgRating: number }>,
 ) {
   const content = applicants
     .map(
