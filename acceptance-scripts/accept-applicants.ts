@@ -35,7 +35,7 @@ export async function acceptApplicant(applicantData: ApplicantData) {
       // Create audit log
       await createAuditLog(
         {
-          userId: "system",
+          userId: applicantData.userId,
           action: "update",
           entityType: "user",
           entityId: applicantData.userId,
@@ -91,6 +91,9 @@ export async function acceptApplicant(applicantData: ApplicantData) {
 async function main() {
   try {
     const applicants = await readApplicantsFromCsv();
+
+    console.log("Found applications", applicants);
+
     console.log(`Found ${applicants.length} applicants to process`);
 
     let successCount = 0;
@@ -118,4 +121,4 @@ async function main() {
   }
 }
 
-main();
+// main();

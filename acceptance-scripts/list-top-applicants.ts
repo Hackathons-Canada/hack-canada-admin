@@ -49,7 +49,7 @@ export async function saveApplicantsToFile(
 
   await fs.writeFile(
     "top-applicants.csv",
-    "userId,First Name,Email\n" + content,
+    "userId,firstName,email\n" + content,
   );
   return true;
 }

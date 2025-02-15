@@ -49,17 +49,16 @@ async function main() {
 
   if (!["1", "2"].includes(mode)) {
     console.log("Invalid mode selected. Please choose 1 or 2.");
-    rl.close();
     return;
   }
 
   // Ask about dry run if in accept applicants mode
   if (mode === "2") {
     const dryRunResponse = await question(
-      "Do you want to run in dry run mode? No actual emails will be sent or statuses updated (y/n): "
+      "Do you want to run in dry run mode? No actual emails will be sent or statuses updated (y/n): ",
     );
     dryRun = dryRunResponse.toLowerCase() === "y";
-    
+
     if (dryRun) {
       console.log("\n⚠️ DRY RUN MODE ENABLED ⚠️");
       console.log("No actual changes will be made to the system.");
@@ -127,7 +126,6 @@ async function main() {
   const remaining = progress.totalToAccept - progress.acceptedCount;
   if (remaining <= 0) {
     console.log("All applicants have already been processed!");
-    rl.close();
     return;
   }
 
@@ -158,7 +156,7 @@ async function main() {
         console.log("DRY RUN MODE: No actual changes will be made");
       } else {
         console.log(
-          "Progress will be saved automatically after each successful acceptance"
+          "Progress will be saved automatically after each successful acceptance",
         );
       }
       console.log("----------------------------------------");
@@ -220,7 +218,7 @@ async function main() {
       console.log(`Total Processed: ${applicants.length}`);
       console.log(`Successfully Accepted: ${successCount}`);
       console.log(`Failed: ${failureCount}`);
-      
+
       if (!dryRun) {
         console.log(
           `Overall Progress: ${progress.acceptedCount}/${progress.totalToAccept}`,
@@ -248,8 +246,6 @@ async function main() {
       process.exit(1);
     }
   }
-
-  rl.close();
 }
 
 main()
@@ -264,5 +260,4 @@ main()
   })
   .finally(() => {
     rl.close();
-    process.exit(0); // Changed from 1 to 0 for successful exit
   });
