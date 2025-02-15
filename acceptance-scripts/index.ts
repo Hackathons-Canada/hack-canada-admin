@@ -195,6 +195,7 @@ async function main() {
         console.log(
           `\nProcessing ${batchProgress}/${applicants.length} in current batch (${percentComplete}% overall)`,
         );
+        // todo: add the applicant's avg'd score
         console.log(`Applicant: ${applicant.firstName} (${applicant.email})`);
 
         try {
