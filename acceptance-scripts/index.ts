@@ -9,6 +9,7 @@ import { readApplicantsFromCsv, acceptApplicant } from "./accept-applicants";
 
 async function main() {
   let progress = await loadProgress();
+  let dryRun = false;
 
   if (progress && progress.normalizedAt) {
     const continueNormalization = await question(
@@ -50,6 +51,20 @@ async function main() {
     console.log("Invalid mode selected. Please choose 1 or 2.");
     rl.close();
     return;
+  }
+
+  // Ask about dry run if in accept applicants mode
+  if (mode === "2") {
+    const dryRunResponse = await question(
+      "Do you want to run in dry run mode? No actual emails will be sent or statuses updated (y/n): "
+    );
+    dryRun = dryRunResponse.toLowerCase() === "y";
+    
+    if (dryRun) {
+      console.log("\n⚠️ DRY RUN MODE ENABLED ⚠️");
+      console.log("No actual changes will be made to the system.");
+      console.log("This is for testing purposes only.\n");
+    }
   }
 
   // Ask for number of applicants to process
@@ -139,9 +154,13 @@ async function main() {
       let failureCount = 0;
 
       console.log("\nStarting acceptance process...");
-      console.log(
-        "Progress will be saved automatically after each successful acceptance",
-      );
+      if (dryRun) {
+        console.log("DRY RUN MODE: No actual changes will be made");
+      } else {
+        console.log(
+          "Progress will be saved automatically after each successful acceptance"
+        );
+      }
       console.log("----------------------------------------");
 
       for (let i = 0; i < applicants.length; i++) {
@@ -158,23 +177,29 @@ async function main() {
         console.log(`Applicant: ${applicant.firstName} (${applicant.email})`);
 
         try {
-          const success = await acceptApplicant(applicant);
-          if (success) {
+          if (dryRun) {
+            // Simulate success in dry run mode
+            console.log("✓ [DRY RUN] Would accept applicant");
             successCount++;
-            progress.acceptedCount++;
-            progress.lastProcessedId = applicant.userId;
-
-            // Save progress after each successful acceptance
-            try {
-              await saveProgress(progress);
-              console.log("✓ Accepted and progress saved");
-            } catch (error) {
-              console.error("Failed to save progress:", error);
-              throw error; // Escalate error to main error handler
-            }
           } else {
-            failureCount++;
-            console.log("✗ Failed to accept applicant");
+            const success = await acceptApplicant(applicant);
+            if (success) {
+              successCount++;
+              progress.acceptedCount++;
+              progress.lastProcessedId = applicant.userId;
+
+              // Save progress after each successful acceptance
+              try {
+                await saveProgress(progress);
+                console.log("✓ Accepted and progress saved");
+              } catch (error) {
+                console.error("Failed to save progress:", error);
+                throw error; // Escalate error to main error handler
+              }
+            } else {
+              failureCount++;
+              console.log("✗ Failed to accept applicant");
+            }
           }
         } catch (error) {
           failureCount++;
@@ -184,7 +209,7 @@ async function main() {
         }
 
         // Add delay between processing each applicant (200ms)
-        if (i < applicants.length - 1) {
+        if (!dryRun && i < applicants.length - 1) {
           await new Promise((resolve) => setTimeout(resolve, 200));
         }
       }
@@ -195,20 +220,25 @@ async function main() {
       console.log(`Total Processed: ${applicants.length}`);
       console.log(`Successfully Accepted: ${successCount}`);
       console.log(`Failed: ${failureCount}`);
-      console.log(
-        `Overall Progress: ${progress.acceptedCount}/${progress.totalToAccept}`,
-      );
+      
+      if (!dryRun) {
+        console.log(
+          `Overall Progress: ${progress.acceptedCount}/${progress.totalToAccept}`,
+        );
 
-      if (progress.acceptedCount < progress.totalToAccept) {
-        console.log("\nNote: Target not reached");
-        console.log(
-          `Still need ${progress.totalToAccept - progress.acceptedCount} more acceptances`,
-        );
-        console.log(
-          "Run the script again with mode 1 to generate a new list of applicants",
-        );
+        if (progress.acceptedCount < progress.totalToAccept) {
+          console.log("\nNote: Target not reached");
+          console.log(
+            `Still need ${progress.totalToAccept - progress.acceptedCount} more acceptances`,
+          );
+          console.log(
+            "Run the script again with mode 1 to generate a new list of applicants",
+          );
+        } else {
+          console.log("\n✓ Target number of acceptances reached!");
+        }
       } else {
-        console.log("\n✓ Target number of acceptances reached!");
+        console.log("\n[DRY RUN] No actual changes were made to the system");
       }
     } catch (error: unknown) {
       console.error(
