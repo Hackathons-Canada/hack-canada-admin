@@ -30,19 +30,19 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
       <Head />
       <Preview>🚀 Hack Canada Event Details and Check-in Information</Preview>
       <Tailwind>
-        <Body className="bg-blue-50">
-          <Container className="mx-auto max-w-2xl px-3 py-6">
+        <Body className="bg-gray-50 py-6">
+          <Container className="mx-auto max-w-2xl">
             <Img
               src="https://i.imgur.com/N36vrSu.png"
               width={500}
               alt="Hack Canada Banner"
               className="w-full rounded-t-lg"
             />
-            <Section className="rounded-b-lg bg-white p-8 shadow-md">
+            <Section className="rounded-b-lg bg-white p-4">
               <Heading className="mb-6 text-2xl font-semibold text-blue-500">
                 Hello {name}! 👋
               </Heading>
-              <Text className="mt-4 text-zinc-700">
+              <Text className="mt-2 text-zinc-700">
                 We&apos;re getting closer to the big day! Here&apos;s everything
                 you need to know about Hack Canada at Wilfrid Laurier University
                 this weekend.
@@ -50,16 +50,11 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
 
               <Section
                 style={{
-                  marginTop: "2rem",
-                  paddingTop: "0.5rem",
-                  paddingBottom: "1.5rem",
-                  paddingLeft: "1.5rem",
-                  paddingRight: "1.5rem",
-                  border: "2px solid #60A5FA",
+                  marginTop: "1.5rem",
+                  padding: "0.5rem 1rem 0.75rem",
+                  border: "1px solid #60A5FA66",
                   borderRadius: "0.5rem",
                   backgroundColor: "rgba(59, 130, 246, 0.05)",
-                  boxShadow:
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                 }}
               >
                 <Text className="text-lg font-semibold text-zinc-800">
@@ -102,35 +97,47 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </div>
               </Section>
 
-              <Section className="mt-4 rounded-lg bg-blue-50 p-6 shadow-lg">
+              <Section className="mt-6 rounded-lg bg-blue-50 px-4 pb-4 pt-2 shadow-lg">
                 <Heading className="text-xl font-bold text-[#0A1F44]">
                   🎫 Your Multi-Purpose QR Code
                 </Heading>
                 <Text className="mt-2 text-zinc-700">
                   This QR code is your digital key to the hackathon experience:
-                  <br />
-                  <ul className="list-inside list-disc space-y-2">
-                    <li>Use it for hackathon check-in and meal check-ins</li>
-                    <li>Connect with other hackers during the event</li>
-                    <li>
-                      Access it anytime through your dashboard at
-                      app.hackcanada.org
-                    </li>
-                  </ul>
-                  <br />
-                  <strong>Important Notes:</strong>
-                  <br />• Your badge must be worn at all times during the event
-                  <br />• High school students must bring a signed letter from
-                  their guardian permitting attendance
-                  <br />• If you lose your badge, find an event organizer
-                  immediately
+                  <div className="my-3">
+                    <div className="mt-2 space-y-1.5">
+                      <div>
+                        • Use it for hackathon check-in and meal check-ins
+                      </div>
+                      <div>• Connect with other hackers during the event</div>
+                      <div>
+                        • Access it anytime through your dashboard at
+                        app.hackcanada.org
+                      </div>
+                    </div>
+                  </div>
+                  <div className="my-3">
+                    <strong>Important Notes:</strong>
+                    <div className="mt-2 space-y-1.5">
+                      <div>
+                        • Your badge must be worn at all times during the event
+                      </div>
+                      <div>
+                        • High school students must bring a signed letter from
+                        their guardian permitting attendance
+                      </div>
+                      <div>
+                        • If you lose your badge, find an event organizer
+                        immediately
+                      </div>
+                    </div>
+                  </div>
                 </Text>
-                <div className="mt-6 flex w-full flex-col items-center justify-center">
+                <div className="mt-4 flex w-full flex-col items-center justify-center">
                   <div className="rounded-lg bg-white p-2.5 shadow-md">
                     <Img
                       src={qrCodeUrl}
-                      width="150"
-                      height="150"
+                      width="200"
+                      height="200"
                       alt="Multi-Purpose QR Code"
                       className="inline-block"
                     />
@@ -138,8 +145,8 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </div>
               </Section>
 
-              <Section className="mt-4">
-                <Heading className="text-xl font-bold text-[#0A1F44]">
+              <Section className="mt-6">
+                <Heading className="text-lg font-bold text-[#0A1F44]">
                   🔗 Important Links & Resources
                 </Heading>
                 <Text className="mt-2 text-zinc-700">
@@ -156,7 +163,7 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 <Text className="mt-4 text-zinc-700">
                   Other important links:
                 </Text>
-                <Text className="mt-2 text-zinc-700">
+                <Text className="text-zinc-700">
                   •{" "}
                   <a
                     href="https://torpid-tuesday-6d4.notion.site/Hack-Canada-Hacker-Package-1805d88c3a21800198e9e0731d94dc3f"
@@ -198,51 +205,33 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                   </a>{" "}
                   - For project submissions (register and submit here!)
                 </Text>
-                <Text className="mt-2 text-sm text-zinc-600">
+                <Text className="mt-2 pb-0 text-sm text-zinc-600">
                   Note: The Schedule, Discord Server, and Hacker Package links
                   are also available through your dashboard.
                 </Text>
               </Section>
 
-              <Section className="mt-4">
+              <Section className="mt-2">
                 <Heading className="text-xl font-bold text-[#0A1F44]">
                   🎒 What to Bring
                 </Heading>
-                <Text className="mt-2 text-zinc-700">
-                  • Valid Photo ID (required for check-in)
-                  <br />
-                  • Laptop & charger
-                  <br />
-                  • Any other devices or hardware you plan to use
-                  <br />
-                  • Toiletries & any medication you need
-                  <br />
-                  • Comfortable clothes and a light jacket (temperature varies)
-                  <br />
-                  • Sleeping bag/blanket if you plan to rest
-                  <br />• Water bottle to stay hydrated
-                </Text>
-              </Section>
-
-              <Section className="mt-4">
-                <Heading className="text-xl font-bold text-[#0A1F44]">
-                  🤝 Mentor Support
-                </Heading>
-                <Text className="mt-2 text-zinc-700">
-                  Mentors will be available both in-person and on Discord
-                  throughout the event:
-                  <br />• In-person mentors can be found at the Balcony of
-                  LH1001
-                  <br />• Discord mentors are available through our server
-                  <br />
-                  <br />
-                  Don&apos;t hesitate to reach out for help with your project!
-                </Text>
+                <div className="mt-3 space-y-1.5 text-zinc-700">
+                  <div>• Valid Photo ID (required for check-in)</div>
+                  <div>• Laptop & charger</div>
+                  <div>• Any other devices or hardware you plan to use</div>
+                  <div>• Toiletries & any medication you need</div>
+                  <div>
+                    • Comfortable clothes and a light jacket (temperature
+                    varies)
+                  </div>
+                  <div>• Sleeping bag/blanket if you plan to rest</div>
+                  <div>• Water bottle to stay hydrated</div>
+                </div>
               </Section>
 
               <Hr className="mt-4 border-gray-200" />
 
-              <Text className="mt-4 text-zinc-700">
+              <Text className="mt-6 text-zinc-700">
                 If you have any questions before the event, feel free to reach
                 out to us at{" "}
                 <a
