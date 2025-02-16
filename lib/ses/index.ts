@@ -4,6 +4,7 @@ import AcceptanceEmail from "@/components/Emails/AcceptanceEmail";
 import RejectionEmail from "@/components/Emails/RejectionEmail";
 import ReminderEmail from "@/components/Emails/ReminderEmail";
 import OnboardingEmail from "@/components/Emails/OnboardingEmail";
+import HackathonPrepEmail from "@/components/Emails/HackathonPrepEmail";
 import { SES } from "@aws-sdk/client-ses";
 import { render } from "@react-email/render";
 import RSVPReminderEmail from "@/components/Emails/RSVPReminderEmail";
@@ -70,7 +71,7 @@ export const sendAcceptanceEmail = async (
 ) => {
   const emailTemplate = render(AcceptanceEmail({ name: recipientName }));
   const emailSubject =
-    "[ACTION REQUIRED] Congratulations, you have been accepted to HackCanada";
+    "[ACTION REQUIRED] Congratulations, you have been accepted to Hack Canada";
 
   const result = await sendEmail(recipientEmail, emailSubject, emailTemplate);
   return result;
@@ -81,7 +82,7 @@ export const sendRejectionEmail = async (
   recipientEmail: string,
 ) => {
   const emailTemplate = render(RejectionEmail({ name: recipientName }));
-  const emailSubject = "Thank You for Your Application to HackCanada";
+  const emailSubject = "Thank You for Your Application to Hack Canada";
 
   const result = await sendEmail(recipientEmail, emailSubject, emailTemplate);
   return result;
@@ -128,6 +129,23 @@ export const sendReminderEmail = async (emails: string[]) => {
   } catch (error) {
     console.error("Error sending email with SES: ", error);
   }
+};
+
+export const sendHackathonPrepEmail = async (
+  recipientEmail: string,
+  recipientName: string,
+  userId: string,
+) => {
+  const emailTemplate = render(
+    HackathonPrepEmail({
+      name: recipientName,
+      userId: userId,
+    }),
+  );
+
+  const emailSubject = "🚀 Hack Canada Event Details and Check-in Information";
+  const result = await sendEmail(recipientEmail, emailSubject, emailTemplate);
+  return result;
 };
 
 export const sendOnboardingEmail = async (
