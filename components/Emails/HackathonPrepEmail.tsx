@@ -102,15 +102,21 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </div>
               </Section>
 
-              <Section className="mt-4 rounded-lg bg-gray-50 p-4">
+              <Section className="mt-4 rounded-lg bg-blue-50 p-6 shadow-lg">
                 <Heading className="text-xl font-bold text-[#0A1F44]">
-                  🎫 Your Check-in QR Code
+                  🎫 Your Multi-Purpose QR Code
                 </Heading>
                 <Text className="mt-2 text-zinc-700">
-                  Please save this QR code and present it during check-in along
-                  with a valid piece of photo ID. You&apos;ll receive your badge
-                  and event T-shirt at check-in.
+                  This QR code is your digital key to the hackathon experience:
                   <br />
+                  <ul className="list-inside list-disc space-y-2">
+                    <li>Use it for hackathon check-in and meal check-ins</li>
+                    <li>Connect with other hackers during the event</li>
+                    <li>
+                      Access it anytime through your dashboard at
+                      app.hackcanada.org
+                    </li>
+                  </ul>
                   <br />
                   <strong>Important Notes:</strong>
                   <br />• Your badge must be worn at all times during the event
@@ -119,19 +125,17 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                   <br />• If you lose your badge, find an event organizer
                   immediately
                 </Text>
-                <div className="mt-4 text-center">
-                  <Img
-                    src={qrCodeUrl}
-                    width="150"
-                    height="150"
-                    alt="Check-in QR Code"
-                    className="inline-block"
-                  />
+                <div className="mt-6 flex w-full flex-col items-center justify-center">
+                  <div className="rounded-lg bg-white p-2.5 shadow-md">
+                    <Img
+                      src={qrCodeUrl}
+                      width="150"
+                      height="150"
+                      alt="Multi-Purpose QR Code"
+                      className="inline-block"
+                    />
+                  </div>
                 </div>
-                <Text className="mt-2 text-sm text-zinc-600">
-                  You can also access your QR code anytime through your profile
-                  on our website.
-                </Text>
               </Section>
 
               <Section className="mt-4">
@@ -187,12 +191,12 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                   - Access your profile and event information
                   <br />•{" "}
                   <a
-                    href="https://hackcanada.devpost.com"
+                    href="https://dorahacks.io/hackathon/hackcanada/detail"
                     className="text-blue-600 underline"
                   >
-                    Devpost
+                    DoraHacks
                   </a>{" "}
-                  - For project submissions (register now!)
+                  - For project submissions (register and submit here!)
                 </Text>
                 <Text className="mt-2 text-sm text-zinc-600">
                   Note: The Schedule, Discord Server, and Hacker Package links
