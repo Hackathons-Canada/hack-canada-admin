@@ -30,7 +30,7 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
       <Head />
       <Preview>🚀 Hack Canada Event Details and Check-in Information</Preview>
       <Tailwind>
-        <Body className="bg-gray-50 py-6">
+        <Body className="bg-gray-50 py-8">
           <Container className="mx-auto max-w-2xl">
             <Img
               src="https://i.imgur.com/N36vrSu.png"
@@ -39,23 +39,20 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
               className="w-full rounded-t-lg"
             />
             <Section className="rounded-b-lg bg-white p-4">
-              <Heading className="mb-6 text-2xl font-semibold text-blue-500">
+              <Heading className="mb-2 text-2xl font-semibold text-blue-500">
                 Hello {name}! 👋
               </Heading>
-              <Text className="mt-2 text-zinc-700">
+              <Text className="text-zinc-700">
                 We&apos;re getting closer to the big day! Here&apos;s everything
-                you need to know about Hack Canada at Wilfrid Laurier University
-                this weekend.
+                you need to know about Hack Canada, taking place at Wilfrid
+                Laurier University this weekend.
               </Text>
 
               <Section
                 style={{
-                  marginTop: "1.5rem",
-                  padding: "0.5rem 1rem 0.75rem",
                   border: "1px solid #60A5FA66",
-                  borderRadius: "0.5rem",
-                  backgroundColor: "rgba(59, 130, 246, 0.05)",
                 }}
+                className="mt-6 rounded-lg bg-blue-50/75 px-4 pb-3 pt-2"
               >
                 <Text className="text-lg font-semibold text-zinc-800">
                   📍 Location & Check-in Details
@@ -69,9 +66,9 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                       Friday, February 21st, 4:30 PM — 6:30 PM
                     </div>
                     <Text className="mt-1 text-xs text-zinc-600">
-                      If you&apos;re going to be late, please email us at
-                      hello@hackcanada.org or message us in the
-                      #ask-an-organizer channel on Discord.
+                      If you&apos;re going to be late, please message us in the
+                      #ask-an-organizer channel on Discord or find an organizer
+                      during the event once you&apos;ve arrived.
                     </Text>
                   </div>
                   <div>
@@ -97,7 +94,7 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </div>
               </Section>
 
-              <Section className="mt-6 rounded-lg bg-blue-50 px-4 pb-4 pt-2 shadow-lg">
+              <Section className="mt-6">
                 <Heading className="text-xl font-bold text-[#0A1F44]">
                   🎫 Your Multi-Purpose QR Code
                 </Heading>
@@ -133,7 +130,7 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                   </div>
                 </Text>
                 <div className="mt-4 flex w-full flex-col items-center justify-center">
-                  <div className="rounded-lg bg-white p-2.5 shadow-md">
+                  <div className="rounded-lg bg-white p-2.5">
                     <Img
                       src={qrCodeUrl}
                       width="200"
@@ -145,8 +142,13 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </div>
               </Section>
 
-              <Section className="mt-6">
-                <Heading className="text-lg font-bold text-[#0A1F44]">
+              <Section
+                style={{
+                  border: "1px solid #60A5FA66",
+                }}
+                className="mt-6 rounded-lg bg-blue-50/50 px-4 pb-4 pt-2"
+              >
+                <Heading className="text-xl font-bold text-[#0A1F44]">
                   🔗 Important Links & Resources
                 </Heading>
                 <Text className="mt-2 text-zinc-700">
@@ -211,25 +213,25 @@ const HackathonPrepEmail = ({ name, userId }: Props) => {
                 </Text>
               </Section>
 
-              <Section className="mt-2">
+              <Section className="mt-4">
                 <Heading className="text-xl font-bold text-[#0A1F44]">
                   🎒 What to Bring
                 </Heading>
-                <div className="mt-3 space-y-1.5 text-zinc-700">
-                  <div>• Valid Photo ID (required for check-in)</div>
-                  <div>• Laptop & charger</div>
-                  <div>• Any other devices or hardware you plan to use</div>
-                  <div>• Toiletries & any medication you need</div>
-                  <div>
-                    • Comfortable clothes and a light jacket (temperature
+                <div className="mt-2 space-y-0 text-zinc-700">
+                  <Text>📸 Valid Photo ID (required for check-in)</Text>
+                  <Text>💻 Laptop & charger</Text>
+                  <Text>🔧 Any other devices or hardware you plan to use</Text>
+                  <Text>🧴 Toiletries & any medication you need</Text>
+                  <Text>
+                    👕 Comfortable clothes and a light jacket (temperature
                     varies)
-                  </div>
-                  <div>• Sleeping bag/blanket if you plan to rest</div>
-                  <div>• Water bottle to stay hydrated</div>
+                  </Text>
+                  <Text>🛏️ Sleeping bag/blanket if you plan to rest</Text>
+                  <Text>🚰 Water bottle to stay hydrated</Text>
                 </div>
               </Section>
 
-              <Hr className="mt-4 border-gray-200" />
+              <Hr className="mt-3 border-gray-200" />
 
               <Text className="mt-6 text-zinc-700">
                 If you have any questions before the event, feel free to reach
