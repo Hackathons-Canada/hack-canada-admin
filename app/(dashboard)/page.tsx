@@ -27,6 +27,7 @@ const Home = async () => {
     [rejected],
     [pendingApplications],
     [waitlisted],
+    [cancelled],
     [admins],
     [organizers],
     [totalReviews],
@@ -56,6 +57,10 @@ const Home = async () => {
       .select({ count: count() })
       .from(users)
       .where(eq(users.applicationStatus, "waitlisted")),
+    db
+      .select({ count: count() })
+      .from(users)
+      .where(eq(users.applicationStatus, "cancelled")),
     db.select({ count: count() }).from(users).where(eq(users.role, "admin")),
     db
       .select({ count: count() })
@@ -119,6 +124,7 @@ const Home = async () => {
             <CountCard label="Rejected" count={rejected.count} />
             <CountCard label="Pending" count={pendingApplications.count} />
             <CountCard label="Waitlisted" count={waitlisted.count} />
+            <CountCard label="Cancelled" count={cancelled.count} />
           </div>
         </section>
 
