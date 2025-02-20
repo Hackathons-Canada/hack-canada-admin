@@ -15,7 +15,7 @@ scripts/migrate-data.ts
 /out/
 
 # Idk
-scripts/
+scripts/test-emails.ts
 !infra/scripts
 dev-docs/
 .idea

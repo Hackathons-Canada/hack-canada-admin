@@ -7,7 +7,7 @@ import OnboardingEmail from "@/components/Emails/OnboardingEmail";
 import HackathonPrepEmail from "@/components/Emails/HackathonPrepEmail";
 import { SES } from "@aws-sdk/client-ses";
 import { render } from "@react-email/render";
-import RSVPReminderEmail from "@/components/Emails/RSVPReminderEmail";
+import RSVPReminder from "@/components/Emails/RSVPReminder";
 
 const ses = new SES({ region: process.env.AWS_SES_REGION });
 
@@ -89,9 +89,10 @@ export const sendRejectionEmail = async (
 };
 
 export const sendRSVPReminderEmail = async (name: string, email: string) => {
-  const emailTemplate = render(RSVPReminderEmail({ name: name }));
+  const emailTemplate = render(RSVPReminder({ name: name }));
 
-  const emailSubject = "🔔 Final RSVP Reminder - Hack Canada";
+  const emailSubject =
+    "🚨 Urgent: Final RSVP Reminder - Please Respond by Tonight for Hack Canada";
   const result = await sendEmail(email, emailSubject, emailTemplate);
   return result;
 };
