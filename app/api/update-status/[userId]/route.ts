@@ -2,7 +2,6 @@ import { getCurrentUser } from "@/auth";
 import { getApplicationById } from "@/data/applications";
 import { getUserById } from "@/data/user";
 import { ApiResponse } from "@/types/api";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { hackerApplications, users } from "@/lib/db/schema";
