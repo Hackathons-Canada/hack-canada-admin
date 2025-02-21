@@ -15,12 +15,13 @@ import { User } from "@/lib/db/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserStatusBadge } from "./search/UserStatusBadge";
 import InfoRow from "./InfoRow";
+import EmergencyContactInfo from "./EmergencyContactInfo";
 
 type Props = {
   user: User;
 };
 
-const UserInfo = ({ user }: Props) => {
+const UserInfo = async ({ user }: Props) => {
   if (!user) {
     return (
       <Card className="border-destructive/50 bg-destructive/10">
@@ -114,6 +115,11 @@ const UserInfo = ({ user }: Props) => {
           )}
         </div>
       </CardContent>
+      {user.role === "hacker" && (
+        <CardContent className="border-t pt-6">
+          <EmergencyContactInfo userId={user.id} />
+        </CardContent>
+      )}
     </Card>
   );
 };

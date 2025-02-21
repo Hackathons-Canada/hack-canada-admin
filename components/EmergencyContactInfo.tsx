@@ -1,53 +1,56 @@
-// import { db } from "@/lib/db";
-// import { emergencyContacts } from "@/lib/db/schema";
-// import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { rsvp } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import InfoRow from "./InfoRow";
+import { Phone, User2, Users2 } from "lucide-react";
 
-// type Props = {
-//   userId: string;
-// };
+type Props = {
+  userId: string;
+};
 
-// const EmergencyContactInfo = async ({ userId }: Props) => {
-//   const [contact] = await db
-//     .select()
-//     .from(emergencyContacts)
-//     .where(eq(emergencyContacts.userId, userId));
+const EmergencyContactInfo = async ({ userId }: Props) => {
+  const [contact] = await db.select().from(rsvp).where(eq(rsvp.userId, userId));
 
-//   if (!contact) {
-//     return null;
-//   }
+  if (!contact) {
+    return null;
+  }
 
-//   return (
-//     <div className="w-full overflow-x-auto rounded-lg border p-4 md:p-8">
-//       <h2 className="mb-4 text-xl font-semibold">
-//         Emergency Contact Information
-//       </h2>
-//       <div className="grid w-full gap-y-4 max-[410px]:mr-20">
-//         <div className="flex items-center justify-between gap-12 lg:gap-12">
-//           <p className="w-1/2 text-nowrap">Contact Name</p>
-//           <p className="w-1/2 text-nowrap text-right">{contact.contactName}</p>
-//         </div>
+  return (
+    <Card className="w-full bg-gradient-to-br from-background via-background/80 to-background max-sm:border-none">
+      <CardHeader className="max-sm:p-0">
+        <CardTitle className="text-xl font-semibold tracking-tight">
+          Emergency Contact Information
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="max-sm:p-0">
+        <div className="grid w-full gap-y-3">
+          <InfoRow
+            label="Contact Name"
+            value={contact.emergencyContactName}
+            icon={<User2 className="size-4" />}
+          />
+          <InfoRow
+            label="Relationship"
+            value={contact.relationshipToParticipant}
+            icon={<Users2 className="size-4" />}
+          />
+          <InfoRow
+            label="Phone Number"
+            value={contact.emergencyContactPhoneNumber}
+            icon={<Phone className="size-4" />}
+          />
+          {contact.alternativePhoneNumber && (
+            <InfoRow
+              label="Alternative Phone"
+              value={contact.alternativePhoneNumber}
+              icon={<Phone className="size-4" />}
+            />
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
-//         <div className="flex items-center justify-between gap-12 lg:gap-12">
-//           <p className="w-1/2 text-nowrap">Relationship</p>
-//           <p className="w-1/2 text-nowrap text-right">{contact.relationship}</p>
-//         </div>
-
-//         <div className="flex items-center justify-between gap-12 lg:gap-12">
-//           <p className="w-1/2 text-nowrap">Phone Number</p>
-//           <p className="w-1/2 text-nowrap text-right">{contact.phoneNumber}</p>
-//         </div>
-
-//         {contact.alternatePhone && (
-//           <div className="flex items-center justify-between gap-12 lg:gap-12">
-//             <p className="w-1/2 text-nowrap">Alternate Phone</p>
-//             <p className="w-1/2 text-nowrap text-right">
-//               {contact.alternatePhone}
-//             </p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EmergencyContactInfo;
+export default EmergencyContactInfo;
