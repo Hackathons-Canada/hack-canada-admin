@@ -3,7 +3,12 @@ import Container from "@/components/Container";
 import CountCard from "@/components/CountCard";
 import PageBanner from "@/components/PageBanner";
 import { db } from "@/lib/db";
-import { hackerApplications, applicationReviews, users } from "@/lib/db/schema";
+import {
+  hackerApplications,
+  applicationReviews,
+  users,
+  checkIns,
+} from "@/lib/db/schema";
 import { isReviewer } from "@/lib/utils";
 import { count, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -23,6 +28,7 @@ const Home = async () => {
     [dbUsers],
     [applicants],
     [hackers],
+    [checkedIns],
     [accepted],
     [rejected],
     [pendingApplications],
@@ -41,6 +47,10 @@ const Home = async () => {
       .from(hackerApplications)
       .where(eq(hackerApplications.submissionStatus, "submitted")),
     db.select({ count: count() }).from(users).where(eq(users.role, "hacker")),
+    db
+      .select({ count: count() })
+      .from(checkIns)
+      .where(eq(checkIns.eventName, "hackathon-check-in")),
     db
       .select({ count: count() })
       .from(users)
@@ -110,6 +120,7 @@ const Home = async () => {
             <CountCard label="Mentors" count={mentors} />
             <CountCard label="Volunteers" count={volunteers} />
             <CountCard label="Hackers" count={hackers.count} />
+            <CountCard label="Checked In" count={checkedIns.count} />
           </div>
         </section>
 

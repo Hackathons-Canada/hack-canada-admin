@@ -265,3 +265,19 @@ export const auditLogs = pgTable("auditLog", {
 
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type NewAuditLog = typeof auditLogs.$inferInsert;
+
+export const checkIns = pgTable("checkIn", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  eventName: text("eventName").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
+
+export type CheckIn = typeof checkIns.$inferSelect;
+export type NewCheckIn = typeof checkIns.$inferInsert;
